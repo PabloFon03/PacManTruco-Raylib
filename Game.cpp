@@ -1,15 +1,19 @@
-#include "Game.h";
 #include <assert.h>
+#include "Game.h";
+#include "Entity.h";
 
 Game::Game(int w, int h, int fps, std::string t)
 {
 	assert(!IsWindowReady());
+
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 	InitWindow(w, h, t.c_str());
 	SetWindowMinSize(wMin, hMin);
 	SetTargetFPS(fps);
+
 	target = LoadRenderTexture(wMin, hMin);
 	SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
+
 	// 19x22
 	std::vector<int> mazeTiles
 	{
@@ -37,6 +41,11 @@ Game::Game(int w, int h, int fps, std::string t)
 		4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 10
 	};
 	currentMaze = Maze(mazeTiles);
+
+	player.x = 9;
+	player.y = 16;
+	player.dir = 3;
+
 }
 
 Game::~Game() noexcept
@@ -47,6 +56,15 @@ Game::~Game() noexcept
 
 bool Game::GameShouldClose() const { return WindowShouldClose(); }
 
+void Game::LoadTextures()
+{
+
+	currentMaze.LoadTextureAtlas();
+
+	player.LoadTextureAtlas();
+
+}
+
 void Game::Tick()
 {
 	frameCounter++;
@@ -56,6 +74,8 @@ void Game::Tick()
 
 void Game::Update()
 {
+	currentMaze.Update();
+	player.Update();
 }
 
 void Game::Draw()
@@ -93,5 +113,7 @@ void Game::OnDraw()
 {
 
 	currentMaze.OnDraw();
+
+	player.Draw();
 
 }

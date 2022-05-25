@@ -2,6 +2,7 @@
 #include <string>
 #include <raylib.h>
 #include "Maze.h";
+#include "Entity.h";
 
 class Game {
 
@@ -21,6 +22,7 @@ public:
 
 	bool GameShouldClose() const;
 
+	void LoadTextures();
 	void Tick();
 
 private:
@@ -32,7 +34,9 @@ private:
 
 	RenderTexture2D target;
 
-	Maze currentMaze;	
+	Maze currentMaze;
+
+	Entity player;
 
 	void Update();
 	void Draw();

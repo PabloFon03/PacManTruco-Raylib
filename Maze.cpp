@@ -9,16 +9,22 @@ Maze::Maze(std::vector<int> rawTiles)
 {
 	tiles = rawTiles;
 
-	tilesAtlas = LoadTexture("img/pacmiku.png");
-	SetTextureFilter(tilesAtlas, TEXTURE_FILTER_POINT);
-
-	player = Entity();
-	player.x = 9;
-	player.y = 16;
-	player.dir = 3;
 }
 
 Maze::~Maze() noexcept
+{
+	UnloadTexture(tilesAtlas);
+}
+
+void Maze::LoadTextureAtlas()
+{
+
+	tilesAtlas = LoadTexture("img/pacmiku.png");
+	SetTextureFilter(tilesAtlas, TEXTURE_FILTER_POINT);
+
+}
+
+void Maze::Update()
 {
 
 }
@@ -35,8 +41,5 @@ void Maze::OnDraw()
 			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, 0, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 }, WHITE);
 		}
 	}
-
-	// Draw Player
-	player.Draw();
 
 }

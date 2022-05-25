@@ -150,9 +150,22 @@
     <ClInclude Include="Maze.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="img\blueG.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="img\orangeG.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="img\pacmiku.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="img\pinkG.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="img\redG.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="img\wakawaka.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -46,5 +46,20 @@
     <Image Include="img\pacmiku.png">
       <Filter>Archivos de recursos\img</Filter>
     </Image>
+    <Image Include="img\blueG.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\orangeG.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\pinkG.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\redG.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\wakawaka.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ int main(void)
 
 	Game game{ screenWidth, screenHeight, 60, "test" };
 
-	SetTargetFPS(60);
+	game.LoadTextures();
 
 	while (!game.GameShouldClose())
 	{

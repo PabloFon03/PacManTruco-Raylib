@@ -6,19 +6,21 @@ class Entity
 public:
 
 	Entity();
+	~Entity();
 
 	int x;
-
 	int y;
-
 	int dir;
 
+	void LoadTextureAtlas();
 	void Update();
-
 	void Draw();
 
 private:
 
-	int frameCounter;
+	int animIndex;
+	float animDelay;
+
+	Texture2D animAtlas;
 
 };

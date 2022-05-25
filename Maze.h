@@ -1,6 +1,5 @@
 #include<vector>
 #include<raylib.h>
-#include "Entity.h";
 #pragma once
 class Maze {
 
@@ -14,13 +13,13 @@ public:
 	// Destructor
 	~Maze() noexcept;
 
+	void LoadTextureAtlas();
+	void Update();
 	void OnDraw();
 
 private:
 
 	std::vector<int> tiles;
 	Texture2D tilesAtlas;
-
-	Entity player;
 
 };
