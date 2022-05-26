@@ -55,9 +55,9 @@ Entity::Vector2Int Entity::AddDir(Vector2Int _coords, int _dirIndex)
 
 	Vector2Int dirVec = dir(_dirIndex);
 
-	returnCoords.x = (returnCoords.x + dirVec.x) % 19;
+	returnCoords.x = TrueMod(returnCoords.x + dirVec.x, 19);
 
-	returnCoords.y = (returnCoords.y + dirVec.y) % 22;
+	returnCoords.y = TrueMod(returnCoords.y + dirVec.y, 22);
 
 	return returnCoords;
 

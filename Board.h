@@ -36,7 +36,7 @@ class Board;
 class Entity
 {
 
-private:
+public:
 
 	class Vector2Int
 	{
@@ -51,10 +51,10 @@ private:
 
 	};
 
-public:
-
 	Entity();
 	~Entity();
+
+	int TrueMod(int _i, int _n) { return (_i % _n + _n) % _n; }
 
 	Vector2Int coords;
 	int dirIndex;
@@ -94,6 +94,20 @@ private:
 
 };
 
+class Enemy : public Entity
+{
+
+public:
+
+	void LoadTextureAtlas();
+	void Update(Board* _board, Maze* _maze, Vector2Int _playerPos);
+
+private:
+
+	void ChangeDir(Maze* _maze, Vector2Int _playerPos);
+
+};
+
 class Board
 {
 
@@ -115,5 +129,7 @@ private:
 
 	Maze maze;
 	Player player;
+
+	Enemy enemy;
 
 };

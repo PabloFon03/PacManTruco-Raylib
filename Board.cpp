@@ -41,6 +41,11 @@ void Board::Start()
 	player.dirIndex = 3;
 	player.LoadTextureAtlas();
 
+	enemy.coords.x = 9;
+	enemy.coords.y = 8;
+	enemy.dirIndex = 3;
+	enemy.LoadTextureAtlas();
+
 }
 
 void Board::Update()
@@ -50,6 +55,8 @@ void Board::Update()
 
 	player.Update(this, &maze);
 
+	enemy.Update(this, &maze, player.coords);
+
 }
 
 void Board::OnDraw()
@@ -58,6 +65,8 @@ void Board::OnDraw()
 	maze.OnDraw();
 
 	player.OnDraw();
+
+	enemy.OnDraw();
 
 	DrawText(("Score: " + std::to_string(score)).c_str(), 8, 8, 16, WHITE);
 
