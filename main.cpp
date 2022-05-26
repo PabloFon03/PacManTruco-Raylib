@@ -4,11 +4,11 @@
 int main(void)
 {
 	const int screenWidth = 304;
-	const int screenHeight = 352;
+	const int screenHeight = 400;
 
 	Game game{ screenWidth, screenHeight, 60, "test" };
 
-	game.LoadTextures();
+	game.Start();
 
 	while (!game.GameShouldClose())
 	{

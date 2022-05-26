@@ -1,4 +1,4 @@
-#include "Maze.h";
+#include "Board.h";
 
 Maze::Maze()
 {
@@ -38,8 +38,17 @@ void Maze::OnDraw()
 		for (int x = 0; x < 19; x++)
 		{
 			int tileID = tiles[19 * y + x];
-			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, 0, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 }, WHITE);
+			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, 0, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
 		}
 	}
 
 }
+
+void Maze::ClearTile(int _i)
+{
+
+	tiles[_i] = 0;
+
+}
+
+int Maze::GetTileID(int i) { return tiles[i]; }
