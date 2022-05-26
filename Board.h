@@ -60,11 +60,9 @@ public:
 	int dirIndex;
 	Vector2Int dir(int _i);
 
-	void LoadTextureAtlas();
-	void Update(Board* _board, Maze* _maze);
+	virtual void LoadTextureAtlas();
+	virtual void Update(Board* _board, Maze* _maze);
 	void OnDraw();
-
-private:
 
 	int animIndex;
 	float animDelay;
@@ -72,13 +70,27 @@ private:
 	float stepTimer;
 	bool hitWall;
 
-	void ChangeDir(Maze* _maze);
+	virtual void ChangeDir(Maze* _maze);
 
 	Vector2Int AddDir(Vector2Int _coords, int _dirIndex);
 	int CoordsToIndex(Vector2Int _coords);
 	bool IsValidDir(Maze* _maze, Vector2Int _coords, int _dirIndex);
 
 	Texture2D animAtlas;
+
+};
+
+class Player : public Entity
+{
+
+public:
+
+	void LoadTextureAtlas();
+	void Update(Board* _board, Maze* _maze);
+
+private:
+
+	void ChangeDir(Maze* _maze);
 
 };
 
@@ -95,12 +107,13 @@ public:
 
 	void ClearTile(int _i);
 	void AddScore(int _s);
+	void OnPowerCollected();
 
 private:
 
 	int score;
 
 	Maze maze;
-	Entity player;
+	Player player;
 
 };

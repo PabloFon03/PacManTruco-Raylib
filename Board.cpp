@@ -76,3 +76,7 @@ void Board::AddScore(int _s)
 	score += _s;
 
 }
+
+void Board::OnPowerCollected()
+{
+}
