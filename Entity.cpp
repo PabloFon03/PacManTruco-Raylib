@@ -1,4 +1,4 @@
-#include "Board.h";
+#include "Game.h";
 
 Entity::Entity()
 {
@@ -6,9 +6,6 @@ Entity::Entity()
 
 Entity::~Entity()
 {
-
-	UnloadTexture(animAtlas);
-
 }
 
 Entity::Vector2Int Entity::dir(int i)
@@ -25,19 +22,10 @@ Entity::Vector2Int Entity::dir(int i)
 
 }
 
-void Entity::LoadTextureAtlas()
+void Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 {
 
-	SetTextureFilter(animAtlas, TEXTURE_FILTER_POINT);
-
-}
-
-void Entity::Update(Board* _board, Maze* _maze) { }
-
-void Entity::OnDraw()
-{
-
-	DrawTextureRec(animAtlas, Rectangle{ (float)animIndex * 16, (float)dirIndex * 16, 16, 16 }, Vector2{ (coords.x + dir(dirIndex).x * stepTimer) * 16, (coords.y + dir(dirIndex).y * stepTimer) * 16 + 48 }, WHITE);
+	DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * 16, (float)dirIndex * 16, 16, 16 }, Vector2{ (coords.x + dir(dirIndex).x * stepTimer) * 16, (coords.y + dir(dirIndex).y * stepTimer) * 16 + 48 }, WHITE);
 
 }
 

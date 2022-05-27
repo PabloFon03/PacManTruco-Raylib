@@ -1,14 +1,19 @@
-#include "Board.h";
+#include "Game.h"
 
-void Player::LoadTextureAtlas()
+Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 {
 
-	animAtlas = LoadTexture("img/wakawaka.png");
-	Entity::LoadTextureAtlas();
+	board = _board;
+
+	coords = _spawnPos;
+
+	dirIndex = _dirIndex;
+
+	mainAnimAtlas = board->GetTexture(0);
 
 }
 
-void Player::Update(Board* _board, Maze* _maze)
+void Player::Update(Maze* _maze)
 {
 
 	float deltaTime = GetFrameTime();
@@ -27,7 +32,7 @@ void Player::Update(Board* _board, Maze* _maze)
 
 			_maze->ClearTile(CoordsToIndex(coords));
 
-			_board->AddScore(10);
+			board->AddScore(10);
 
 			break;
 
@@ -35,9 +40,9 @@ void Player::Update(Board* _board, Maze* _maze)
 
 			_maze->ClearTile(CoordsToIndex(coords));
 
-			_board->AddScore(50);
+			board->AddScore(50);
 
-			_board->OnPowerCollected();
+			board->OnPowerCollected();
 
 			break;
 

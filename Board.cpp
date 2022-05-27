@@ -1,7 +1,14 @@
-#include "Board.h";
+#include "Game.h"
 
 Board::Board()
 {
+}
+
+Board::Board(std::vector<Texture2D>& _textures)
+{
+
+	textures = _textures;
+
 }
 
 void Board::Start()
@@ -36,15 +43,13 @@ void Board::Start()
 	maze = Maze(mazeTiles);
 	maze.LoadTextureAtlas();
 
-	player.coords.x = 9;
-	player.coords.y = 16;
-	player.dirIndex = 3;
-	player.LoadTextureAtlas();
+	player = Player{ this, Entity::Vector2Int{ 9, 16 }, 3 };
 
-	enemy.coords.x = 9;
-	enemy.coords.y = 8;
-	enemy.dirIndex = 3;
-	enemy.LoadTextureAtlas();
+	enemies.clear();
+	enemies.push_back(Enemy{ this, 0, Entity::Vector2Int{ 9, 8 }, 3 });
+	enemies.push_back(Enemy{ this, 1, Entity::Vector2Int{ 8, 10 }, 0 });
+	enemies.push_back(Enemy{ this, 2, Entity::Vector2Int{ 9, 10 }, 0 });
+	enemies.push_back(Enemy{ this, 3, Entity::Vector2Int{ 10, 10 }, 0 });
 
 }
 
@@ -53,9 +58,9 @@ void Board::Update()
 
 	maze.Update();
 
-	player.Update(this, &maze);
+	player.Update(&maze);
 
-	enemy.Update(this, &maze, player.coords);
+	for (int i = 0; i < enemies.size(); i++) { enemies[i].Update(&maze, player.coords); }
 
 }
 
@@ -66,7 +71,7 @@ void Board::OnDraw()
 
 	player.OnDraw();
 
-	enemy.OnDraw();
+	for (int i = 0; i < enemies.size(); i++) { enemies[i].OnDraw(); }
 
 	DrawText(("Score: " + std::to_string(score)).c_str(), 8, 8, 16, WHITE);
 

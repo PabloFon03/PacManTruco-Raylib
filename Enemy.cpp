@@ -1,19 +1,30 @@
-#include "Board.h";
+#include "Game.h"
 
-void Enemy::LoadTextureAtlas()
+Enemy::Enemy()
+{
+}
+
+Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 {
 
-	animAtlas = LoadTexture("img/redG.png");
-	Entity::LoadTextureAtlas();
+	board = _board;
+
+	ID = _ID;
+
+	coords = _spawnPos;
+
+	dirIndex = _dirIndex;
+
+	mainAnimAtlas = board->GetTexture(ID + 1);
 
 }
 
-void Enemy::Update(Board* _board, Maze* _maze, Vector2Int _playerPos)
+void Enemy::Update(Maze* _maze, Vector2Int _playerPos)
 {
 
 	float deltaTime = GetFrameTime();
 
-	stepTimer += 2.5f * deltaTime;
+	stepTimer += 3.5f * deltaTime;
 
 	if (stepTimer >= 1)
 	{
@@ -70,7 +81,7 @@ void Enemy::ChangeDir(Maze* _maze, Vector2Int _playerPos)
 	}
 
 	int lowestDistIndex = 0;
-	
+
 	// Look For First Possible Direction
 	while (lowestDistIndex < 3 && dirDist[lowestDistIndex] < 0) { lowestDistIndex++; }
 

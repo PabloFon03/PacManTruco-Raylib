@@ -1,4 +1,4 @@
-#include "Board.h";
+#include "Game.h"
 
 Maze::Maze()
 {
@@ -7,6 +7,7 @@ Maze::Maze()
 
 Maze::Maze(std::vector<int> rawTiles)
 {
+
 	tiles = rawTiles;
 
 }

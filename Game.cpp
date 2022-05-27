@@ -3,6 +3,7 @@
 
 Game::Game(int w, int h, int fps, std::string t)
 {
+
 	assert(!IsWindowReady());
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
@@ -12,13 +13,17 @@ Game::Game(int w, int h, int fps, std::string t)
 
 	target = LoadRenderTexture(wMin, hMin);
 	SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
-	
+
 }
 
 Game::~Game() noexcept
 {
+
 	assert(GetWindowHandle());
+
+	for (int i = 0; i < textures.size(); i++) { UnloadTexture(textures[i]); }
 	CloseWindow();
+
 }
 
 bool Game::GameShouldClose() const { return WindowShouldClose(); }
@@ -26,6 +31,23 @@ bool Game::GameShouldClose() const { return WindowShouldClose(); }
 
 void Game::Start()
 {
+
+	// Clear Texture List
+	textures.clear();
+
+	// Load Textures
+	std::vector<std::string> textureFiles{ "img/wakawaka.png", "img/redG.png", "img/pinkG.png", "img/blueG.png", "img/orangeG.png" };
+
+	for (int i = 0; i < textureFiles.size(); i++)
+	{
+
+		textures.push_back(LoadTexture(textureFiles[i].c_str()));
+
+		SetTextureFilter(textures[i], TEXTURE_FILTER_POINT);
+
+	}
+
+	board = Board(textures);
 
 	board.Start();
 
@@ -77,6 +99,6 @@ void Game::Draw()
 void Game::OnDraw()
 {
 
-	board.OnDraw();
+	board.OnDraw();	
 
 }
