@@ -64,5 +64,20 @@
     <Image Include="img\wakawaka.png">
       <Filter>Archivos de recursos\img</Filter>
     </Image>
+    <Image Include="img\sqweek.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\nyaaaa.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\blue.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\orange.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
+    <Image Include="img\red.png">
+      <Filter>Archivos de recursos\img</Filter>
+    </Image>
   </ItemGroup>
 </Project>

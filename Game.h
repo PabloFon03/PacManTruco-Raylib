@@ -66,6 +66,8 @@ public:
 	void DrawCurrentFrame(Texture2D& _animAtlas);
 	virtual void OnDraw() = 0;
 
+	virtual Vector2Int TileSize() = 0;
+
 	int animIndex{ 0 };
 	float animDelay{ 0 };
 
@@ -99,6 +101,8 @@ private:
 
 	void ChangeDir(Maze* _maze);
 
+	Vector2Int TileSize() { return Vector2Int{ 24, 24 }; }
+
 };
 
 // Enemy Class
@@ -120,6 +124,8 @@ private:
 	int ID{ -1 };
 
 	void ChangeDir(Maze* _maze, Vector2Int _playerPos);
+
+	Vector2Int TileSize() { return Vector2Int{ 18, 32 }; }
 
 };
 

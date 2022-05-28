@@ -25,7 +25,7 @@ Entity::Vector2Int Entity::dir(int i)
 void Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 {
 
-	DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * 16, (float)dirIndex * 16, 16, 16 }, Vector2{ (coords.x + dir(dirIndex).x * stepTimer) * 16, (coords.y + dir(dirIndex).y * stepTimer) * 16 + 48 }, WHITE);
+	DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * TileSize().x, (float)dirIndex * TileSize().y, (float)TileSize().x, (float)TileSize().y }, Vector2{ (coords.x + dir(dirIndex).x * stepTimer) * 16 - (TileSize().x - 16) / 2.0f, (coords.y + dir(dirIndex).y * stepTimer) * 16 + 48 - (TileSize().y - 16) / 2.0f }, WHITE);
 
 }
 

@@ -151,6 +151,11 @@
     <ClInclude Include="Game.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="img\blue.png" />
+    <Image Include="img\nyaaaa.png" />
+    <Image Include="img\orange.png" />
+    <Image Include="img\red.png" />
+    <Image Include="img\sqweek.png" />
     <Image Include="img\blueG.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
