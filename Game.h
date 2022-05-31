@@ -59,7 +59,7 @@ public:
 
 		while (_i < 0) { _i += _n; }
 
-		while (_i > _n) { _i -= _n; }
+		while (_i >= _n) { _i -= _n; }
 
 		return _i;
 	}
