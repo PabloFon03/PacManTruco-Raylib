@@ -52,7 +52,17 @@ public:
 
 	};
 
-	int TrueMod(int _i, int _n) { return (_i % _n + _n) % _n; }
+	float TrueMod(float _i, float _n)
+	{
+
+		if (_n < 0) { _n *= -1; }
+
+		while (_i < 0) { _i += _n; }
+
+		while (_i > _n) { _i -= _n; }
+
+		return _i;
+	}
 
 	Entity();
 	virtual ~Entity();
@@ -62,6 +72,8 @@ public:
 	Vector2Int coords;
 	int dirIndex;
 	Vector2Int dir(int _i);
+
+	Vector2 GetRawCoords() { return Vector2{ TrueMod(coords.x + dir(dirIndex).x * stepTimer, 19), TrueMod(coords.y + dir(dirIndex).y * stepTimer, 22) }; }
 
 	void DrawCurrentFrame(Texture2D& _animAtlas);
 	virtual void OnDraw() = 0;

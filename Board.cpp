@@ -69,9 +69,25 @@ void Board::OnDraw()
 
 	maze.OnDraw();
 
-	player.OnDraw();
+	// Draw Entities From Top To Bottom
+	std::vector<Entity*> entities = std::vector<Entity*>();
 
-	for (int i = 0; i < enemies.size(); i++) { enemies[i].OnDraw(); }
+	entities.push_back(&player);
+	for (int i = 0; i < enemies.size(); i++) { entities.push_back(&enemies[i]); }
+
+	// Selection Sort
+	for (int i = 0; i < entities.size() - 1; i++)
+	{
+
+		int targetIndex = i;
+
+		for (int i = targetIndex + 1; i < entities.size(); i++) { if ((*entities[i]).GetRawCoords().y < (*entities[targetIndex]).GetRawCoords().y) { targetIndex = i; } }
+
+		if (targetIndex != i) { std::swap(entities[i], entities[targetIndex]); }
+
+	}
+
+	for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
 
 	DrawText(("Score: " + std::to_string(score)).c_str(), 8, 8, 16, WHITE);
 
