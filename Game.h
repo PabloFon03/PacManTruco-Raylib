@@ -135,7 +135,9 @@ private:
 
 	int ID{ -1 };
 
-	void ChangeDir(Maze* _maze, Vector2Int _playerPos);
+	Vector2Int GetTarget();
+
+	void ChangeDir(Maze* _maze);
 
 	Vector2Int TileSize() { return Vector2Int{ 18, 32 }; }
 
@@ -158,6 +160,9 @@ public:
 	void ClearTile(int _i);
 	void AddScore(int _s);
 	void OnPowerCollected();
+
+	Entity::Vector2Int GetPlayerPos() { return player.coords; }
+	int GetPlayerDirIndex() { return player.dirIndex; }
 
 	Texture2D GetTexture(int _i) { return textures[_i]; }
 

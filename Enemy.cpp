@@ -19,7 +19,7 @@ Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 
 }
 
-void Enemy::Update(Maze* _maze, Vector2Int _playerPos)
+void Enemy::Update(Maze* _maze, Vector2Int _targetPos)
 {
 
 	float deltaTime = GetFrameTime();
@@ -31,7 +31,7 @@ void Enemy::Update(Maze* _maze, Vector2Int _playerPos)
 
 		coords = AddDir(coords, dirIndex);
 
-		ChangeDir(_maze, _playerPos);
+		ChangeDir(_maze);
 
 		stepTimer--;
 
@@ -40,7 +40,7 @@ void Enemy::Update(Maze* _maze, Vector2Int _playerPos)
 	if (hitWall)
 	{
 
-		ChangeDir(_maze, _playerPos);
+		ChangeDir(_maze);
 
 		stepTimer = 0;
 
@@ -66,15 +66,37 @@ void Enemy::Update(Maze* _maze, Vector2Int _playerPos)
 
 }
 
-void Enemy::ChangeDir(Maze* _maze, Vector2Int _playerPos)
+Entity::Vector2Int Enemy::GetTarget()
 {
+
+	Vector2Int playerCoords = board->GetPlayerPos();
+
+	switch (ID)
+	{
+
+	case 0: return playerCoords;
+
+	case 1: return AddDir(playerCoords, board->GetPlayerDirIndex());
+
+	case 3: return coords.distanceTo(playerCoords) > 5 ? playerCoords : Vector2Int{ 0, 0 };
+
+	}
+
+	return Vector2Int{ 0, 0 };
+
+}
+
+void Enemy::ChangeDir(Maze* _maze)
+{
+
+	Vector2Int targetPos = GetTarget();
 
 	std::vector<float> dirDist(3);
 
 	for (int i = -1; i < 2; i++)
 	{
 
-		if (IsValidDir(_maze, coords, TrueMod(dirIndex + i, 4))) { dirDist[i + 1] = AddDir(coords, TrueMod(dirIndex + i, 4)).distanceTo(_playerPos); }
+		if (IsValidDir(_maze, coords, TrueMod(dirIndex + i, 4))) { dirDist[i + 1] = AddDir(coords, TrueMod(dirIndex + i, 4)).distanceTo(targetPos); }
 
 		else { dirDist[i + 1] = -1; }
 
