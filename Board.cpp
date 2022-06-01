@@ -90,6 +90,7 @@ void Board::OnDraw()
 	for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
 
 	DrawText(("Score: " + std::to_string(score)).c_str(), 8, 8, 16, WHITE);
+	DrawText(("Speed: " + std::to_string(speedMod + 1)).c_str(), 128, 8, 16, WHITE);
 
 }
 
@@ -104,6 +105,19 @@ void Board::AddScore(int _s)
 {
 
 	score += _s;
+
+	speedScore += _s;
+
+	while (speedScore >= 500)
+	{
+
+		speedScore -= 500;
+
+		if (speedMod < 50) { speedMod++; }
+
+		else { score += 2500; }
+
+	}
 
 }
 

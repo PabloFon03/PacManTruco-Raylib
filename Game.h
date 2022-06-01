@@ -28,6 +28,8 @@ private:
 	std::vector<int> tiles;
 	Texture2D tilesAtlas;
 
+	int ColorID{ 5 };
+
 };
 
 // Declared Before Definition
@@ -161,6 +163,8 @@ public:
 	void AddScore(int _s);
 	void OnPowerCollected();
 
+	float GetDeltaTime() { return GetFrameTime() * (1 + 0.1f * speedMod); }
+
 	Entity::Vector2Int GetPlayerPos() { return player.coords; }
 	int GetPlayerDirIndex() { return player.dirIndex; }
 
@@ -171,6 +175,8 @@ private:
 	std::vector<Texture2D> textures;
 
 	int score{ 0 };
+	int speedScore{ 0 };
+	int speedMod{ 0 };
 
 	Maze maze;
 	Player player;

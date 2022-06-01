@@ -36,7 +36,7 @@ void Game::Start()
 	textures.clear();
 
 	// Load Textures
-	std::vector<std::string> textureFiles{ "img/sqweek.png", "img/red.png", "img/tsundere cheesecake.png", "img/blind.png", "img/mouse gal.png" };
+	std::vector<std::string> textureFiles{ "img/sqweek.png", "img/red.png", "img/tsundere cheesecake.png", "img/blind.png", "img/orange.png" };
 
 	for (int i = 0; i < textureFiles.size(); i++)
 	{

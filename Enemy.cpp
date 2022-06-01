@@ -22,7 +22,7 @@ Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 void Enemy::Update(Maze* _maze, Vector2Int _targetPos)
 {
 
-	float deltaTime = GetFrameTime();
+	float deltaTime = board->GetDeltaTime();
 
 	stepTimer += 3.5f * deltaTime;
 
@@ -76,7 +76,7 @@ Entity::Vector2Int Enemy::GetTarget()
 
 	case 0: return playerCoords;
 
-	case 1: return AddDir(playerCoords, board->GetPlayerDirIndex());
+	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex()), board->GetPlayerDirIndex());
 
 	case 3: return coords.distanceTo(playerCoords) > 5 ? playerCoords : Vector2Int{ 0, 0 };
 

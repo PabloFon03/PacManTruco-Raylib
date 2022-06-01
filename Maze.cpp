@@ -39,7 +39,7 @@ void Maze::OnDraw()
 		for (int x = 0; x < 19; x++)
 		{
 			int tileID = tiles[19 * y + x];
-			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, 0, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
+			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, (float)ColorID * 16, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
 		}
 	}
 

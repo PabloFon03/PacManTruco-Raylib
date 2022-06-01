@@ -16,7 +16,7 @@ Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 void Player::Update(Maze* _maze)
 {
 
-	float deltaTime = GetFrameTime();
+	float deltaTime = board->GetDeltaTime();
 
 	stepTimer += 3.5f * deltaTime;
 
