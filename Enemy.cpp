@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Board.h"
 
 Enemy::Enemy()
 {
@@ -15,16 +15,16 @@ Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 
 	dirIndex = _dirIndex;
 
-	mainAnimAtlas = board->GetTexture(ID + 1);
+	mainAnimAtlas = board->GetTexture(ID + 2);
 
 }
 
-void Enemy::Update(Maze* _maze, Vector2Int _targetPos)
+void Enemy::Update(Maze* _maze)
 {
 
 	float deltaTime = board->GetDeltaTime();
 
-	stepTimer += 3.5f * deltaTime;
+	stepTimer += 4 * deltaTime;
 
 	if (stepTimer >= 1)
 	{
@@ -64,6 +64,13 @@ void Enemy::Update(Maze* _maze, Vector2Int _targetPos)
 
 	}
 
+	if (abs(GetRawCoords().x - board->GetPlayerRawPos().x) < 0.5f && abs(GetRawCoords().y - board->GetPlayerRawPos().y) < 0.5f)
+	{
+
+		board->OnPlayerHit();
+
+	}
+
 }
 
 Entity::Vector2Int Enemy::GetTarget()
@@ -91,7 +98,7 @@ void Enemy::ChangeDir(Maze* _maze)
 
 	Vector2Int targetPos = GetTarget();
 
-	std::vector<float> dirDist(3);
+	std::vector<float> dirDist(4);
 
 	for (int i = -1; i < 2; i++)
 	{
@@ -102,13 +109,16 @@ void Enemy::ChangeDir(Maze* _maze)
 
 	}
 
+	// Allow U-Turns
+	if (true) { dirDist[3] = -1; }
+
 	int lowestDistIndex = 0;
 
 	// Look For First Possible Direction
-	while (lowestDistIndex < 3 && dirDist[lowestDistIndex] < 0) { lowestDistIndex++; }
+	while (lowestDistIndex < 4 && dirDist[lowestDistIndex] < 0) { lowestDistIndex++; }
 
 	// Look For Direction With Lowest Distance
-	for (int i = lowestDistIndex + 1; i < 3; i++) { if (dirDist[i] > -1 && dirDist[i] < dirDist[lowestDistIndex]) { lowestDistIndex = i; } }
+	for (int i = lowestDistIndex + 1; i < 4; i++) { if (dirDist[i] > -1 && dirDist[i] < dirDist[lowestDistIndex]) { lowestDistIndex = i; } }
 
 	// Apply Lowest Distance Direction Offset (U-Turn If None)
 	dirIndex = TrueMod(dirIndex + lowestDistIndex - 1, 4);

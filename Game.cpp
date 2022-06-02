@@ -28,7 +28,6 @@ Game::~Game() noexcept
 
 bool Game::GameShouldClose() const { return WindowShouldClose(); }
 
-
 void Game::Start()
 {
 
@@ -36,7 +35,7 @@ void Game::Start()
 	textures.clear();
 
 	// Load Textures
-	std::vector<std::string> textureFiles{ "img/sqweek.png", "img/red.png", "img/tsundere cheesecake.png", "img/blind.png", "img/orange.png" };
+	std::vector<std::string> textureFiles{ "img/round counter.png", "img/sqweek.png", "img/mouse gal.png", "img/tsundere cheesecake.png", "img/alice.png", "img/orange.png"};
 
 	for (int i = 0; i < textureFiles.size(); i++)
 	{
@@ -47,6 +46,13 @@ void Game::Start()
 
 	}
 
+	StartBoard();
+
+}
+
+void Game::StartBoard()
+{
+
 	board = Board(textures);
 
 	board.Start();
@@ -55,24 +61,49 @@ void Game::Start()
 
 void Game::Tick()
 {
-	frameCounter++;
 	Update();
 	Draw();
 }
 
 void Game::Update()
 {
-	board.Update();
+	
+	switch (board.ExitFlag())
+	{
+
+	// Keep Going
+	case 0:
+
+		board.Update();
+
+		break;
+
+	}
+
 }
 
 void Game::Draw()
 {
 
+	StartDraw();
+
+	board.OnDraw();
+
+	EndDraw();
+
+}
+
+void Game::StartDraw()
+{
+
 	BeginTextureMode(target);
 
-	ClearBackground(Color{ 5, 5, 5, 255 });
+	ClearBackground(BLACK);
 
-	OnDraw();
+}
+
+void Game::EndDraw()
+{
 
 	EndTextureMode();
 
@@ -93,12 +124,5 @@ void Game::Draw()
 		Vector2{ 0, 0 }, 0.0f, WHITE);
 
 	EndDrawing();
-
-}
-
-void Game::OnDraw()
-{
-
-	board.OnDraw();	
 
 }

@@ -3,17 +3,12 @@
 
 int main(void)
 {
-	const int screenWidth = 304;
-	const int screenHeight = 400;
 
-	Game game{ screenWidth, screenHeight, 60, "test" };
+	Game game{ 304, 448, 60, "test" };
 
 	game.Start();
 
-	while (!game.GameShouldClose())
-	{
-		game.Tick();
-	}
+	while (!game.GameShouldClose()) { game.Tick(); }
 
 	return 0;
 }

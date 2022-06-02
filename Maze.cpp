@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Board.h"
 
 Maze::Maze()
 {
@@ -30,17 +30,20 @@ void Maze::Update()
 
 }
 
-void Maze::OnDraw()
+void Maze::OnDraw(int _ColorID)
 {
 
 	// Draw Maze Tiles
 	for (int y = 0; y < 22; y++)
 	{
+
 		for (int x = 0; x < 19; x++)
 		{
+
 			int tileID = tiles[19 * y + x];
-			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, (float)ColorID * 16, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
+			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, (float)_ColorID * 16, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
 		}
+
 	}
 
 }

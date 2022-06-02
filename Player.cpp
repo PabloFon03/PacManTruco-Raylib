@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Board.h"
 
 Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 {
@@ -9,7 +9,7 @@ Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 
 	dirIndex = _dirIndex;
 
-	mainAnimAtlas = board->GetTexture(0);
+	mainAnimAtlas = board->GetTexture(1);
 
 }
 
@@ -18,7 +18,7 @@ void Player::Update(Maze* _maze)
 
 	float deltaTime = board->GetDeltaTime();
 
-	stepTimer += 3.5f * deltaTime;
+	stepTimer += 4 * deltaTime;
 
 	if (stepTimer >= 1)
 	{

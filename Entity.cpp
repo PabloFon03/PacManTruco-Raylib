@@ -1,4 +1,4 @@
-#include "Game.h";
+#include "Board.h"
 
 Entity::Entity()
 {
@@ -25,7 +25,19 @@ Entity::Vector2Int Entity::dir(int i)
 void Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 {
 
-	DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * TileSize().x, (float)dirIndex * TileSize().y, (float)TileSize().x, (float)TileSize().y }, Vector2{ (coords.x + dir(dirIndex).x * stepTimer) * 16 - (TileSize().x - 16) / 2.0f, (coords.y + dir(dirIndex).y * stepTimer) * 16 + 48 - (TileSize().y - 16) / 2.0f }, WHITE);
+	for (int y = -1; y < 2; y++)
+	{
+
+		for (int x = -1; x < 2; x++)
+		{
+
+			Vector2 rawCoords = { GetRawCoords().x + x * 19, GetRawCoords().y + y * 22 };
+
+			if (rawCoords.x > -2 && rawCoords.x < 21 && rawCoords.y > -2 && rawCoords.y < 24) { DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * TileSize().x, (float)dirIndex * TileSize().y, (float)TileSize().x, (float)TileSize().y }, Vector2{ rawCoords.x * 16 - (TileSize().x - 16) / 2.0f, rawCoords.y * 16 + 48 - (TileSize().y - 16) / 2.0f }, WHITE); }
+
+		}
+
+	}	
 
 }
 
