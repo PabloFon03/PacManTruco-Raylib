@@ -140,20 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Maze.cpp" />
-    <ClCompile Include="Player.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Game.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <Image Include="img\baseballs.png" />
     <Image Include="img\blue.png" />
+    <Image Include="img\electric ball.png" />
+    <Image Include="img\electric base.png" />
     <Image Include="img\nyaaaa.png" />
     <Image Include="img\orange.png" />
     <Image Include="img\red.png" />
@@ -174,6 +164,25 @@
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="img\wakawaka.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BaseballArena.cpp" />
+    <ClCompile Include="BaseballBall.cpp" />
+    <ClCompile Include="BaseballPlayer.cpp" />
+    <ClCompile Include="MazeBoard.cpp" />
+    <ClCompile Include="MazeEnemy.cpp" />
+    <ClCompile Include="MazeEntity.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MazePlayer.cpp" />
+    <ClCompile Include="SubScreen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Arena.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="SubScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

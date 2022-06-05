@@ -1,5 +1,8 @@
 #include <assert.h>
+
 #include "Game.h";
+#include "Board.h";
+#include "Arena.h";
 
 Game::Game(int w, int h, int fps, std::string t)
 {
@@ -21,7 +24,11 @@ Game::~Game() noexcept
 
 	assert(GetWindowHandle());
 
+	// Free Content
+	delete content;
+
 	for (int i = 0; i < textures.size(); i++) { UnloadTexture(textures[i]); }
+
 	CloseWindow();
 
 }
@@ -35,7 +42,7 @@ void Game::Start()
 	textures.clear();
 
 	// Load Textures
-	std::vector<std::string> textureFiles{ "img/round counter.png", "img/sqweek.png", "img/mouse gal.png", "img/tsundere cheesecake.png", "img/alice.png", "img/orange.png"};
+	std::vector<std::string> textureFiles{ "img/electric base.png", "img/electric ball.png", "img/baseballs.png", "img/pitcher.png", "img/pitcher platform.png", "img/player platform.png", "img/round counter.png", "img/sqweek.png", "img/mouse gal.png", "img/tsundere cheesecake.png", "img/alice.png", "img/orange.png"};
 
 	for (int i = 0; i < textureFiles.size(); i++)
 	{
@@ -46,35 +53,57 @@ void Game::Start()
 
 	}
 
-	StartBoard();
+	StartNewScreen(2);
 
 }
 
-void Game::StartBoard()
+void Game::StartNewScreen(int _ID)
 {
 
-	board = Board(textures);
+	// Free Old Content
+	delete content;
 
-	board.Start();
+	// Create New Content
+	switch (_ID)
+	{
+
+	case 1:
+		content = new PacMan_Board::Board(textures);
+		break;
+
+	case 2:
+		content = new Baseball_Arena::Arena(textures);
+		break;
+
+	default:
+		break;
+
+	}
+
+	// Initcialize New Content
+	(*content).Start();
 
 }
 
 void Game::Tick()
 {
+
 	Update();
+
 	Draw();
+
 }
 
 void Game::Update()
 {
 	
-	switch (board.ExitFlag())
+	switch ((*content).exitFlag)
 	{
 
 	// Keep Going
-	case 0:
+	default:
 
-		board.Update();
+		(*content).Update();
 
 		break;
 
@@ -87,7 +116,7 @@ void Game::Draw()
 
 	StartDraw();
 
-	board.OnDraw();
+	(*content).OnDraw();
 
 	EndDraw();
 

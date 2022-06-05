@@ -1,23 +1,25 @@
 #include "Board.h"
 
-Maze::Maze()
+using namespace PacMan_Board;
+
+Board::Maze::Maze()
 {
 
 }
 
-Maze::Maze(std::vector<int> rawTiles)
+Board::Maze::Maze(std::vector<int> rawTiles)
 {
 
 	tiles = rawTiles;
 
 }
 
-Maze::~Maze() noexcept
+Board::Maze::~Maze() noexcept
 {
 	UnloadTexture(tilesAtlas);
 }
 
-void Maze::LoadTextureAtlas()
+void Board::Maze::LoadTextureAtlas()
 {
 
 	tilesAtlas = LoadTexture("img/pacmiku.png");
@@ -25,12 +27,12 @@ void Maze::LoadTextureAtlas()
 
 }
 
-void Maze::Update()
+void Board::Maze::Update()
 {
 
 }
 
-void Maze::OnDraw(int _ColorID)
+void Board::Maze::OnDraw(int _ColorID)
 {
 
 	// Draw Maze Tiles
@@ -41,18 +43,42 @@ void Maze::OnDraw(int _ColorID)
 		{
 
 			int tileID = tiles[19 * y + x];
+
 			DrawTextureRec(tilesAtlas, Rectangle{ (float)tileID * 16, (float)_ColorID * 16, 16, 16 }, Vector2{ (float)x * 16, (float)y * 16 + 48 }, WHITE);
+
 		}
 
 	}
 
 }
 
-void Maze::ClearTile(int _i)
+int Board::Maze::GetDotCount()
+{
+
+	int n = 0;
+
+	for (int y = 0; y < 22; y++)
+	{
+
+		for (int x = 0; x < 19; x++)
+		{
+
+			int tileID = tiles[19 * y + x];
+
+			if (tileID == 18) { n++; }
+
+		}
+
+	}
+
+	return n;
+}
+
+void Board::Maze::ClearTile(int _i)
 {
 
 	tiles[_i] = 0;
 
 }
 
-int Maze::GetTileID(int i) { return tiles[i]; }
+int Board::Maze::GetTileID(int i) { return tiles[i]; }

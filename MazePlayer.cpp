@@ -1,6 +1,8 @@
 #include "Board.h"
 
-Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
+using namespace PacMan_Board;
+
+Board::Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 {
 
 	board = _board;
@@ -13,7 +15,7 @@ Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
 
 }
 
-void Player::Update(Maze* _maze)
+void Board::Player::Update(Maze* _maze)
 {
 
 	float deltaTime = board->GetDeltaTime();
@@ -31,6 +33,8 @@ void Player::Update(Maze* _maze)
 		case 18:
 
 			_maze->ClearTile(CoordsToIndex(coords));
+
+			board->DotCollected();
 
 			board->AddScore(10);
 
@@ -83,7 +87,7 @@ void Player::Update(Maze* _maze)
 
 }
 
-void Player::ChangeDir(Maze* _maze)
+void Board::Player::ChangeDir(Maze* _maze)
 {
 
 	for (int i = 0; i < 4; i++)

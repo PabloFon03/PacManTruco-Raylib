@@ -1,8 +1,6 @@
 #include "Board.h"
 
-Board::Board()
-{
-}
+using namespace PacMan_Board;
 
 Board::Board(std::vector<Texture2D>& _textures)
 {
@@ -43,6 +41,9 @@ void Board::Start()
 	maze = Maze(mazeTiles);
 	maze.LoadTextureAtlas();
 
+	dotsCollected = 0;
+	dotGoal = maze.GetDotCount();
+
 	player = Player{ this, Entity::Vector2Int{ 9, 16 }, 3 };
 
 	enemies.clear();
@@ -51,8 +52,8 @@ void Board::Start()
 	enemies.push_back(Enemy{ this, 2, Entity::Vector2Int{ 9, 10 }, 0 });
 	enemies.push_back(Enemy{ this, 3, Entity::Vector2Int{ 10, 10 }, 0 });
 
-	score = 0;
-	speedMod = 0;
+	// score = 0;
+	// speedMod = 0;
 
 	currentState = Starting;
 
@@ -101,8 +102,10 @@ void Board::Update()
 
 void Board::OnDraw()
 {
+
 	switch (currentState)
 	{
+
 	case Starting:
 
 		maze.OnDraw(clearedRounds % 6);
@@ -154,11 +157,11 @@ void Board::OnDraw()
 
 		case 5:
 
-			DrawRectangle(87, 199, 50, 50, Color{ 150, 225, 255, 255 });
+			DrawRectangle(101, 199, 98, 50, Color{ 150, 225, 255, 255 });
 
-			DrawRectangle(88, 200, 48, 48, BLACK);
+			DrawRectangle(102, 200, 96, 48, BLACK);
 
-			DrawText("- GO -", 104, 216, 16, SKYBLUE);
+			DrawText("- GO -", 128, 216, 16, SKYBLUE);
 
 			break;
 
@@ -202,6 +205,7 @@ void Board::OnDraw()
 	DrawRectangle(0, 400, 304, 48, BLACK);
 
 	DrawTextureRec(GetTexture(0), Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
+	DrawText(("Dots: " + std::to_string(dotsCollected) + " / " + std::to_string(dotGoal)).c_str(), 192, 416, 16, WHITE);
 
 }
 
@@ -224,10 +228,26 @@ void Board::AddScore(int _s)
 
 		speedScore -= 500;
 
-		if (speedMod < 50) { speedMod++; }
+		if (speedMod < 24) { speedMod++; }
 
 		else { score += 2500; }
 
+	}
+
+}
+
+void Board::DotCollected()
+{
+
+	dotsCollected++;
+
+	if (dotsCollected == dotGoal)
+	{
+	
+		clearedRounds++;
+
+		Start();
+	
 	}
 
 }
@@ -239,6 +259,7 @@ void Board::OnPowerCollected()
 void Board::OnPlayerHit()
 {
 
-	currentState = Defeat;
+	// currentState = Defeat;
+	Start();
 
 }

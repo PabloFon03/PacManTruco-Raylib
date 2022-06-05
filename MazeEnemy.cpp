@@ -1,10 +1,12 @@
 #include "Board.h"
 
-Enemy::Enemy()
+using namespace PacMan_Board;
+
+Board::Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
+Board::Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 {
 
 	board = _board;
@@ -19,7 +21,7 @@ Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
 
 }
 
-void Enemy::Update(Maze* _maze)
+void Board::Enemy::Update(Maze* _maze)
 {
 
 	float deltaTime = board->GetDeltaTime();
@@ -64,7 +66,7 @@ void Enemy::Update(Maze* _maze)
 
 	}
 
-	if (abs(GetRawCoords().x - board->GetPlayerRawPos().x) < 0.5f && abs(GetRawCoords().y - board->GetPlayerRawPos().y) < 0.5f)
+	if (abs(GetRawCoords().x - board->GetPlayerRawPos().x) < 0.35f && abs(GetRawCoords().y - board->GetPlayerRawPos().y) < 0.35f)
 	{
 
 		board->OnPlayerHit();
@@ -73,7 +75,7 @@ void Enemy::Update(Maze* _maze)
 
 }
 
-Entity::Vector2Int Enemy::GetTarget()
+Board::Entity::Vector2Int Board::Enemy::GetTarget()
 {
 
 	Vector2Int playerCoords = board->GetPlayerPos();
@@ -83,7 +85,7 @@ Entity::Vector2Int Enemy::GetTarget()
 
 	case 0: return playerCoords;
 
-	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex()), board->GetPlayerDirIndex());
+	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex(), false), board->GetPlayerDirIndex(), false);
 
 	case 3: return coords.distanceTo(playerCoords) > 5 ? playerCoords : Vector2Int{ 0, 0 };
 
@@ -93,7 +95,7 @@ Entity::Vector2Int Enemy::GetTarget()
 
 }
 
-void Enemy::ChangeDir(Maze* _maze)
+void Board::Enemy::ChangeDir(Maze* _maze)
 {
 
 	Vector2Int targetPos = GetTarget();

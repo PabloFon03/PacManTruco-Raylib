@@ -1,4 +1,8 @@
-#include "Board.h"
+#include<string>
+#include<vector>
+#include<raylib.h>
+
+#include "./SubScreen.h"
 
 // Game Class
 class Game {
@@ -20,15 +24,7 @@ public:
 	bool GameShouldClose() const;
 
 	void Start();
-
-	void StartBoard();
-
 	void Tick();
-	void Update();
-	void Draw();
-
-	void StartDraw();
-	void EndDraw();
 
 private:
 
@@ -39,10 +35,14 @@ private:
 
 	std::vector<Texture2D> textures;
 
-	enum Screens { MainMenu, StageSelect, Maze, CamilaShop, HappyShop };
+	void StartNewScreen(int _ID);
 
-	Screens currentScreen{ Maze };
+	void Update();
+	void Draw();
 
-	Board board;
+	void StartDraw();
+	void EndDraw();
+
+	SubScreen* content;
 
 };
