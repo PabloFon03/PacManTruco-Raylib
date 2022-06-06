@@ -15,19 +15,19 @@ namespace PacMan_Board
 
 	public:
 
-		// Maze Class
-		class Maze
+		// Grid Class
+		class Grid
 		{
 
 		public:
 
-			Maze();
+			Grid();
 
 			// Constrcutor
-			Maze(std::vector<int> _rawTiles);
+			Grid(std::vector<int> _rawTiles);
 
 			// Destructor
-			~Maze() noexcept;
+			~Grid() noexcept;
 
 			void LoadTextureAtlas();
 			void Update();
@@ -82,6 +82,7 @@ namespace PacMan_Board
 			virtual ~Entity();
 
 			Board* board;
+			Grid* grid;
 
 			Vector2Int coords;
 			int dirIndex;
@@ -103,11 +104,11 @@ namespace PacMan_Board
 			float stateTimer;
 			int stateIndex;
 
-			virtual void ChangeDir(Maze* _maze);
+			virtual void ChangeDir();
 
 			Vector2Int AddDir(Vector2Int _coords, int _dirIndex, bool _modWrap = true);
 			int CoordsToIndex(Vector2Int _coords);
-			bool IsValidDir(Maze* _maze, Vector2Int _coords, int _dirIndex);
+			bool IsValidDir(Vector2Int _coords, int _dirIndex);
 
 		};
 
@@ -119,16 +120,29 @@ namespace PacMan_Board
 
 			Player() {}
 
-			Player(Board* _board, Vector2Int _spawnPos, int _dirIndex);
+			Player(Board* _board, Grid* _grid, Vector2Int _spawnPos, int _dirIndex)
+			{
 
-			void Update(Maze* _maze);
+				board = _board;
+
+				grid = _grid;
+
+				coords = _spawnPos;
+
+				dirIndex = _dirIndex;
+
+				mainAnimAtlas = board->GetTexture(1);
+
+			}
+
+			void Update();
 			void OnDraw() { DrawCurrentFrame(mainAnimAtlas); }
 
 		private:
 
 			Texture2D mainAnimAtlas;
 
-			void ChangeDir(Maze* _maze);
+			void ChangeDir();
 
 			Vector2Int TileSize() { return Vector2Int{ 24, 24 }; }
 
@@ -140,10 +154,25 @@ namespace PacMan_Board
 
 		public:
 
-			Enemy();
-			Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex);
+			Enemy() {}
+			Enemy(Board* _board, Grid* _grid, int _ID, Vector2Int _spawnPos, int _dirIndex)
+			{
 
-			void Update(Maze* _maze);
+				board = _board;
+
+				grid = _grid;
+
+				ID = _ID;
+
+				coords = _spawnPos;
+
+				dirIndex = _dirIndex;
+
+				mainAnimAtlas = board->GetTexture(ID + 2);
+
+			}
+
+			void Update();
 			void OnDraw() { DrawCurrentFrame(mainAnimAtlas); }
 
 		private:
@@ -154,13 +183,13 @@ namespace PacMan_Board
 
 			Vector2Int GetTarget();
 
-			void ChangeDir(Maze* _maze);
+			void ChangeDir();
 
 			Vector2Int TileSize() { return Vector2Int{ 18, 52 }; }
 
 		};
 
-		Board(std::vector<Texture2D>& _textures);
+		Board(Resources* _res);
 
 		void Start();
 		void Update();
@@ -178,13 +207,11 @@ namespace PacMan_Board
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }
 		int GetPlayerDirIndex() { return player.dirIndex; }
 
-		Texture2D GetTexture(int _i) { return textures[_i]; }
+		Texture2D GetTexture(int _i) { return (*resources).GetMazeTexture(_i); }
 
 		int ExitFlag() { return 0; }
 
 	private:
-
-		std::vector<Texture2D> textures;
 
 		int clearedRounds{ 0 };
 
@@ -195,7 +222,7 @@ namespace PacMan_Board
 		int dotsCollected;
 		int dotGoal;
 
-		Maze maze;
+		Grid grid;
 		Player player;
 		std::vector<Enemy> enemies{ std::vector<Enemy>(0) };
 

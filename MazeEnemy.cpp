@@ -1,27 +1,8 @@
-#include "Board.h"
+#include "Maze.h"
 
 using namespace PacMan_Board;
 
-Board::Enemy::Enemy()
-{
-}
-
-Board::Enemy::Enemy(Board* _board, int _ID, Vector2Int _spawnPos, int _dirIndex)
-{
-
-	board = _board;
-
-	ID = _ID;
-
-	coords = _spawnPos;
-
-	dirIndex = _dirIndex;
-
-	mainAnimAtlas = board->GetTexture(ID + 2);
-
-}
-
-void Board::Enemy::Update(Maze* _maze)
+void Board::Enemy::Update()
 {
 
 	float deltaTime = board->GetDeltaTime();
@@ -33,7 +14,7 @@ void Board::Enemy::Update(Maze* _maze)
 
 		coords = AddDir(coords, dirIndex);
 
-		ChangeDir(_maze);
+		ChangeDir();
 
 		stepTimer--;
 
@@ -42,7 +23,7 @@ void Board::Enemy::Update(Maze* _maze)
 	if (hitWall)
 	{
 
-		ChangeDir(_maze);
+		ChangeDir();
 
 		stepTimer = 0;
 
@@ -95,7 +76,7 @@ Board::Entity::Vector2Int Board::Enemy::GetTarget()
 
 }
 
-void Board::Enemy::ChangeDir(Maze* _maze)
+void Board::Enemy::ChangeDir()
 {
 
 	Vector2Int targetPos = GetTarget();
@@ -105,7 +86,7 @@ void Board::Enemy::ChangeDir(Maze* _maze)
 	for (int i = -1; i < 2; i++)
 	{
 
-		if (IsValidDir(_maze, coords, TrueMod(dirIndex + i, 4))) { dirDist[i + 1] = AddDir(coords, TrueMod(dirIndex + i, 4)).distanceTo(targetPos); }
+		if (IsValidDir(coords, TrueMod(dirIndex + i, 4))) { dirDist[i + 1] = AddDir(coords, TrueMod(dirIndex + i, 4)).distanceTo(targetPos); }
 
 		else { dirDist[i + 1] = -1; }
 
@@ -125,6 +106,6 @@ void Board::Enemy::ChangeDir(Maze* _maze)
 	// Apply Lowest Distance Direction Offset (U-Turn If None)
 	dirIndex = TrueMod(dirIndex + lowestDistIndex - 1, 4);
 
-	Entity::ChangeDir(_maze);
+	Entity::ChangeDir();
 
 }

@@ -1,4 +1,4 @@
-#include "Arena.h"
+#include "Baseball.h"
 
 using namespace Baseball_Arena;
 
@@ -124,6 +124,85 @@ void Arena::Ball::Update()
 
 		break;
 
+		// Fast Ball
+	case 4:
+
+		switch (stepCounter)
+		{
+
+			// Slow Down
+		case 0:
+
+			v.x += 10 * deltaTime;
+
+			if (v.x > 0) { stepCounter = 1; }
+
+			else { Move(deltaTime); }
+
+			break;
+
+			// Wait
+		case 1:
+
+			stepTimer += deltaTime;
+
+			if (stepTimer >= 0.75f)
+			{
+
+				v.x = -15;
+
+				stepCounter = 2;
+
+			}
+
+			break;
+
+			// Speed Up
+		case 2:
+
+			Move(deltaTime);
+
+			break;
+
+		}
+
+		break;
+
+		// Sloped Ball
+	case 5:
+
+		Move(deltaTime);
+
+		switch (stepCounter)
+		{
+
+			// Wait FOr Descent
+		case 0:
+
+			if (pos.x < 4) { stepCounter = 1; }
+
+			break;
+
+			// Descend
+		case 1:
+
+			pos.y = (pos.x - 2) / 2 * 1.5f;
+
+			if (pos.x < 2)
+			{
+
+				pos.y = 0;
+
+				stepCounter = 2;
+
+			}
+
+			break;
+
+		}
+
+		break;
+
 	}
 
 	Vector2 playerPos = arena->GetPlayerPos();
@@ -132,7 +211,7 @@ void Arena::Ball::Update()
 	if (sqrt(pow(pos.x - playerPos.x, 2) + pow(pos.y - playerPos.y, 2)) < 0.5f) { exitCode = 1; }
 
 	// Out Of Bounds
-	else if (pos.x < -5) { exitCode = 2; }
+	if (pos.x < -5) { exitCode = 2; }
 
 	animTimer += deltaTime;
 

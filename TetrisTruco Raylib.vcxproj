@@ -174,14 +174,14 @@
     <ClCompile Include="MazeEntity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MazeGrid.cpp" />
     <ClCompile Include="MazePlayer.cpp" />
-    <ClCompile Include="SubScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Arena.h" />
-    <ClInclude Include="Board.h" />
+    <ClInclude Include="Baseball.h" />
+    <ClInclude Include="Maze.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Resources.h" />
     <ClInclude Include="SubScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

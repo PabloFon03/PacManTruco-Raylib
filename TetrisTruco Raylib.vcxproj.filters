@@ -74,9 +74,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="SubScreen.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="BaseballArena.cpp">
       <Filter>Archivos de origen\Baseball</Filter>
     </ClCompile>
@@ -98,7 +95,7 @@
     <ClCompile Include="BaseballBall.cpp">
       <Filter>Archivos de origen\Baseball</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
+    <ClCompile Include="MazeGrid.cpp">
       <Filter>Archivos de origen\Maze</Filter>
     </ClCompile>
   </ItemGroup>
@@ -106,13 +103,16 @@
     <ClInclude Include="SubScreen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Arena.h">
+    <ClInclude Include="Baseball.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Board.h">
+    <ClInclude Include="Maze.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "Maze.h"
 
 using namespace PacMan_Board;
 
@@ -43,10 +43,10 @@ void Board::Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 
 }
 
-void Board::Entity::ChangeDir(Maze* _maze)
+void Board::Entity::ChangeDir()
 {
 
-	hitWall = !IsValidDir(_maze, coords, dirIndex);
+	hitWall = !IsValidDir(coords, dirIndex);
 
 }
 
@@ -72,10 +72,10 @@ Board::Entity::Vector2Int Board::Entity::AddDir(Vector2Int _coords, int _dirInde
 
 int Board::Entity::CoordsToIndex(Vector2Int coords) { return coords.y * 19 + coords.x; }
 
-bool Board::Entity::IsValidDir(Maze* _maze, Vector2Int _coords, int _dirIndex)
+bool Board::Entity::IsValidDir(Vector2Int _coords, int _dirIndex)
 {
 
-	int nextTileID = _maze->GetTileID(CoordsToIndex(AddDir(_coords, _dirIndex)));
+	int nextTileID = grid->GetTileID(CoordsToIndex(AddDir(_coords, _dirIndex)));
 
 	return nextTileID == 0 || nextTileID > 17;
 

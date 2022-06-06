@@ -1,11 +1,11 @@
-#include "Arena.h"
+#include "Baseball.h"
 
 using namespace Baseball_Arena;
 
-Arena::Arena(std::vector<Texture2D>& _textures)
+Arena::Arena(Resources* _res)
 {
 
-	textures = _textures;
+	resources = _res;
 
 }
 
@@ -18,7 +18,7 @@ void Arena::Start()
 
 	nextBalls.clear();
 
-	for (int i = 0; i < 100; i++) { nextBalls.push_back(SpawnData{ i % 4, 0.75f }); }
+	for (int i = 0; i < 100; i++) { nextBalls.push_back(SpawnData{ i % 6, 0.75f }); }
 
 }
 
@@ -107,12 +107,12 @@ void Arena::OnDraw()
 	player.OnDraw();
 
 	// Draw Player Platform
-	DrawTexture(textures[5], 32, 278, WHITE);
+	DrawTexture(GetTexture(5), 32, 278, WHITE);
 
 	// Draw Pitcher
-	DrawTextureRec(textures[3], Rectangle{ (float)pitcherAnimIndex * 18, 0, 18, 32 }, Vector2{ 238, 224 }, WHITE);
+	DrawTextureRec(GetTexture(3), Rectangle{ (float)pitcherAnimIndex * 18, 0, 18, 32 }, Vector2{ 238, 224 }, WHITE);
 
 	// Draw Pitcher Platform
-	DrawTexture(textures[4], 224, 256, WHITE);
+	DrawTexture(GetTexture(4), 224, 256, WHITE);
 
 }

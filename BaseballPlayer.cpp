@@ -1,4 +1,4 @@
-#include "Arena.h"
+#include "Baseball.h"
 
 using namespace Baseball_Arena;
 
@@ -59,8 +59,6 @@ void Arena::Player::Update()
 			}
 
 		}
-
-		else if (IsKeyPressed(KEY_X)) { v.y = -40; }
 
 		ballAnimTimer += deltaTime;
 

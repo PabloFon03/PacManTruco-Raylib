@@ -119,7 +119,7 @@ namespace Baseball_Arena
 
 		};
 
-		Arena(std::vector<Texture2D>& _textures);
+		Arena(Resources* _res);
 
 		void Start();
 		void Update();
@@ -129,16 +129,14 @@ namespace Baseball_Arena
 
 		float GetDeltaTime() { return GetFrameTime() * (1 + 0.2f * speedMod); }
 
-		Texture2D GetTexture(int _i) { return textures[_i]; }
+		Texture2D GetTexture(int _i) { return (*resources).GetBaseballTexture(_i); }
 
 	private:
-
-		std::vector<Texture2D> textures;
 
 		int clearedRounds{ 0 };
 
 		int score{ 0 };
-		int speedMod{ 0 };
+		int speedMod{ 2 };
 
 		int dotsCollected{ 0 };
 		int dotGoal;

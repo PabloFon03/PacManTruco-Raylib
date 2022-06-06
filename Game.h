@@ -2,7 +2,7 @@
 #include<vector>
 #include<raylib.h>
 
-#include "./SubScreen.h"
+#include "SubScreen.h"
 
 // Game Class
 class Game {
@@ -33,16 +33,15 @@ private:
 
 	RenderTexture2D target;
 
-	std::vector<Texture2D> textures;
-
-	void StartNewScreen(int _ID);
-
 	void Update();
 	void Draw();
 
 	void StartDraw();
 	void EndDraw();
 
+	Resources resources;
+
 	SubScreen* content;
+	void StartNewScreen(int _ID);
 
 };

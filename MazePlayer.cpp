@@ -1,21 +1,8 @@
-#include "Board.h"
+#include "Maze.h"
 
 using namespace PacMan_Board;
 
-Board::Player::Player(Board* _board, Vector2Int _spawnPos, int _dirIndex)
-{
-
-	board = _board;
-
-	coords = _spawnPos;
-
-	dirIndex = _dirIndex;
-
-	mainAnimAtlas = board->GetTexture(1);
-
-}
-
-void Board::Player::Update(Maze* _maze)
+void Board::Player::Update()
 {
 
 	float deltaTime = board->GetDeltaTime();
@@ -27,12 +14,12 @@ void Board::Player::Update(Maze* _maze)
 
 		coords = AddDir(coords, dirIndex);
 
-		switch (_maze->GetTileID(CoordsToIndex(coords)))
+		switch (grid->GetTileID(CoordsToIndex(coords)))
 		{
 
 		case 18:
 
-			_maze->ClearTile(CoordsToIndex(coords));
+			grid->ClearTile(CoordsToIndex(coords));
 
 			board->DotCollected();
 
@@ -42,7 +29,7 @@ void Board::Player::Update(Maze* _maze)
 
 		case 19:
 
-			_maze->ClearTile(CoordsToIndex(coords));
+			grid->ClearTile(CoordsToIndex(coords));
 
 			board->AddScore(50);
 
@@ -52,7 +39,7 @@ void Board::Player::Update(Maze* _maze)
 
 		}
 
-		ChangeDir(_maze);
+		ChangeDir();
 
 		stepTimer--;
 
@@ -61,7 +48,7 @@ void Board::Player::Update(Maze* _maze)
 	if (hitWall)
 	{
 
-		ChangeDir(_maze);
+		ChangeDir();
 
 		stepTimer = 0;
 
@@ -87,13 +74,13 @@ void Board::Player::Update(Maze* _maze)
 
 }
 
-void Board::Player::ChangeDir(Maze* _maze)
+void Board::Player::ChangeDir()
 {
 
 	for (int i = 0; i < 4; i++)
 	{
 
-		if (IsKeyDown(std::vector<int> { KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT }[i]) && IsValidDir(_maze, coords, i))
+		if (IsKeyDown(std::vector<int> { KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT }[i]) && IsValidDir(coords, i))
 		{
 
 			dirIndex = i;
@@ -104,6 +91,6 @@ void Board::Player::ChangeDir(Maze* _maze)
 
 	}
 
-	Entity::ChangeDir(_maze);
+	Entity::ChangeDir();
 
 }

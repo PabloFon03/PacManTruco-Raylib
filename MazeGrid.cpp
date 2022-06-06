@@ -1,25 +1,25 @@
-#include "Board.h"
+#include "Maze.h"
 
 using namespace PacMan_Board;
 
-Board::Maze::Maze()
+Board::Grid::Grid()
 {
 
 }
 
-Board::Maze::Maze(std::vector<int> rawTiles)
+Board::Grid::Grid(std::vector<int> rawTiles)
 {
 
 	tiles = rawTiles;
 
 }
 
-Board::Maze::~Maze() noexcept
+Board::Grid::~Grid() noexcept
 {
 	UnloadTexture(tilesAtlas);
 }
 
-void Board::Maze::LoadTextureAtlas()
+void Board::Grid::LoadTextureAtlas()
 {
 
 	tilesAtlas = LoadTexture("img/pacmiku.png");
@@ -27,15 +27,15 @@ void Board::Maze::LoadTextureAtlas()
 
 }
 
-void Board::Maze::Update()
+void Board::Grid::Update()
 {
 
 }
 
-void Board::Maze::OnDraw(int _ColorID)
+void Board::Grid::OnDraw(int _ColorID)
 {
 
-	// Draw Maze Tiles
+	// Draw Grid Tiles
 	for (int y = 0; y < 22; y++)
 	{
 
@@ -52,7 +52,7 @@ void Board::Maze::OnDraw(int _ColorID)
 
 }
 
-int Board::Maze::GetDotCount()
+int Board::Grid::GetDotCount()
 {
 
 	int n = 0;
@@ -74,11 +74,11 @@ int Board::Maze::GetDotCount()
 	return n;
 }
 
-void Board::Maze::ClearTile(int _i)
+void Board::Grid::ClearTile(int _i)
 {
 
 	tiles[_i] = 0;
 
 }
 
-int Board::Maze::GetTileID(int i) { return tiles[i]; }
+int Board::Grid::GetTileID(int i) { return tiles[i]; }

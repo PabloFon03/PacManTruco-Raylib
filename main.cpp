@@ -12,4 +12,5 @@ int main(void)
 	while (!game.GameShouldClose()) { game.Tick(); }
 
 	return 0;
+
 }

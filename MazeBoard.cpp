@@ -1,11 +1,11 @@
-#include "Board.h"
+#include "Maze.h"
 
 using namespace PacMan_Board;
 
-Board::Board(std::vector<Texture2D>& _textures)
+Board::Board(Resources* _res)
 {
 
-	textures = _textures;
+	resources = _res;
 
 }
 
@@ -38,19 +38,19 @@ void Board::Start()
 		6, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 6,
 		4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 10
 	};
-	maze = Maze(mazeTiles);
-	maze.LoadTextureAtlas();
+	grid = Grid(mazeTiles);
+	grid.LoadTextureAtlas();
 
 	dotsCollected = 0;
-	dotGoal = maze.GetDotCount();
+	dotGoal = grid.GetDotCount();
 
-	player = Player{ this, Entity::Vector2Int{ 9, 16 }, 3 };
+	player = Player{ this, &grid, Entity::Vector2Int{ 9, 16 }, 3 };
 
 	enemies.clear();
-	enemies.push_back(Enemy{ this, 0, Entity::Vector2Int{ 9, 8 }, 3 });
-	enemies.push_back(Enemy{ this, 1, Entity::Vector2Int{ 8, 10 }, 0 });
-	enemies.push_back(Enemy{ this, 2, Entity::Vector2Int{ 9, 10 }, 0 });
-	enemies.push_back(Enemy{ this, 3, Entity::Vector2Int{ 10, 10 }, 0 });
+	enemies.push_back(Enemy{ this, &grid, 0, Entity::Vector2Int{ 9, 8 }, 3 });
+	enemies.push_back(Enemy{ this, &grid, 1, Entity::Vector2Int{ 8, 10 }, 0 });
+	enemies.push_back(Enemy{ this, &grid, 2, Entity::Vector2Int{ 9, 10 }, 0 });
+	enemies.push_back(Enemy{ this, &grid, 3, Entity::Vector2Int{ 10, 10 }, 0 });
 
 	// score = 0;
 	// speedMod = 0;
@@ -89,11 +89,11 @@ void Board::Update()
 
 	case Playing:
 
-		maze.Update();
+		grid.Update();
 
-		player.Update(&maze);
+		player.Update();
 
-		for (int i = 0; i < enemies.size(); i++) { enemies[i].Update(&maze); }
+		for (int i = 0; i < enemies.size(); i++) { enemies[i].Update(); }
 
 		break;
 	}
@@ -108,7 +108,7 @@ void Board::OnDraw()
 
 	case Starting:
 
-		maze.OnDraw(clearedRounds % 6);
+		grid.OnDraw(clearedRounds % 6);
 
 		switch (stepCounter)
 		{
@@ -171,7 +171,7 @@ void Board::OnDraw()
 
 	case Playing:
 
-		maze.OnDraw(clearedRounds % 6);
+		grid.OnDraw(clearedRounds % 6);
 
 		// Draw Entities From Top To Bottom
 		std::vector<Entity*> entities = std::vector<Entity*>();
@@ -212,7 +212,7 @@ void Board::OnDraw()
 void Board::ClearTile(int _i)
 {
 
-	maze.ClearTile(_i);
+	grid.ClearTile(_i);
 
 }
 
