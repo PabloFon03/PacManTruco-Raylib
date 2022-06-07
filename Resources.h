@@ -23,12 +23,13 @@ public:
 		LoadTextures(mazeTextures, std::vector<std::string>
 		{
 			"round counter.png",
-				"sqweek.png",
-				"mouse gal.png",
-				"tsundere cheesecake.png",
-				"alice.png",
-				"orange.png"
-		});
+			"pacmiku.png",
+			"sqweek.png",
+			"mouse gal.png",
+			"tsundere cheesecake.png",
+			"alice.png",
+			"orange.png"
+		}, "maze/");
 
 		// Load Baseball Texture Files
 		LoadTextures(baseballTextures, std::vector<std::string>
@@ -39,7 +40,7 @@ public:
 				"pitcher.png",
 				"pitcher platform.png",
 				"player platform.png"
-		});
+		}, "baseball/");
 
 	}
 
@@ -63,13 +64,13 @@ private:
 	std::vector<Texture2D> mazeTextures{ std::vector<Texture2D>() };
 	std::vector<Texture2D> baseballTextures{ std::vector<Texture2D>() };
 
-	void LoadTextures(std::vector<Texture2D>& _refVec, std::vector<std::string> _fileNames)
+	void LoadTextures(std::vector<Texture2D>& _refVec, std::vector<std::string> _fileNames, std::string _aboveFolder = "")
 	{
 
 		for (int i = 0; i < _fileNames.size(); i++)
 		{
 
-			_refVec.push_back(LoadTexture(("img/" + _fileNames[i]).c_str()));
+			_refVec.push_back(LoadTexture(("img/" + _aboveFolder + _fileNames[i]).c_str()));
 
 			SetTextureFilter(_refVec[i], TEXTURE_FILTER_POINT);
 

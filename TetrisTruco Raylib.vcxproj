@@ -140,32 +140,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Image Include="img\baseballs.png" />
-    <Image Include="img\blue.png" />
-    <Image Include="img\electric ball.png" />
-    <Image Include="img\electric base.png" />
-    <Image Include="img\nyaaaa.png" />
-    <Image Include="img\orange.png" />
-    <Image Include="img\red.png" />
-    <Image Include="img\sqweek.png" />
-    <Image Include="img\blueG.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="img\orangeG.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="img\pacmiku.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="img\pinkG.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="img\redG.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="img\wakawaka.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="BaseballArena.cpp" />
     <ClCompile Include="BaseballBall.cpp" />
     <ClCompile Include="BaseballPlayer.cpp" />
@@ -183,6 +157,37 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="SubScreen.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\baseball\baseballs.png" />
+    <Image Include="img\baseball\electric ball.png" />
+    <Image Include="img\baseball\electric base.png" />
+    <Image Include="img\baseball\pitcher platform.png" />
+    <Image Include="img\baseball\pitcher react.png" />
+    <Image Include="img\baseball\pitcher.png" />
+    <Image Include="img\baseball\player platform.png" />
+    <Image Include="img\maze\alice.png" />
+    <Image Include="img\maze\blind.png" />
+    <Image Include="img\maze\blue.png" />
+    <Image Include="img\maze\camila.png" />
+    <Image Include="img\maze\candle.png" />
+    <Image Include="img\maze\eye.png" />
+    <Image Include="img\maze\happy.png" />
+    <Image Include="img\maze\mildred.png" />
+    <Image Include="img\maze\miranda blue.png" />
+    <Image Include="img\maze\miranda orange.png" />
+    <Image Include="img\maze\miranda.png" />
+    <Image Include="img\maze\mouse gal.png" />
+    <Image Include="img\maze\orange colored.png" />
+    <Image Include="img\maze\orange.png" />
+    <Image Include="img\maze\pacmiku.png" />
+    <Image Include="img\maze\red.png" />
+    <Image Include="img\maze\round counter.png" />
+    <Image Include="img\maze\sleep.png" />
+    <Image Include="img\maze\sqweek.png" />
+    <Image Include="img\maze\tsundere cheesecake go speeeen.png" />
+    <Image Include="img\maze\tsundere cheesecake.png" />
+    <Image Include="img\maze\wake up.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

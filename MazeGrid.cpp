@@ -7,24 +7,19 @@ Board::Grid::Grid()
 
 }
 
-Board::Grid::Grid(std::vector<int> rawTiles)
+Board::Grid::Grid(Board* _board, std::vector<int> rawTiles)
 {
+
+	board = _board;
+
+	tilesAtlas = board->GetTexture(1);
 
 	tiles = rawTiles;
 
 }
 
-Board::Grid::~Grid() noexcept
+Board::Grid::~Grid()
 {
-	UnloadTexture(tilesAtlas);
-}
-
-void Board::Grid::LoadTextureAtlas()
-{
-
-	tilesAtlas = LoadTexture("img/pacmiku.png");
-	SetTextureFilter(tilesAtlas, TEXTURE_FILTER_POINT);
-
 }
 
 void Board::Grid::Update()
@@ -74,11 +69,6 @@ int Board::Grid::GetDotCount()
 	return n;
 }
 
-void Board::Grid::ClearTile(int _i)
-{
-
-	tiles[_i] = 0;
-
-}
+void Board::Grid::ClearTile(int _i) { tiles[_i] = 0; }
 
 int Board::Grid::GetTileID(int i) { return tiles[i]; }

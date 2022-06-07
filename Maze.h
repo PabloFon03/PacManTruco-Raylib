@@ -24,12 +24,11 @@ namespace PacMan_Board
 			Grid();
 
 			// Constrcutor
-			Grid(std::vector<int> _rawTiles);
+			Grid(Board* _board, std::vector<int> _rawTiles);
 
 			// Destructor
-			~Grid() noexcept;
+			~Grid();
 
-			void LoadTextureAtlas();
 			void Update();
 			void OnDraw(int _ColorID);
 
@@ -39,6 +38,8 @@ namespace PacMan_Board
 			int GetDotCount();
 
 		private:
+
+			Board* board;
 
 			std::vector<int> tiles;
 			Texture2D tilesAtlas;
@@ -131,7 +132,7 @@ namespace PacMan_Board
 
 				dirIndex = _dirIndex;
 
-				mainAnimAtlas = board->GetTexture(1);
+				mainAnimAtlas = board->GetTexture(2);
 
 			}
 
@@ -168,7 +169,7 @@ namespace PacMan_Board
 
 				dirIndex = _dirIndex;
 
-				mainAnimAtlas = board->GetTexture(ID + 2);
+				mainAnimAtlas = board->GetTexture(ID + 3);
 
 			}
 

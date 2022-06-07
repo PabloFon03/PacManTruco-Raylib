@@ -38,8 +38,7 @@ void Board::Start()
 		6, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 6,
 		4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 10
 	};
-	grid = Grid(mazeTiles);
-	grid.LoadTextureAtlas();
+	grid = Grid(this, mazeTiles);
 
 	dotsCollected = 0;
 	dotGoal = grid.GetDotCount();
