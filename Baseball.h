@@ -50,6 +50,8 @@ namespace Baseball_Arena
 			void Update();
 			void OnDraw();
 
+			bool isOnGround() { return onGround; }
+
 			Vector2 TileSize() { return Vector2{ 16, 16 }; }
 
 		private:
@@ -119,7 +121,7 @@ namespace Baseball_Arena
 
 		};
 
-		Arena(Resources* _res);
+		Arena(Resources* _res, int _difficulty);
 
 		void Start();
 		void Update();
@@ -127,31 +129,33 @@ namespace Baseball_Arena
 
 		Vector2 GetPlayerPos() { return player.pos; }
 
-		float GetDeltaTime() { return GetFrameTime() * (1 + 0.2f * speedMod); }
+		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
 
 		Texture2D GetTexture(int _i) { return (*resources).GetBaseballTexture(_i); }
 
 	private:
 
+		int difficulty{ 0 };
 		int clearedRounds{ 0 };
 
 		int score{ 0 };
-		int speedMod{ 2 };
+		int speedMod{ 0 };
 
-		int dotsCollected{ 0 };
-		int dotGoal;
+		int hits{ 0 };
+		int misses{ 0 };
+		int totalMisses{ 0 };
 
 		Player player;
 		std::vector<Ball> balls{ std::vector<Ball>(0) };
 
-		std::vector<SpawnData> nextBalls{ std::vector<SpawnData>(0) };
+		std::vector<std::vector<SpawnData>> roundSpawns{ std::vector<std::vector<SpawnData>>() };
 		float spawnDelay{ 0 };
 
 		int pitcherAnimIndex{ 0 };
 		float pitcherAnimTimer{ 0 };
 
-		enum States { Starting, Playing, Paused, Defeat, Cleared, TimeUp, Results };
-		States currentState{ Starting };
+		enum States { Starting, Playing, GameOver, Results };
+		States currentState{ Playing };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };
 

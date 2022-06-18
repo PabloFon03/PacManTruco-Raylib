@@ -1,11 +1,14 @@
 #include "Baseball.h"
+#include "Random.h"
 
 using namespace Baseball_Arena;
 
-Arena::Arena(Resources* _res)
+Arena::Arena(Resources* _res, int _difficulty)
 {
 
 	resources = _res;
+
+	difficulty = _difficulty;
 
 }
 
@@ -16,9 +19,70 @@ void Arena::Start()
 
 	balls.clear();
 
-	nextBalls.clear();
+	roundSpawns.clear();
 
-	for (int i = 0; i < 100; i++) { nextBalls.push_back(SpawnData{ i % 6, 0.75f }); }
+	Random rng = Random();
+
+	for (int r = 0; r < (difficulty == 0 ? 3 : (difficulty == 1 ? 5 : 10)); r++)
+	{
+
+		std::vector<SpawnData> currentRoundSpawns = std::vector<SpawnData>();
+
+		bool specialDelay = false;
+
+		for (int i = 0; i < (r < (difficulty == 0 ? 2 : (difficulty == 1 ? 7 : 5)) ? 5 : 10); i++)
+		{
+
+			bool tutorialRound = r == 0 && difficulty == 0;
+
+			int ballType;
+
+			if (tutorialRound) { ballType = i; }
+
+			else
+			{
+
+				do { ballType = rng.RandomInt(6); } while (specialDelay && (ballType == 1 || ballType == 4));
+
+				specialDelay = false;
+
+			}
+
+
+			switch (ballType)
+			{
+
+				// RNG Delay Variation (50% Chance)
+			case 1:
+
+				specialDelay = !tutorialRound && rng.RandomInt(2) == 0;
+
+				currentRoundSpawns.push_back(SpawnData{ 1, specialDelay ? 0.75f : 4 });
+
+				break;
+
+				// RNG Delay Variation (40% Chance)
+			case 4:
+
+				specialDelay = !tutorialRound && rng.RandomInt(5) < 2;
+
+				currentRoundSpawns.push_back(SpawnData{ 4, specialDelay ? 0.25f : 2.5f });
+
+				break;
+
+			default:
+
+				currentRoundSpawns.push_back(SpawnData{ ballType, 2 });
+
+				break;
+
+			}
+
+		}
+
+		roundSpawns.push_back(currentRoundSpawns);
+
+	}
 
 }
 
@@ -27,71 +91,136 @@ void Arena::Update()
 
 	float deltaTime = GetDeltaTime();
 
-	if (nextBalls.size() > 0)
+	switch (currentState)
 	{
 
-		spawnDelay -= deltaTime;
+	case Playing:
 
-		if (spawnDelay <= 0)
+		if (roundSpawns[0].size() > 0)
 		{
 
-			// Spawn Next Ball
-			balls.push_back(Ball{ this, nextBalls[0].GetID() });
+			spawnDelay -= deltaTime;
 
-			// Add Next Spawn Delay
-			spawnDelay += nextBalls[0].GetDelay();
+			if (spawnDelay <= 0)
+			{
 
-			// Delete From Spawn Queue
-			nextBalls.erase(nextBalls.begin());
+				// Spawn Next Ball
+				balls.push_back(Ball{ this, roundSpawns[0][0].GetID() });
 
-			// Reset Pitcher Animation
-			pitcherAnimIndex = 1;
+				// Add Next Spawn Delay
+				spawnDelay += roundSpawns[0][0].GetDelay();
 
-			pitcherAnimTimer = 0;
+				// Delete From Spawn Queue
+				roundSpawns[0].erase(roundSpawns[0].begin());
+
+				// Reset Pitcher Animation
+				pitcherAnimIndex = 1;
+				pitcherAnimTimer = 0;
+
+			}
 
 		}
 
-	}
-
-	if (pitcherAnimIndex > 0)
-	{
-
-		pitcherAnimTimer += deltaTime;
-
-		if (pitcherAnimTimer >= 0.05f)
+		if (pitcherAnimIndex > 0)
 		{
 
-			pitcherAnimTimer -= 0.05f;
+			pitcherAnimTimer += deltaTime;
 
-			pitcherAnimIndex++;
+			if (pitcherAnimTimer >= 0.05f)
+			{
 
-			if (pitcherAnimIndex > 3) { pitcherAnimIndex = 0; }
+				pitcherAnimTimer -= 0.05f;
+
+				pitcherAnimIndex++;
+				if (pitcherAnimIndex > 3) { pitcherAnimIndex = 0; }
+
+			}
 
 		}
 
-	}
+		player.Update();
 
-	player.Update();
-
-	for (int i = balls.size() - 1; i >= 0; i--)
-	{
-
-		// Update Ball
-		if (balls[i].GetExitCode() == 0) { balls[i].Update(); }
-
-		else
+		for (int i = balls.size() - 1; i >= 0; i--)
 		{
 
-			// Hit Ball
-			if (balls[i].GetExitCode() == 1) {}
+			// Update Ball
+			if (balls[i].GetExitCode() == 0) { balls[i].Update(); }
 
-			// Missed Ball
-			else {}
+			else
+			{
 
-			// Delete Ball
-			balls.erase(std::next(balls.begin(), i));
+				// Hit Ball
+				if (balls[i].GetExitCode() == 1) { hits++; }
+
+				// Missed Ball
+				else { misses++; }
+
+				// Delete Ball
+				balls.erase(std::next(balls.begin(), i));
+
+			}
 
 		}
+
+		if (roundSpawns[0].size() == 0 && balls.size() == 0 && player.isOnGround())
+		{
+
+			// Remove Current Round Spawns
+			roundSpawns.erase(roundSpawns.begin());
+
+			// Set Pitcher Reaction
+			pitcherAnimIndex = misses == 0 ? 5 : misses < 3 ? 6 : hits > 0 ? 7 : 8;
+
+			stepCounter = 0;
+			stepTimer = 0;
+
+			currentState = Results;
+
+		}
+
+		break;
+
+	case Results:
+
+		switch (stepCounter)
+		{
+
+		case 0:
+
+			stepTimer += deltaTime;
+
+			if (stepTimer > 2)
+			{
+
+				stepTimer -= 2;
+
+				// Game Over
+				if (misses > 2) { currentState = GameOver; }
+
+				// More Rounds Left
+				else if (roundSpawns.size() > 0)
+				{
+
+					clearedRounds++;
+					speedMod++;
+
+					totalMisses += misses;
+					misses = 0;
+
+					currentState = Playing;
+
+				}
+
+				// Last Round Cleared
+				else { currentState = Results; }
+
+			}
+
+			break;
+
+		}
+
+		break;
 
 	}
 
@@ -107,12 +236,26 @@ void Arena::OnDraw()
 	player.OnDraw();
 
 	// Draw Player Platform
-	DrawTexture(GetTexture(5), 32, 278, WHITE);
+	DrawTexture(GetTexture(2), 32, 278, WHITE);
 
 	// Draw Pitcher
-	DrawTextureRec(GetTexture(3), Rectangle{ (float)pitcherAnimIndex * 18, 0, 18, 32 }, Vector2{ 238, 224 }, WHITE);
+	DrawTextureRec(GetTexture(4), Rectangle{ (float)pitcherAnimIndex * 18, 0, 18, 32 }, Vector2{ 238, 224 }, WHITE);
 
 	// Draw Pitcher Platform
-	DrawTexture(GetTexture(4), 224, 256, WHITE);
+	DrawTexture(GetTexture(5), 224, 256, WHITE);
+
+	// Draw Ashley Platform
+	DrawTexture(GetTexture(6), 130, 260, WHITE);
+
+	// Draw Health Bar
+	for (int i = 0; i < 3; i++) { DrawTextureRec(GetCommonTexture(2), Rectangle{ (float)(2 - misses < i ? 1 : 0) * 16, 0, 16, 16 }, Vector2{ (float)64 + 20 * i, 96 }, WHITE); }
+
+	switch (currentState)
+	{
+	case GameOver:
+		break;
+	}
+
+	DrawTextCharAtlas("Game Over", Vector2{ 152, 216 }, WHITE, 1);
 
 }

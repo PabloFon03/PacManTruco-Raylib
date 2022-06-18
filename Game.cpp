@@ -3,6 +3,7 @@
 #include "Game.h";
 #include "Maze.h";
 #include "Baseball.h";
+#include "Claw.h";
 
 Game::Game(int w, int h, int fps, std::string t)
 {
@@ -41,7 +42,7 @@ void Game::Start()
 	// Load Resources
 	resources.Load();
 
-	StartNewScreen(1);
+	StartNewScreen(5);
 
 }
 
@@ -59,8 +60,18 @@ void Game::StartNewScreen(int _ID)
 		content = new PacMan_Board::Board(&resources);
 		break;
 
+	// Baseball Minigame
 	case 2:
-		content = new Baseball_Arena::Arena(&resources);
+	case 3:
+	case 4:
+		content = new Baseball_Arena::Arena(&resources, _ID - 2);
+		break;
+
+	// Claw Minigame
+	case 5:
+	case 6:
+	case 7:
+		content = new Claw_Board::Board(&resources, _ID - 5);
 		break;
 
 	default:

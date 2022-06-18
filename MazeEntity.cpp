@@ -80,14 +80,3 @@ bool Board::Entity::IsValidDir(Vector2Int _coords, int _dirIndex)
 	return nextTileID == 0 || nextTileID > 17;
 
 }
-
-float Board::Entity::Vector2Int::magnitude() { return sqrt(powf(x, 2) + powf(y, 2)); }
-
-float Board::Entity::Vector2Int::distanceTo(Vector2Int _target)
-{
-
-	Vector2Int diff = Vector2Int{ _target.x - x, _target.y - y };
-
-	return diff.magnitude();
-
-}

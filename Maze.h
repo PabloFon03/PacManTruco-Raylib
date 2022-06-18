@@ -8,7 +8,105 @@
 
 namespace PacMan_Board
 {
+	/*
+	namespace Items
+	{
 
+		class PlayerItem
+		{
+
+		public:
+
+			PlayerItem(int _price, int _mana)
+			{
+
+				price = _price;
+
+				isElectric = false;
+				manaCost = _mana;
+
+			}
+
+			PlayerItem(int _price, float _discharge)
+			{
+
+				price = _price;
+
+				isElectric = true;
+				dischargeRate = _discharge;
+
+			}
+
+		private:
+
+			int price{ 0 };
+
+			bool isElectric{ false };
+			int manaCost{ 0 };
+			float dischargeRate{ 0.0f };
+
+		};
+
+		PlayerItem Items[8]
+		{
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// Freeze
+			PlayerItem{ 0, 0.0f },
+
+			// Boost
+			PlayerItem{ 0, 0.0f }
+
+		};
+
+		int CharmPrices[8]
+		{
+
+			// None
+			0,
+
+			// Score x3
+			0,
+
+			// Lifes x3
+			0,
+
+			// Crystals x3
+			0,
+
+			// Score x4
+			0,
+
+			// Lifes x5
+			0,
+
+			// Crystals x5
+			0,
+
+			// Locket
+			0,
+
+		};
+
+	}
+	*/
 	// Board Class
 	class Board : public SubScreen
 	{
@@ -62,8 +160,15 @@ namespace PacMan_Board
 				int x;
 				int y;
 
-				float magnitude();
-				float distanceTo(Vector2Int _target);
+				float magnitude() { return sqrt(powf(x, 2) + powf(y, 2)); }
+
+				float distanceTo(Vector2Int _target)
+				{
+
+					Vector2Int diff = Vector2Int{ _target.x - x, _target.y - y };
+					return diff.magnitude();
+
+				}
 
 			};
 
@@ -88,6 +193,15 @@ namespace PacMan_Board
 			Vector2Int coords;
 			int dirIndex;
 			Vector2Int dir(int _i);
+
+			float rawDistanceTo(Vector2 _target)
+			{
+
+				Vector2 rawCoords = GetRawCoords();
+				Vector2 diff = Vector2{ _target.x - rawCoords.x, _target.y - rawCoords.y };
+				return sqrt(powf(diff.x, 2) + powf(diff.y, 2));
+
+			}
 
 			Vector2 GetRawCoords() { return Vector2{ TrueMod(coords.x + dir(dirIndex).x * stepTimer, 19), TrueMod(coords.y + dir(dirIndex).y * stepTimer, 22) }; }
 
@@ -202,7 +316,9 @@ namespace PacMan_Board
 		void OnPowerCollected();
 		void OnPlayerHit();
 
-		float GetDeltaTime() { return GetFrameTime() * (1 + 0.1f * speedMod); }
+		void SpawnEnemy(int _ID, Entity::Vector2Int _spawnCoords, int _spawnDir) { enemies.push_back(Enemy{ this, &grid, _ID, _spawnCoords, _spawnDir }); }
+
+		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
 
 		Entity::Vector2Int GetPlayerPos() { return player.coords; }
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }

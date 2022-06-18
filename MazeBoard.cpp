@@ -46,10 +46,10 @@ void Board::Start()
 	player = Player{ this, &grid, Entity::Vector2Int{ 9, 16 }, 3 };
 
 	enemies.clear();
-	enemies.push_back(Enemy{ this, &grid, 0, Entity::Vector2Int{ 9, 8 }, 3 });
-	enemies.push_back(Enemy{ this, &grid, 1, Entity::Vector2Int{ 8, 10 }, 0 });
-	enemies.push_back(Enemy{ this, &grid, 2, Entity::Vector2Int{ 9, 10 }, 0 });
-	enemies.push_back(Enemy{ this, &grid, 3, Entity::Vector2Int{ 10, 10 }, 0 });
+	SpawnEnemy(0, Entity::Vector2Int{ 9, 8 }, 3);
+	SpawnEnemy(1, Entity::Vector2Int{ 8, 10 }, 0);
+	SpawnEnemy(2, Entity::Vector2Int{ 9, 10 }, 0);
+	SpawnEnemy(3, Entity::Vector2Int{ 10, 10 }, 0);
 
 	// score = 0;
 	// speedMod = 0;
@@ -66,6 +66,7 @@ void Board::Update()
 
 	switch (currentState)
 	{
+
 	case Starting:
 
 		stepTimer += GetDeltaTime();
@@ -242,11 +243,11 @@ void Board::DotCollected()
 
 	if (dotsCollected == dotGoal)
 	{
-	
+
 		clearedRounds++;
 
 		Start();
-	
+
 	}
 
 }

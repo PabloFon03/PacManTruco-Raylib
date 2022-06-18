@@ -47,7 +47,7 @@ void Board::Enemy::Update()
 
 	}
 
-	if (abs(GetRawCoords().x - board->GetPlayerRawPos().x) < 0.35f && abs(GetRawCoords().y - board->GetPlayerRawPos().y) < 0.35f)
+	if (rawDistanceTo(board->GetPlayerRawPos()) < 0.25f)
 	{
 
 		board->OnPlayerHit();

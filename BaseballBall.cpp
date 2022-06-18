@@ -10,7 +10,7 @@ Arena::Ball::Ball(Arena* _arena, int _ID)
 {
 
 	arena = _arena;
-	animAtlas = arena->GetTexture(2);
+	animAtlas = arena->GetTexture(3);
 
 	ID = _ID;
 
@@ -46,7 +46,7 @@ void Arena::Ball::Update()
 
 		break;
 
-		// Regular Ball
+		// Looping Ball
 	case 1:
 
 		// Rotating
@@ -146,7 +146,7 @@ void Arena::Ball::Update()
 
 			stepTimer += deltaTime;
 
-			if (stepTimer >= 0.75f)
+			if (stepTimer >= 1.5f)
 			{
 
 				v.x = -15;
@@ -176,7 +176,7 @@ void Arena::Ball::Update()
 		switch (stepCounter)
 		{
 
-			// Wait FOr Descent
+			// Wait For Descent
 		case 0:
 
 			if (pos.x < 4) { stepCounter = 1; }
@@ -211,7 +211,7 @@ void Arena::Ball::Update()
 	if (sqrt(pow(pos.x - playerPos.x, 2) + pow(pos.y - playerPos.y, 2)) < 0.5f) { exitCode = 1; }
 
 	// Out Of Bounds
-	if (pos.x < -5) { exitCode = 2; }
+	if (pos.x < -5 && v.x < 0) { exitCode = 2; }
 
 	animTimer += deltaTime;
 
