@@ -23,51 +23,51 @@ public:
 		LoadTextures(commonTextures, std::vector<std::string>
 		{
 			"CharAtlas.png",
-				"Tokens.png",
-				"HealthIcons.png",
-				"Box0.png",
-				"Box1.png",
-				"Box2.png",
-				"Box3.png",
-				"Box4.png",
-				"Box5.png",
-				"Box6.png",
-				"Box7.png",
-				"Box8.png",
-				"Box9.png"
+			"Tokens.png",
+			"HealthIcons.png",
+			"Box0.png",
+			"Box1.png",
+			"Box2.png",
+			"Box3.png",
+			"Box4.png",
+			"Box5.png",
+			"Box6.png",
+			"Box7.png",
+			"Box8.png",
+			"Box9.png"
 		});
 
 		// Load Maze Texture Files
 		LoadTextures(mazeTextures, std::vector<std::string>
 		{
 			"round counter.png",
-				"pacmiku.png",
-				"sqweek.png",
-				"mouse gal.png",
-				"tsundere cheesecake.png",
-				"alice.png",
-				"orange.png"
+			"pacmiku.png",
+			"sqweek.png",
+			"mouse gal.png",
+			"tsundere cheesecake.png",
+			"alice.png",
+			"orange.png"
 		}, "maze/");
 
 		// Load Baseball Texture Files
 		LoadTextures(baseballTextures, std::vector<std::string>
 		{
 			"electric base.png",
-				"electric ball.png",
-				"player platform.png",
-				"baseballs.png",
-				"pitcher.png",
-				"pitcher platform.png",
-				"ashley platform.png"
+			"electric ball.png",
+			"player platform.png",
+			"baseballs.png",
+			"pitcher.png",
+			"pitcher platform.png",
+			"ashley platform.png"
 		}, "baseball/");
 
 		// Load Baseball Texture Files
 		LoadTextures(clawTextures, std::vector<std::string>
 		{
 			"Claw.png",
-				"Rope.png",
-				"RowTiles.png",
-				"NoTokens.png"
+			"Rope.png",
+			"RowTiles.png",
+			"NoTokens.png"
 		}, "claw/");
 
 	}

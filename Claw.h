@@ -49,11 +49,23 @@ namespace Claw_Board
 			void OnDraw();
 
 			Vector2 TileSize() { return Vector2{ 48, 32 }; }
+			Vector2 TargetTileSize() { return Vector2{ 16, 16 }; }
+			Vector2 NoTargetsTileSize() { return Vector2{ 136, 136 }; }
+
+			void Drop();
+			void Restart();
 
 		private:
 
 			Texture2D ropeTile;
 			Texture2D animAtlas;
+			Texture2D targetTiles;
+			Texture2D noTargets;
+
+			enum States { Playing, Grabbing, Retrieving };
+			States currentState{ Playing };
+
+			int grabbedTargetID{ -1 };
 
 		};
 
@@ -70,6 +82,8 @@ namespace Claw_Board
 			void OnDraw();
 
 			Vector2 TileSize() { return Vector2{ 16, 16 }; }
+
+			int GetID() { return ID; }
 
 		private:
 
@@ -91,13 +105,27 @@ namespace Claw_Board
 		void Update();
 		void OnDraw();
 
-		void TokenGrabbed(int _ID);
+		void TargetGrabbed(int _i);
+		void TargetRetreived();
 
-		Vector2 GetPlayerPos() { return player.pos; }
+		std::vector<Vector2> GetTargetsPos()
+		{
+			
+			std::vector<Vector2> returnVec = std::vector<Vector2>();
+
+			for (int i = 0; i < targets.size(); i++) { returnVec.push_back(targets[i].pos); }
+
+			return returnVec;
+		
+		}
+
+		int GetTargetID(int _i) { return targets[_i].GetID(); }
 
 		float GetDeltaTime() { return GetRawDeltaTime(); }
 
 		Texture2D GetTexture(int _i) { return (*resources).GetClawTexture(_i); }
+
+		int GetTokens() { return (int)ceilf(score / 10.0f) + (score >= bonusThreshold ? bonusTokens : 0); }
 
 	private:
 
@@ -121,10 +149,13 @@ namespace Claw_Board
 		Player player;
 		std::vector<Target> targets{ std::vector<Target>() };
 
-		enum States { Starting, Playing, Retrieving, Results };
+		enum States { Starting, Playing, Grabbing, Retrieving, Results };
 		States currentState{ Starting };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };
+
+		int bonusThreshold{ 500 };
+		int bonusTokens{ 50 };
 
 	};
 

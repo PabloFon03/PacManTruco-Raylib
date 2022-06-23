@@ -42,7 +42,7 @@ void Game::Start()
 	// Load Resources
 	resources.Load();
 
-	StartNewScreen(5);
+	StartNewScreen(7);
 
 }
 
