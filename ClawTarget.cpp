@@ -26,12 +26,12 @@ void Board::Target::Update()
 
 	pos.x += speed * deltaTime;
 
-	if (abs(pos.x) > 7)
+	if (abs(pos.x) >= 7)
 	{
 
 		speed *= -1;
 
-		pos.x = 7 * (pos.x > 0 ? 1 : -1);
+		pos.x = (7 - (abs(pos.x) - 7)) * (pos.x > 0 ? 1 : -1);
 
 	}
 

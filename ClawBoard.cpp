@@ -82,7 +82,7 @@ Board::Board(Resources* _res, int _difficulty)
 
 			Target{ this, 3, Vector2{ -7, 6 }, 8 }, Target{ this, 3, Vector2{ 0, 6 }, -8 }, Target{ this, 3, Vector2{ 0, 6 }, 8 }, Target{ this, 3, Vector2{ 7, 6 }, -8 },
 
-			Target{ this, 4, Vector2{ 0, 1 }, -10 }, Target{ this, 4, Vector2{ 0, 1 }, 10 },
+			Target{ this, 4, Vector2{ 0, 1 }, -12 }, Target{ this, 4, Vector2{ 0, 1 }, 12 },
 
 		};
 
@@ -224,22 +224,10 @@ void Board::Update()
 			if (stepTimer > 0) { stepTimer -= GetDeltaTime(); }
 
 			// Next Step
-
 			else
 			{
-
-				switch (stepCounter)
-				{
-
-				default:
-
-					stepTimer++;
-
-					break;
-				}
-
+				stepTimer++;
 				stepCounter++;
-
 			}
 
 		}
@@ -254,7 +242,7 @@ void Board::OnDraw()
 {
 
 	// Draw Rows
-	for (int i = 0; i < rows.size(); i++) { for (int x = 0; x < 17; x++) { DrawTextureRec(GetTexture(2), Rectangle{ rows[i].ID * 16.0f, (x == 0 || x == 16 ? 0 : 1) * 16.0f, 16, 16 }, Vector2{ 16 * x + 16.0f, 448.0f - 16 * (rows[i].y + 1) }, WHITE); } }
+	for (int i = 0; i < rows.size(); i++) { for (int x = 0; x < 17; x++) { DrawTextureRec(GetTexture(2), Rectangle{ rows[i].ID * 16.0f, (x == 0 || x == 16 ? 0 : 1) * 16.0f, 16, 16 }, Vector2{ 16 * x + 16.0f, 448.0f - 16 * (rows[i].y + 1) }, Color{ 225, 225, 225, 255 }); } }
 
 	// Draw Targets
 	for (int i = 0; i < targets.size(); i++) { targets[i].OnDraw(); }
@@ -278,8 +266,8 @@ void Board::OnDraw()
 	{
 
 		// Draw Center Round Counter
-		DrawBox(8, Vector2{ 80, 24 }, Vector2{ 152, 224 }, Color{ 102, 216, 255, 255 });
-		DrawTextCharAtlas(TextFormat("Round %i", roundCounter + 1), Vector2{ 152, 220 }, Color{ 102, 216, 255, 255 }, 1);
+		DrawBox(8, Vector2{ 80, 24 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
+		DrawTextCharAtlas(TextFormat("Round %i", roundCounter + 1), Vector2{ 152, 220 }, Color{ 225, 225, 225, 255 }, 1);
 
 	}
 
@@ -295,20 +283,20 @@ void Board::OnDraw()
 			switch (i)
 			{
 
-			case 0: DrawTextCharAtlas("Score", Vector2{ 152, 180 }, WHITE, 1); break;
+			case 0: DrawTextCharAtlas("Score", Vector2{ 152, 180 }, Color{ 225, 225, 225, 255 }, 1); break;
 
-			case 1: DrawTextCharAtlas(TextFormat("%i", score), Vector2{ 152, 192 }, WHITE, 1); break;
+			case 1: DrawTextCharAtlas(TextFormat("%i", score), Vector2{ 152, 192 }, Color{ 225, 225, 225, 255 }, 1); break;
 
-			case 2: DrawTextureRec(GetCommonTexture(1), Rectangle{ 0, 0, 16, 16 }, Vector2{ 144, 240 }, WHITE); break;
+			case 2: DrawTextureRec(GetCommonTexture(1), Rectangle{ 0, 0, 16, 16 }, Vector2{ 144, 240 }, Color{ 225, 225, 225, 255 }); break;
 
 			case 3:
 
-				DrawTextCharAtlas(TextFormat("%i", GetTokens()), Vector2{ 152, 260 }, WHITE, 1);
+				DrawTextCharAtlas(TextFormat("%i", GetTokens()), Vector2{ 152, 260 }, Color{ 225, 225, 225, 255 }, 1);
 
 				if (score >= bonusThreshold)
 				{
-					DrawTextCharAtlas("[BONUS]", Vector2{ 152, 212 }, WHITE, 1);
-					DrawTextCharAtlas(TextFormat("%i", bonusTokens), Vector2{ 152, 224 }, WHITE, 1);
+					DrawTextCharAtlas("[BONUS]", Vector2{ 152, 212 }, Color{ 225, 225, 225, 255 }, 1);
+					DrawTextCharAtlas(TextFormat("%i", bonusTokens), Vector2{ 152, 224 }, Color{ 225, 225, 225, 255 }, 1);
 				}
 
 				break;

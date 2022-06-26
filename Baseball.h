@@ -127,11 +127,25 @@ namespace Baseball_Arena
 		void Update();
 		void OnDraw();
 
+		void OnBallHit()
+		{
+
+			// Register Hit
+			hits++;
+
+			// Add Score
+			score += 50 + 25 * speedMod;
+
+		}
+
 		Vector2 GetPlayerPos() { return player.pos; }
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
 
 		Texture2D GetTexture(int _i) { return (*resources).GetBaseballTexture(_i); }
+
+		int GetTokens() { return (int)ceilf(score / 150.0f) + (totalMisses == 0 ? GetBonus() : 0); }
+		int GetBonus() { return 25 * (int)powf(2, difficulty); }
 
 	private:
 
