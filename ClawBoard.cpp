@@ -92,8 +92,6 @@ Board::Board(Resources* _res, int _difficulty)
 
 }
 
-void Board::Start() { }
-
 void Board::Update()
 {
 

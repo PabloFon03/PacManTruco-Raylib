@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Baseball.h" />
     <ClInclude Include="Claw.h" />
+    <ClInclude Include="LoadingTrain.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Random.h" />

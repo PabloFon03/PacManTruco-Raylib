@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include<string>
 #include<vector>
 #include<raylib.h>
@@ -101,7 +99,6 @@ namespace Claw_Board
 
 		Board(Resources* _res, int _difficulty);
 
-		void Start();
 		void Update();
 		void OnDraw();
 

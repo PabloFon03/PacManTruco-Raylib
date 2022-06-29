@@ -1,6 +1,7 @@
 #include <assert.h>
 
 #include "Game.h";
+#include "LoadingTrain.h";
 #include "Maze.h";
 #include "Baseball.h";
 #include "Claw.h";
@@ -42,14 +43,14 @@ void Game::Start()
 	// Load Resources
 	resources.Load();
 
-	StartNewScreen(2);
+	StartNewScreen(42);
 
 }
 
 void Game::StartNewScreen(int _ID)
 {
 
-	// Free Old Content
+	// Free Old Content Memory
 	delete content;
 
 	// Create New Content
@@ -74,21 +75,28 @@ void Game::StartNewScreen(int _ID)
 		content = new Claw_Board::Board(&resources, _ID - 5);
 		break;
 
+	// Loading Screen
+	case 40:
+	case 41:
+	case 42:
+	case 43:
+		content = new Loading_Screen::LoadScreen(&resources, _ID - 40);
+		break;
+
 	default:
 		break;
 
 	}
-
-	// Initcialize New Content
-	(*content).Start();
 
 }
 
 void Game::Tick()
 {
 
+	// Update Logic
 	Update();
 
+	// Draw On Screen
 	Draw();
 
 }
@@ -100,9 +108,16 @@ void Game::Update()
 	{
 
 	// Keep Going
-	default:
+	case -1:
 
 		(*content).Update();
+
+		break;
+
+	// Load New Screen
+	default:
+
+		StartNewScreen((*content).exitFlag);
 
 		break;
 

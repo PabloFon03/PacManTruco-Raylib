@@ -1,7 +1,5 @@
 #pragma once
 
-#include <raylib.h>
-
 #include "Resources.h"
 
 // Abstract Class For Screen Contents
@@ -10,7 +8,6 @@ class SubScreen
 
 public:
 
-	virtual void Start() = 0;
 	virtual void Update() = 0;
 	virtual void OnDraw() = 0;
 
@@ -18,7 +15,7 @@ public:
 
 	virtual int GetTokens() { return 0; }
 
-	int exitFlag{ 0 };
+	int exitFlag{ -1 };
 
 	Resources* resources;
 

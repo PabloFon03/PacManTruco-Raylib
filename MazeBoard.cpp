@@ -7,11 +7,6 @@ Board::Board(Resources* _res)
 
 	resources = _res;
 
-}
-
-void Board::Start()
-{
-
 	// 19x22
 	std::vector<int> mazeTiles
 	{
@@ -246,8 +241,6 @@ void Board::DotCollected()
 
 		clearedRounds++;
 
-		Start();
-
 	}
 
 }
@@ -260,6 +253,5 @@ void Board::OnPlayerHit()
 {
 
 	// currentState = Defeat;
-	Start();
 
 }

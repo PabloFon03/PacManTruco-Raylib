@@ -306,7 +306,6 @@ namespace PacMan_Board
 
 		Board(Resources* _res);
 
-		void Start();
 		void Update();
 		void OnDraw();
 

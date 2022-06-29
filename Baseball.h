@@ -123,7 +123,6 @@ namespace Baseball_Arena
 
 		Arena(Resources* _res, int _difficulty);
 
-		void Start();
 		void Update();
 		void OnDraw();
 

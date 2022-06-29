@@ -98,6 +98,9 @@
     <ClInclude Include="Claw.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="LoadingTrain.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\baseball\baseballs.png">

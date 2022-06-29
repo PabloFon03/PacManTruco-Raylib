@@ -10,11 +10,6 @@ Arena::Arena(Resources* _res, int _difficulty)
 
 	difficulty = _difficulty;
 
-}
-
-void Arena::Start()
-{
-
 	player = Player(this);
 
 	balls.clear();
@@ -153,7 +148,7 @@ void Arena::Update()
 				if (balls[i].GetExitCode() == 1) { OnBallHit(); }
 
 				// Missed Ball
-				// else { misses++; totalMisses++; }
+				else { misses++; totalMisses++; }
 
 				// Delete Ball
 				balls.erase(std::next(balls.begin(), i));
@@ -169,7 +164,7 @@ void Arena::Update()
 			roundSpawns.erase(roundSpawns.begin());
 
 			// Set Pitcher Reaction
-			pitcherAnimIndex = misses == 0 || roundSpawns.size() == 0 ? 5 : misses < 3 ? 6 : hits > 0 ? 7 : 8;
+			pitcherAnimIndex = misses == 0 || (roundSpawns.size() == 0 && misses < 3) ? 5 : misses < 3 ? 6 : hits > 0 ? 7 : 8;
 
 			stepCounter = 0;
 			stepTimer = 0;
