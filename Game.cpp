@@ -3,6 +3,7 @@
 #include "Game.h";
 #include "MainMenu.h";
 #include "LoadingTrain.h";
+#include "ItemShop.h";
 #include "Maze.h";
 #include "Baseball.h";
 #include "Claw.h";
@@ -62,6 +63,13 @@ void Game::StartNewScreen(int _ID)
 	case -1:
 	case 0:
 		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
+		break;
+
+		// Maze
+	case 1:
+	case 2:
+	case 3:
+		content = new ItemShop_Screen::ItemShop(&resources, _ID - 1, player.GetTokens() + 25);
 		break;
 
 	// Maze

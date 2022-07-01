@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "SubScreen.h"
 #include "Random.h"
 

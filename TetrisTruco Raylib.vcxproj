@@ -153,15 +153,16 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MazeGrid.cpp" />
     <ClCompile Include="MazePlayer.cpp" />
-    <ClCompile Include="PlayerItems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Baseball.h" />
     <ClInclude Include="Claw.h" />
+    <ClInclude Include="ItemShop.h" />
     <ClInclude Include="LoadingTrain.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="MazeItems.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="SubScreen.h" />

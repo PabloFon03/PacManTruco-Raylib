@@ -47,13 +47,15 @@ public:
 		// Load Maze Texture Files
 		LoadTextures(mazeTextures, std::vector<std::string>
 		{
+			"ItemIcons.png",
+			"CharmIcons.png",
 			"RoundCounter.png",
-			"pacmiku.png",
-			"sqweek.png",
-			"mouse gal.png",
-			"tsundere cheesecake.png",
-			"alice.png",
-			"orange.png"
+			"MazeTiles.png",
+			"Mouse.png",
+			"Alliga.png",
+			"Erika.png",
+			"Alice.png",
+			"Carla.png"
 		}, "maze/");
 
 		// Load Baseball Texture Files

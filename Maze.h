@@ -9,6 +9,52 @@
 namespace PacMan_Board
 {
 
+	namespace Items
+	{
+
+		class PlayerItem
+		{
+
+		public:
+
+			PlayerItem(int _price, int _mana)
+			{
+
+				price = _price;
+
+				isElectric = false;
+				manaCost = _mana;
+
+			}
+
+			PlayerItem(int _price, float _discharge)
+			{
+
+				price = _price;
+
+				isElectric = true;
+				dischargeRate = _discharge;
+
+			}
+
+			int GetPrice() { return price; }
+
+			bool IsElectric() { return isElectric; }
+			int GetManaCost() { return manaCost; }
+			int GetDischargeRate() { return dischargeRate; }
+
+		private:
+
+			int price{ 0 };
+
+			bool isElectric{ false };
+			int manaCost{ 0 };
+			float dischargeRate{ 0.0f };
+
+		};
+
+	}
+
 	// Board Class
 	class Board : public SubScreen
 	{
