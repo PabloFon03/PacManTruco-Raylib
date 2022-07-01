@@ -6,7 +6,6 @@
 namespace Loading_Screen
 {
 
-	// Board Class
 	class LoadScreen : public SubScreen
 	{
 
@@ -61,10 +60,10 @@ namespace Loading_Screen
 			Train.v = 3;
 
 			// Start Offscreen
-			Train.x = -r.RandomInt(5, 12);
+			Train.x = -r.RandomInt(5, 15);
 
 			// Set End X-Pos
-			Train.endX = Train.wagons + r.RandomInt(10, 20);
+			Train.endX = Train.wagons + r.RandomInt(5, 15);
 
 			currentState = StartDelay;
 			stepTimer = 3;
@@ -173,14 +172,19 @@ namespace Loading_Screen
 			switch (targetExitFlag)
 			{
 
+			case 1:
 			case 2:
 			case 3:
-			case 4:
+				return "Item Shop";
+
+			case 7:
+			case 8:
+			case 9:
 				return "Baseball Arena";
 
-			case 5:
-			case 6:
-			case 7:
+			case 10:
+			case 11:
+			case 12:
 				return "Claw Machine";
 
 			default: return TextFormat("Undefined (Exit Flag: %i)", targetExitFlag);

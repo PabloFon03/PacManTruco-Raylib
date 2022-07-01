@@ -11,6 +11,31 @@ class Game {
 
 public:
 
+	// Player Save Data Class
+	class PlayerData
+	{
+
+	public:
+
+		PlayerData() { tokens = 0; }
+
+		int GetTokens() { return tokens; }
+
+		void AddTokens(int _amount)
+		{
+
+			tokens += _amount;
+
+			if (tokens < 0) { tokens = 0; }
+
+		}
+
+	private:
+
+		int tokens{ 0 };
+
+	};
+
 	// Constrcutor
 	Game(int w, int h, int fps, std::string t);
 
@@ -30,6 +55,8 @@ public:
 
 private:
 
+	bool isClosed{ false };
+
 	const int wMin = 304;
 	const int hMin = 448;
 
@@ -43,7 +70,10 @@ private:
 
 	Resources resources;
 
+	PlayerData player;
+
 	SubScreen* content;
 	void StartNewScreen(int _ID);
+
 
 };

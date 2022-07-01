@@ -75,6 +75,9 @@
     <ClCompile Include="ClawBoard.cpp">
       <Filter>Archivos de origen\Claw</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerItems.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SubScreen.h">
@@ -101,92 +104,9 @@
     <ClInclude Include="LoadingTrain.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="img\baseball\baseballs.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\baseball\electric ball.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\baseball\electric base.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\baseball\pitcher platform.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\baseball\pitcher.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\baseball\player platform.png">
-      <Filter>Archivos de recursos\img\Baseball</Filter>
-    </Image>
-    <Image Include="img\maze\alice.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\blind.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\blue.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\camila.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\candle.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\eye.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\happy.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\mildred.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\miranda blue.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\miranda orange.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\miranda.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\mouse gal.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\orange colored.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\orange.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\pacmiku.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\red.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\round counter.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\sleep.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\sqweek.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\tsundere cheesecake go speeeen.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\tsundere cheesecake.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
-    <Image Include="img\maze\wake up.png">
-      <Filter>Archivos de recursos\img\Maze</Filter>
-    </Image>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\arcade.fs">
@@ -195,5 +115,28 @@
     <None Include="shaders\base.fs">
       <Filter>Archivos de recursos\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\baseball\AshleyPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\Baseballs.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\Carla.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\CarlaPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricBall.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricBase.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
   </ItemGroup>
 </Project>

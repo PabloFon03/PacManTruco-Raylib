@@ -5,7 +5,7 @@
 int main(void)
 {
 
-	Game game{ 304, 448, 60, "test" };
+	Game game{ 304, 448, 60, "Cat n' Mouse" };
 
 	game.Start();
 

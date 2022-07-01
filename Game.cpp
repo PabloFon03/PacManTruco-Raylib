@@ -1,6 +1,7 @@
 #include <assert.h>
 
 #include "Game.h";
+#include "MainMenu.h";
 #include "LoadingTrain.h";
 #include "Maze.h";
 #include "Baseball.h";
@@ -33,7 +34,7 @@ Game::~Game() noexcept
 
 }
 
-bool Game::GameShouldClose() const { return WindowShouldClose(); }
+bool Game::GameShouldClose() const { return WindowShouldClose() || isClosed; }
 
 void Game::Start()
 {
@@ -43,7 +44,7 @@ void Game::Start()
 	// Load Resources
 	resources.Load();
 
-	StartNewScreen(42);
+	StartNewScreen(-1);
 
 }
 
@@ -57,33 +58,38 @@ void Game::StartNewScreen(int _ID)
 	switch (_ID)
 	{
 
-	case 1:
+	// Main Menu
+	case -1:
+	case 0:
+		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
+		break;
+
+	// Maze
+	case 4:
+	case 5:
+	case 6:
 		content = new PacMan_Board::Board(&resources);
 		break;
 
 	// Baseball Minigame
-	case 2:
-	case 3:
-	case 4:
-		content = new Baseball_Arena::Arena(&resources, _ID - 2);
+	case 7:
+	case 8:
+	case 9:
+		content = new Baseball_Arena::Arena(&resources, _ID - 7);
 		break;
 
 	// Claw Minigame
-	case 5:
-	case 6:
-	case 7:
-		content = new Claw_Board::Board(&resources, _ID - 5);
-		break;
-
-	// Loading Screen
-	case 40:
-	case 41:
-	case 42:
-	case 43:
-		content = new Loading_Screen::LoadScreen(&resources, _ID - 40);
+	case 10:
+	case 11:
+	case 12:
+		content = new Claw_Board::Board(&resources, _ID - 10);
 		break;
 
 	default:
+
+		// Loading Screens
+		if (_ID >= 40 && _ID <= 52) { content = new Loading_Screen::LoadScreen(&resources, _ID - 40); }
+
 		break;
 
 	}
@@ -104,7 +110,9 @@ void Game::Tick()
 void Game::Update()
 {
 	
-	switch ((*content).exitFlag)
+	int exitFlag = (*content).exitFlag;
+
+	switch (exitFlag)
 	{
 
 	// Keep Going
@@ -114,10 +122,19 @@ void Game::Update()
 
 		break;
 
+	// Close App
+	case -2:
+
+		isClosed = true;
+
+		break;
+
 	// Load New Screen
 	default:
 
-		StartNewScreen((*content).exitFlag);
+		player.AddTokens((*content).GetTokens());
+
+		StartNewScreen(exitFlag);
 
 		break;
 

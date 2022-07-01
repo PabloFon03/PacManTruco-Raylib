@@ -153,11 +153,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MazeGrid.cpp" />
     <ClCompile Include="MazePlayer.cpp" />
+    <ClCompile Include="PlayerItems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Baseball.h" />
     <ClInclude Include="Claw.h" />
     <ClInclude Include="LoadingTrain.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Random.h" />
@@ -165,38 +167,17 @@
     <ClInclude Include="SubScreen.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\baseball\baseballs.png" />
-    <Image Include="img\baseball\electric ball.png" />
-    <Image Include="img\baseball\electric base.png" />
-    <Image Include="img\baseball\pitcher platform.png" />
-    <Image Include="img\baseball\pitcher.png" />
-    <Image Include="img\baseball\player platform.png" />
-    <Image Include="img\maze\alice.png" />
-    <Image Include="img\maze\blind.png" />
-    <Image Include="img\maze\blue.png" />
-    <Image Include="img\maze\camila.png" />
-    <Image Include="img\maze\candle.png" />
-    <Image Include="img\maze\eye.png" />
-    <Image Include="img\maze\happy.png" />
-    <Image Include="img\maze\mildred.png" />
-    <Image Include="img\maze\miranda blue.png" />
-    <Image Include="img\maze\miranda orange.png" />
-    <Image Include="img\maze\miranda.png" />
-    <Image Include="img\maze\mouse gal.png" />
-    <Image Include="img\maze\orange colored.png" />
-    <Image Include="img\maze\orange.png" />
-    <Image Include="img\maze\pacmiku.png" />
-    <Image Include="img\maze\red.png" />
-    <Image Include="img\maze\round counter.png" />
-    <Image Include="img\maze\sleep.png" />
-    <Image Include="img\maze\sqweek.png" />
-    <Image Include="img\maze\tsundere cheesecake go speeeen.png" />
-    <Image Include="img\maze\tsundere cheesecake.png" />
-    <Image Include="img\maze\wake up.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="shaders\arcade.fs" />
     <None Include="shaders\base.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\baseball\AshleyPlatform.png" />
+    <Image Include="img\baseball\Baseballs.png" />
+    <Image Include="img\baseball\Carla.png" />
+    <Image Include="img\baseball\CarlaPlatform.png" />
+    <Image Include="img\baseball\ElectricBall.png" />
+    <Image Include="img\baseball\ElectricBase.png" />
+    <Image Include="img\baseball\ElectricPlatform.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
