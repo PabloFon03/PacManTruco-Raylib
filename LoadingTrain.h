@@ -75,6 +75,15 @@ namespace Loading_Screen
 		void Update()
 		{
 
+			// Skip Cutscene
+			if (currentState != EndDelay && IsKeyPressed(KEY_Z))
+			{
+
+				currentState = EndDelay;
+				stepTimer = 2;
+
+			}
+
 			switch (currentState)
 			{
 
@@ -171,6 +180,8 @@ namespace Loading_Screen
 
 			switch (targetExitFlag)
 			{
+
+			case 0: return "Main Menu";
 
 			case 1:
 			case 2:

@@ -221,6 +221,9 @@ void Board::Update()
 			// Delay
 			if (stepTimer > 0) { stepTimer -= GetDeltaTime(); }
 
+			// Exit To Main Menu
+			else if (stepCounter == 7) { exitFlag = 40; }
+
 			// Next Step
 			else
 			{
@@ -275,7 +278,7 @@ void Board::OnDraw()
 		// Draw Box
 		DrawBox(8, Vector2{ 96, 128 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
 
-		for (int i = 0; i < stepCounter - 2; i++)
+		for (int i = 0; i < stepCounter - 1; i++)
 		{
 
 			switch (i)

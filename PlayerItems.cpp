@@ -1,117 +1,114 @@
 #include "Maze.h"
 
-namespace PacMan_Board
+using namespace PacMan_Board;
+
+namespace Items
 {
 
-	namespace Items
+	class PlayerItem
 	{
 
-		class PlayerItem
+	public:
+
+		PlayerItem(int _price, int _mana)
 		{
 
-		public:
+			price = _price;
 
-			PlayerItem(int _price, int _mana)
-			{
+			isElectric = false;
+			manaCost = _mana;
 
-				price = _price;
+		}
 
-				isElectric = false;
-				manaCost = _mana;
+		PlayerItem(int _price, float _discharge)
+		{
 
-			}
+			price = _price;
 
-			PlayerItem(int _price, float _discharge)
-			{
+			isElectric = true;
+			dischargeRate = _discharge;
 
-				price = _price;
+		}
 
-				isElectric = true;
-				dischargeRate = _discharge;
+	private:
 
-			}
+		int price{ 0 };
 
-		private:
+		bool isElectric{ false };
+		int manaCost{ 0 };
+		float dischargeRate{ 0.0f };
 
-			int price{ 0 };
+	};
 
-			bool isElectric{ false };
-			int manaCost{ 0 };
-			float dischargeRate{ 0.0f };
+	PlayerItem GetItem(int _i)
+	{
+
+		PlayerItem Items[8]
+		{
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// None
+			PlayerItem{ 0, 0 },
+
+			// Sword
+			PlayerItem{ 0, 0 },
+
+			// Freeze
+			PlayerItem{ 0, 0.0f },
+
+			// Boost
+			PlayerItem{ 0, 0.0f }
 
 		};
 
-		PlayerItem GetItem(int _i)
+		return Items[_i];
+
+	}
+
+	int GetCharmPrice(int _i)
+	{
+
+		int CharmPrices[8]
 		{
 
-			PlayerItem Items[8]
-			{
+			// None
+			0,
 
-				// None
-				PlayerItem{ 0, 0 },
+			// Score x3
+			0,
 
-				// Sword
-				PlayerItem{ 0, 0 },
+			// Lifes x3
+			0,
 
-				// None
-				PlayerItem{ 0, 0 },
+			// Crystals x3
+			0,
 
-				// Sword
-				PlayerItem{ 0, 0 },
+			// Score x4
+			0,
 
-				// None
-				PlayerItem{ 0, 0 },
+			// Lifes x5
+			0,
 
-				// Sword
-				PlayerItem{ 0, 0 },
+			// Crystals x5
+			0,
 
-				// Freeze
-				PlayerItem{ 0, 0.0f },
+			// Locket
+			0,
 
-				// Boost
-				PlayerItem{ 0, 0.0f }
+		};
 
-			};
-
-			return Items[_i];
-
-		}
-
-		int GetCharmPrice(int _i)
-		{
-
-			int CharmPrices[8]
-			{
-
-				// None
-				0,
-
-				// Score x3
-				0,
-
-				// Lifes x3
-				0,
-
-				// Crystals x3
-				0,
-
-				// Score x4
-				0,
-
-				// Lifes x5
-				0,
-
-				// Crystals x5
-				0,
-
-				// Locket
-				0,
-
-			};
-
-			return CharmPrices[_i];
-
-		}
+		return CharmPrices[_i];
 
 	}
 

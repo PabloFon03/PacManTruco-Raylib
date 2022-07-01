@@ -214,14 +214,23 @@ void Arena::Update()
 		else
 		{
 
-			// Delay
-			if (stepTimer > 0) { stepTimer -= GetDeltaTime(); }
+			stepTimer += deltaTime;
 
-			// Next Step
-			else
+			float delays[6]{ 0, 1, 1, 1.5f, 1, 3 };
+
+			if (stepTimer > delays[stepCounter - 1])
 			{
-				stepTimer++;
-				stepCounter++;
+
+				// Exit To Main Menu
+				if (stepCounter == 6) { exitFlag = 40; }
+
+				// Next Step
+				else
+				{
+					stepTimer -= delays[stepCounter - 1];
+					stepCounter++;
+				}
+
 			}
 
 		}
@@ -232,13 +241,13 @@ void Arena::Update()
 
 		stepTimer += deltaTime;
 
-		float delays[5] { 3, 1, 2, 1, 3 };
+		float delays[5] { 3, 1, 1.5f, 1, 3 };
 
 		if (stepTimer > delays[stepCounter])
 		{
 
 			// Exit To Main Menu
-			if (stepCounter == 4) {}
+			if (stepCounter == 4) { exitFlag = 40; }
 
 			// Next Step
 			else

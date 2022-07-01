@@ -162,7 +162,7 @@ namespace Baseball_Arena
 		std::vector<Ball> balls{ std::vector<Ball>(0) };
 
 		std::vector<std::vector<SpawnData>> roundSpawns{ std::vector<std::vector<SpawnData>>() };
-		float spawnDelay{ 0 };
+		float spawnDelay{ 2 };
 
 		int pitcherAnimIndex{ 0 };
 		float pitcherAnimTimer{ 0 };
