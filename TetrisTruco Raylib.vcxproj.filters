@@ -118,6 +118,9 @@
     <None Include="shaders\base.fs">
       <Filter>Archivos de recursos\shaders</Filter>
     </None>
+    <None Include="shaders\bloom.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\baseball\AshleyPlatform.png">

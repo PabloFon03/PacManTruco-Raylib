@@ -77,6 +77,6 @@ bool Board::Entity::IsValidDir(Vector2Int _coords, int _dirIndex)
 
 	int nextTileID = grid->GetTileID(CoordsToIndex(AddDir(_coords, _dirIndex)));
 
-	return nextTileID == 0 || nextTileID > 17;
+	return nextTileID == 0 || nextTileID > 16;
 
 }

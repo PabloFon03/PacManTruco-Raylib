@@ -5,6 +5,7 @@
 #include<raylib.h>
 
 #include "SubScreen.h"
+#include "Random.h"
 
 namespace PacMan_Board
 {
@@ -75,7 +76,6 @@ namespace PacMan_Board
 			// Destructor
 			~Grid();
 
-			void Update();
 			void OnDraw(int _ColorID);
 
 			void ClearTile(int _i);
@@ -138,6 +138,27 @@ namespace PacMan_Board
 			Board* board;
 			Grid* grid;
 
+			Vector2Int spawnCoords;
+			int spawnDirIndex;
+			void SetSpawn(Vector2Int _coords, int _dirIndex)
+			{
+
+				spawnCoords = _coords;
+				spawnDirIndex = _dirIndex;
+
+				Spawn();
+
+			}
+			void Spawn()
+			{
+
+				stepTimer = 0;
+
+				coords = spawnCoords;
+				dirIndex = spawnDirIndex;
+
+			}
+
 			Vector2Int coords;
 			int dirIndex;
 			Vector2Int dir(int _i);
@@ -183,23 +204,20 @@ namespace PacMan_Board
 
 			Player() {}
 
-			Player(Board* _board, Grid* _grid, Vector2Int _spawnPos, int _dirIndex)
+			Player(Board* _board, Grid* _grid)
 			{
 
 				board = _board;
-
 				grid = _grid;
 
-				coords = _spawnPos;
-
-				dirIndex = _dirIndex;
-
-				mainAnimAtlas = board->GetTexture(2);
+				mainAnimAtlas = board->GetTexture(4);
 
 			}
 
 			void Update();
 			void OnDraw() { DrawCurrentFrame(mainAnimAtlas); }
+
+			int ReturnEnemyCollisionOutcome() { return 0; }
 
 		private:
 
@@ -218,7 +236,7 @@ namespace PacMan_Board
 		public:
 
 			Enemy() {}
-			Enemy(Board* _board, Grid* _grid, int _ID, Vector2Int _spawnPos, int _dirIndex)
+			Enemy(Board* _board, Grid* _grid, int _ID)
 			{
 
 				board = _board;
@@ -226,10 +244,6 @@ namespace PacMan_Board
 				grid = _grid;
 
 				ID = _ID;
-
-				coords = _spawnPos;
-
-				dirIndex = _dirIndex;
 
 				mainAnimAtlas = board->GetTexture(ID + 3);
 
@@ -252,7 +266,7 @@ namespace PacMan_Board
 
 		};
 
-		Board(Resources* _res);
+		Board(Resources* _res, int _difficulty);
 
 		void Update();
 		void OnDraw();
@@ -261,9 +275,7 @@ namespace PacMan_Board
 		void AddScore(int _s);
 		void DotCollected();
 		void OnPowerCollected();
-		void OnPlayerHit();
-
-		void SpawnEnemy(int _ID, Entity::Vector2Int _spawnCoords, int _spawnDir) { enemies.push_back(Enemy{ this, &grid, _ID, _spawnCoords, _spawnDir }); }
+		void OnPlayerHit();		
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
 
@@ -273,24 +285,69 @@ namespace PacMan_Board
 
 		Texture2D GetTexture(int _i) { return (*resources).GetMazeTexture(_i); }
 
-		int ExitFlag() { return 0; }
-
 	private:
 
+		struct PlayerSpawnData
+		{
+
+			Entity::Vector2Int spawnPos;
+
+			int spawnDir;
+
+		};
+
+		struct EnemySpawnData
+		{
+
+			int typeID;
+
+			Entity::Vector2Int spawnPos;
+
+			int spawnDir;
+
+		};
+
+		struct MazeSpawnData
+		{
+
+			std::vector<int> gridTiles;
+
+			PlayerSpawnData playerSpawn;
+
+			std::vector<EnemySpawnData> enemySpawns{ std::vector<EnemySpawnData>() };
+
+		};
+
+		std::vector<int> mazeIDs{ std::vector<int>() };
+
+		void RefillMazeQueue(bool _random = true);
+
+		MazeSpawnData ReturnMazeSpawnData(int _i);
+
+		void SpawnNextMaze();
+
+		void SpawnEnemy(EnemySpawnData _spawnData) { enemies.push_back(Enemy{ this, &grid, _spawnData.typeID }); }
+
+		int difficulty{ 0 };
 		int clearedRounds{ 0 };
+
+		float timeLeft{ 300 };
 
 		int score{ 0 };
 		int speedScore{ 0 };
 		int speedMod{ 0 };
 
-		int dotsCollected;
-		int dotGoal;
+		int dotsCollected{ 0 };
+		int dotGoal{ 0 };
+
+		int lifesLeft{ 99 };
+		int crystalsLeft{ 99 };
 
 		Grid grid;
 		Player player;
 		std::vector<Enemy> enemies{ std::vector<Enemy>(0) };
 
-		enum States { Starting, Playing, Paused, Defeat, Cleared, TimeUp, Results };
+		enum States { Starting, Playing, Paused, FlipOut, FlipIn, Defeated, TimeUp, Results };
 		States currentState{ Starting };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };

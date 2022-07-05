@@ -45,7 +45,8 @@ void Game::Start()
 	// Load Resources
 	resources.Load();
 
-	StartNewScreen(-1);
+	// Start Intro Screen
+	StartNewScreen(4);
 
 }
 
@@ -76,7 +77,7 @@ void Game::StartNewScreen(int _ID)
 	case 4:
 	case 5:
 	case 6:
-		content = new PacMan_Board::Board(&resources);
+		content = new PacMan_Board::Board(&resources, _ID - 4);
 		break;
 
 	// Baseball Minigame

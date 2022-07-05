@@ -12,7 +12,7 @@ Board::Grid::Grid(Board* _board, std::vector<int> rawTiles)
 
 	board = _board;
 
-	tilesAtlas = board->GetTexture(1);
+	tilesAtlas = board->GetTexture(3);
 
 	tiles = rawTiles;
 
@@ -20,11 +20,6 @@ Board::Grid::Grid(Board* _board, std::vector<int> rawTiles)
 
 Board::Grid::~Grid()
 {
-}
-
-void Board::Grid::Update()
-{
-
 }
 
 void Board::Grid::OnDraw(int _ColorID)
@@ -60,7 +55,7 @@ int Board::Grid::GetDotCount()
 
 			int tileID = tiles[19 * y + x];
 
-			if (tileID == 18) { n++; }
+			if (tileID == 17) { n++; }
 
 		}
 

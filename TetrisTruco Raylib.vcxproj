@@ -170,6 +170,7 @@
   <ItemGroup>
     <None Include="shaders\arcade.fs" />
     <None Include="shaders\base.fs" />
+    <None Include="shaders\bloom.fs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\baseball\AshleyPlatform.png" />

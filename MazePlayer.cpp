@@ -12,30 +12,46 @@ void Board::Player::Update()
 	if (stepTimer >= 1)
 	{
 
-		coords = AddDir(coords, dirIndex);
+		if (IsValidDir(coords, dirIndex)) { coords = AddDir(coords, dirIndex); }
+		else { hitWall = true; }
 
-		switch (grid->GetTileID(CoordsToIndex(coords)))
+		int tileID;
+		tileID = grid->GetTileID(CoordsToIndex(coords));
+
+		switch (tileID)
 		{
+
+			// Blank Vessel
+		case 17:
+
+			grid->ClearTile(CoordsToIndex(coords));
+
+			board->DotCollected();
+			board->AddScore(10);
+
+			break;
 
 		case 18:
 
 			grid->ClearTile(CoordsToIndex(coords));
 
-			board->DotCollected();
-
-			board->AddScore(10);
-
-			break;
-
-		case 19:
-
-			grid->ClearTile(CoordsToIndex(coords));
-
 			board->AddScore(50);
-
 			board->OnPowerCollected();
 
 			break;
+
+			// Dash Booster
+		case 19:
+		case 20:
+		case 21:
+		case 22:
+
+			if (dirIndex == tileID - 19)
+			{
+
+
+
+			}
 
 		}
 
@@ -77,10 +93,12 @@ void Board::Player::Update()
 void Board::Player::ChangeDir()
 {
 
+	int startDirIndex = dirIndex;
+
 	for (int i = 0; i < 4; i++)
 	{
 
-		if (IsKeyDown(std::vector<int> { KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT }[i]) && IsValidDir(coords, i))
+		if ((!(i == startDirIndex)) && IsKeyDown(std::vector<int> { KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT }[i]) && IsValidDir(coords, i))
 		{
 
 			dirIndex = i;
