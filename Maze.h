@@ -275,7 +275,7 @@ namespace PacMan_Board
 		void AddScore(int _s);
 		void DotCollected();
 		void OnPowerCollected();
-		void OnPlayerHit();		
+		void OnPlayerHit();
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
 
@@ -326,7 +326,7 @@ namespace PacMan_Board
 
 		void SpawnNextMaze();
 
-		void SpawnEnemy(EnemySpawnData _spawnData) { enemies.push_back(Enemy{ this, &grid, _spawnData.typeID }); }
+		void SpawnEnemy(EnemySpawnData _spawnData);
 
 		int difficulty{ 0 };
 		int clearedRounds{ 0 };
@@ -345,7 +345,7 @@ namespace PacMan_Board
 
 		Grid grid;
 		Player player;
-		std::vector<Enemy> enemies{ std::vector<Enemy>(0) };
+		std::vector<Enemy> enemies{ std::vector<Enemy>() };
 
 		enum States { Starting, Playing, Paused, FlipOut, FlipIn, Defeated, TimeUp, Results };
 		States currentState{ Starting };

@@ -46,7 +46,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(4);
+	StartNewScreen(5);
 
 }
 
