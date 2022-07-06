@@ -62,6 +62,9 @@ private:
 
 	RenderTexture2D target;
 
+	RenderTexture2D buffer1;
+	RenderTexture2D buffer2;
+
 	void Update();
 	void Draw();
 

@@ -18,6 +18,13 @@ public:
 	void Load()
 	{
 
+		// Load Fragment Shader Files
+		LoadShaders(shaders, std::vector<std::string>
+		{
+			"uvTest.fs",
+			"gray.fs"
+		});
+
 		// Load Common Texture Files
 		LoadTextures(commonTextures, std::vector<std::string>
 		{

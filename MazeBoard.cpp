@@ -57,6 +57,29 @@ void Board::Update()
 void Board::OnDraw()
 {
 
+	// Draw Maze Grid
+	grid.OnDraw(clearedRounds % 6);
+
+	// List All Entities
+	std::vector<Entity*> entities = std::vector<Entity*>();
+	entities.push_back(&player);
+	for (int i = 0; i < enemies.size(); i++) { entities.push_back(&enemies[i]); }
+
+	// Selection Sort
+	for (int i = 0; i < entities.size() - 1; i++)
+	{
+
+		int targetIndex = i;
+
+		for (int i = targetIndex + 1; i < entities.size(); i++) { if ((*entities[i]).GetRawCoords().y < (*entities[targetIndex]).GetRawCoords().y) { targetIndex = i; } }
+
+		if (targetIndex != i) { std::swap(entities[i], entities[targetIndex]); }
+
+	}
+
+	// Draw Entities From Top To Bottom
+	for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
+
 	switch (currentState)
 	{
 
@@ -72,70 +95,34 @@ void Board::OnDraw()
 		case 0:
 
 			DrawBox(8, Vector2{ 96, 32 }, Vector2{ 152, 224 }, SKYBLUE);
-
 			DrawTextCharAtlas("READY", Vector2{ 152, 220 }, SKYBLUE, 1);
-
 			break;
 
 		case 2:
 
 			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, RED);
-
 			DrawTextCharAtlas("3", Vector2{ 152, 220 }, RED, 1);
-
 			break;
 
 		case 3:
 
 			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, YELLOW);
-
 			DrawTextCharAtlas("2", Vector2{ 152, 220 }, YELLOW, 1);
-
 			break;
 
 		case 4:
 
 			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, GREEN);
-
 			DrawTextCharAtlas("1", Vector2{ 152, 220 }, GREEN, 1);
-
 			break;
 
 		case 5:
 
 			DrawBox(8, Vector2{ 64, 32 }, Vector2{ 152, 224 }, SKYBLUE);
-
 			DrawTextCharAtlas("GO", Vector2{ 152, 220 }, SKYBLUE, 1);
-
 			break;
 
 		}
-
-		break;
-
-	case Playing:
-
-		grid.OnDraw(clearedRounds % 6);
-
-		// Draw Entities From Top To Bottom
-		std::vector<Entity*> entities = std::vector<Entity*>();
-
-		entities.push_back(&player);
-		for (int i = 0; i < enemies.size(); i++) { entities.push_back(&enemies[i]); }
-
-		// Selection Sort
-		for (int i = 0; i < entities.size() - 1; i++)
-		{
-
-			int targetIndex = i;
-
-			for (int i = targetIndex + 1; i < entities.size(); i++) { if ((*entities[i]).GetRawCoords().y < (*entities[targetIndex]).GetRawCoords().y) { targetIndex = i; } }
-
-			if (targetIndex != i) { std::swap(entities[i], entities[targetIndex]); }
-
-		}
-
-		for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
 
 		break;
 
@@ -1179,7 +1166,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			7, 11, 11, 15, 11, 11, 10, 0, 4, 11, 10, 0, 4, 11, 11, 15, 11, 11, 13
 		};
 
-		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 12 }, 3 };
+		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 12 }, 2 };
 
 		break;
 

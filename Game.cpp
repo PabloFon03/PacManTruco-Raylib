@@ -21,6 +21,12 @@ Game::Game(int w, int h, int fps, std::string t)
 	target = LoadRenderTexture(wMin, hMin);
 	SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
 
+	buffer1 = LoadRenderTexture(wMin, hMin);
+	SetTextureFilter(buffer1.texture, TEXTURE_FILTER_POINT);
+
+	buffer2 = LoadRenderTexture(wMin, hMin);
+	SetTextureFilter(buffer2.texture, TEXTURE_FILTER_POINT);
+
 }
 
 Game::~Game() noexcept
@@ -176,15 +182,38 @@ void Game::EndDraw()
 
 	EndTextureMode();
 
+	std::vector<int> shaderStack = std::vector<int>();
+
+	shaderStack.push_back((*content).renderShader);
+	shaderStack.push_back(1);
+
+	for (int i = 0; i < shaderStack.size(); i++)
+	{
+
+		BeginTextureMode(i % 2 == 0 ? buffer1 : buffer2);
+
+		BeginShaderMode(resources.GetShader(shaderStack[i]));
+
+		Texture* currentBuffer = &(i == 0 ? target : i % 2 == 0 ? buffer2 : buffer1).texture;
+		DrawTexturePro((*currentBuffer), Rectangle{ 0, 0, (float)(*currentBuffer).width, -(float)(*currentBuffer).height }, Rectangle{ 0, 0, (float)(*currentBuffer).width, (float)(*currentBuffer).height }, Vector2{ 0, 0 }, 0.0f, WHITE);
+
+		EndShaderMode();
+
+		EndTextureMode();
+
+	}
+
 	BeginDrawing();
+
+	Texture* finalBuffer = &(shaderStack.size() % 2 == 0 ? buffer2 : buffer1).texture;
 
 	float wScale = (float)GetScreenWidth() / wMin;
 	float hScale = (float)GetScreenHeight() / hMin;
 
 	float scale = wScale < hScale ? wScale : hScale;
 
-	DrawTexturePro(target.texture,
-		Rectangle{ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height },
+	DrawTexturePro((*finalBuffer),
+		Rectangle{ 0.0f, 0.0f, (float)(*finalBuffer).width, -(float)(*finalBuffer).height },
 		Rectangle{
 		(GetScreenWidth() - ((float)wMin * scale)) * 0.5f,
 		(GetScreenHeight() - ((float)hMin * scale)) * 0.5f,

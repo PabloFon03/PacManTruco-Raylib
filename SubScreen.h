@@ -17,6 +17,8 @@ public:
 
 	int exitFlag{ -1 };
 
+	int renderShader{ 0 };
+
 	Resources* resources;
 
 	Texture2D GetCommonTexture(int _i) { return (*resources).GetCommonTexture(_i); }
