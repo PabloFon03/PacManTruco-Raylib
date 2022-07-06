@@ -52,7 +52,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(6);
+	StartNewScreen(4);
 
 }
 
@@ -66,7 +66,7 @@ void Game::StartNewScreen(int _ID)
 	switch (_ID)
 	{
 
-	// Main Menu
+		// Main Menu
 	case -1:
 	case 0:
 		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
@@ -79,21 +79,21 @@ void Game::StartNewScreen(int _ID)
 		content = new ItemShop_Screen::ItemShop(&resources, _ID - 1, player.GetTokens() + 25);
 		break;
 
-	// Maze
+		// Maze
 	case 4:
 	case 5:
 	case 6:
 		content = new PacMan_Board::Board(&resources, _ID - 4);
 		break;
 
-	// Baseball Minigame
+		// Baseball Minigame
 	case 7:
 	case 8:
 	case 9:
 		content = new Baseball_Arena::Arena(&resources, _ID - 7);
 		break;
 
-	// Claw Minigame
+		// Claw Minigame
 	case 10:
 	case 11:
 	case 12:
@@ -124,27 +124,27 @@ void Game::Tick()
 
 void Game::Update()
 {
-	
+
 	int exitFlag = (*content).exitFlag;
 
 	switch (exitFlag)
 	{
 
-	// Keep Going
+		// Keep Going
 	case -1:
 
 		(*content).Update();
 
 		break;
 
-	// Close App
+		// Close App
 	case -2:
 
 		isClosed = true;
 
 		break;
 
-	// Load New Screen
+		// Load New Screen
 	default:
 
 		player.AddTokens((*content).GetTokens());
@@ -182,17 +182,55 @@ void Game::EndDraw()
 
 	EndTextureMode();
 
+	int wScreen = GetScreenWidth();
+	int hScreen = GetScreenHeight();
+
+	if (buffer1.texture.width != wScreen || buffer1.texture.height != hScreen)
+	{
+
+		UnloadRenderTexture(buffer1);
+		UnloadRenderTexture(buffer2);
+
+		buffer1 = LoadRenderTexture(wScreen, hScreen);
+		SetTextureFilter(buffer1.texture, TEXTURE_FILTER_POINT);
+
+		buffer2 = LoadRenderTexture(wScreen, hScreen);
+		SetTextureFilter(buffer2.texture, TEXTURE_FILTER_POINT);
+
+	}	
+
+	BeginTextureMode(buffer1);
+
+	ClearBackground(BLACK);
+
+	float wScale = (float)wScreen / wMin;
+	float hScale = (float)hScreen / hMin;
+
+	float scale = wScale < hScale ? wScale : hScale;
+
+	DrawTexturePro(target.texture,
+		Rectangle{ 0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height },
+		Rectangle{
+		(GetScreenWidth() - ((float)wMin * scale)) * 0.5f,
+		(GetScreenHeight() - ((float)hMin * scale)) * 0.5f,
+		(float)wMin * scale,
+		(float)hMin * scale },
+		Vector2{ 0, 0 }, 0.0f, WHITE);
+
+	EndTextureMode();
+
 	std::vector<int> shaderStack = std::vector<int>();
 
 	shaderStack.push_back((*content).renderShader);
-	shaderStack.push_back(1);
 
-	for (int i = 0; i < shaderStack.size(); i++)
+	for (int i = 1; i <= shaderStack.size(); i++)
 	{
 
 		BeginTextureMode(i % 2 == 0 ? buffer1 : buffer2);
 
-		BeginShaderMode(resources.GetShader(shaderStack[i]));
+		ClearBackground(BLACK);
+
+		BeginShaderMode(resources.GetShader(shaderStack[i - 1]));
 
 		Texture* currentBuffer = &(i == 0 ? target : i % 2 == 0 ? buffer2 : buffer1).texture;
 		DrawTexturePro((*currentBuffer), Rectangle{ 0, 0, (float)(*currentBuffer).width, -(float)(*currentBuffer).height }, Rectangle{ 0, 0, (float)(*currentBuffer).width, (float)(*currentBuffer).height }, Vector2{ 0, 0 }, 0.0f, WHITE);
@@ -205,21 +243,8 @@ void Game::EndDraw()
 
 	BeginDrawing();
 
-	Texture* finalBuffer = &(shaderStack.size() % 2 == 0 ? buffer2 : buffer1).texture;
-
-	float wScale = (float)GetScreenWidth() / wMin;
-	float hScale = (float)GetScreenHeight() / hMin;
-
-	float scale = wScale < hScale ? wScale : hScale;
-
-	DrawTexturePro((*finalBuffer),
-		Rectangle{ 0.0f, 0.0f, (float)(*finalBuffer).width, -(float)(*finalBuffer).height },
-		Rectangle{
-		(GetScreenWidth() - ((float)wMin * scale)) * 0.5f,
-		(GetScreenHeight() - ((float)hMin * scale)) * 0.5f,
-		(float)wMin * scale,
-		(float)hMin * scale },
-		Vector2{ 0, 0 }, 0.0f, WHITE);
+	Texture* finalBuffer = &(shaderStack.size() % 2 == 0 ? buffer1 : buffer2).texture;
+	DrawTexturePro((*finalBuffer), Rectangle{ 0, 0, (float)(*finalBuffer).width, -(float)(*finalBuffer).height }, Rectangle{ 0, 0, (float)(*finalBuffer).width, (float)(*finalBuffer).height }, Vector2{ 0, 0 }, 0.0f, WHITE);
 
 	EndDrawing();
 

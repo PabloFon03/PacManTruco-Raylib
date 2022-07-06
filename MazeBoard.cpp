@@ -50,6 +50,45 @@ void Board::Update()
 
 		break;
 
+	case FlipOut:
+
+		stepTimer += 4 * GetRawDeltaTime();
+
+		if (stepTimer >= 1)
+		{
+
+			clearedRounds++;
+			SpawnNextMaze();
+
+			stepTimer--;
+			currentState = FlipIn;
+
+		}
+
+		else { SetShaderValue(resources->GetShader(0), 1, &stepTimer, SHADER_UNIFORM_FLOAT); }
+
+		break;
+
+	case FlipIn:
+
+		stepTimer += 4 * GetRawDeltaTime();
+
+		if (stepTimer >= 1)
+		{
+
+			stepTimer--;
+			currentState = Playing;
+
+		}
+
+		else
+		{
+			float val = 1 - stepTimer;
+			SetShaderValue(resources->GetShader(0), 1, &val, SHADER_UNIFORM_FLOAT);
+		}
+
+		break;
+
 	}
 
 }
@@ -170,11 +209,10 @@ void Board::DotCollected()
 	dotsCollected++;
 
 	if (dotsCollected == dotGoal)
-	{
+	{		
 
-		clearedRounds++;
-
-		SpawnNextMaze();
+		stepTimer = 0;
+		currentState = FlipOut;
 
 	}
 

@@ -21,6 +21,7 @@ public:
 		// Load Fragment Shader Files
 		LoadShaders(shaders, std::vector<std::string>
 		{
+			"mazeFlip.fs",
 			"uvTest.fs",
 			"gray.fs"
 		});

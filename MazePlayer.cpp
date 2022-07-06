@@ -7,7 +7,7 @@ void Board::Player::Update()
 
 	float deltaTime = board->GetDeltaTime();
 
-	stepTimer += 4 * deltaTime;
+	stepTimer += 5 * deltaTime;
 
 	if (stepTimer >= 1)
 	{
