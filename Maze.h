@@ -42,7 +42,7 @@ namespace PacMan_Board
 
 			bool IsElectric() { return isElectric; }
 			int GetManaCost() { return manaCost; }
-			int GetDischargeRate() { return dischargeRate; }
+			float GetDischargeRate() { return dischargeRate; }
 
 		private:
 
@@ -66,17 +66,17 @@ namespace PacMan_Board
 				// Sword
 				PlayerItem{ 1, 2 },
 
-				// Jump
+				// Dash
 				PlayerItem{ 3, 0 },
 
-				// Dash
+				// Magic
 				PlayerItem{ 5, 0 },
 
-				// Magic
+				// Projectile
 				PlayerItem{ 8, 0 },
 
-				// Projectile
-				PlayerItem{ 10, 0 },
+				// Trade
+				PlayerItem{ 10, 0.125f },
 
 				// Freeze
 				PlayerItem{ 12, 0.2f },
@@ -291,10 +291,26 @@ namespace PacMan_Board
 
 			}
 
+			void Spawn()
+			{
+
+				Entity::Spawn();
+
+				currentState = None;
+				stateTimer = 0;
+
+			}
+
 			void Update();
 			void OnDraw();
 
 			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic ? 1 : 0; }
+
+			int GetItemIndex(int _i) { return (int)items[_i]; }
+			bool UsingItem() { return currentState != None; }
+			bool TimeFrozen() { return currentState == Freeze; }
+
+			float GetElectricCharge() { return electricEnergy; }
 
 		private:
 
@@ -332,12 +348,12 @@ namespace PacMan_Board
 
 			enum ItemStates { None, Sword, Dash, Magic, Projectile, Trade, Freeze, ElectricDash };
 			ItemStates currentState{ None };
-			float stateTimer;
+			float stateTimer{ 0 };
 
-			ItemStates items[3]{ Sword, Dash, Magic };
+			ItemStates items[3]{ Trade, Freeze, ElectricDash };
 
 			int energy{ 0 };
-			float electricEnergy{ 0.0f };
+			float electricEnergy{ 0 };
 
 		};
 
@@ -352,7 +368,6 @@ namespace PacMan_Board
 			{
 
 				board = _board;
-
 				grid = _grid;
 
 				ID = _ID;
@@ -391,6 +406,7 @@ namespace PacMan_Board
 		void OnPlayerHit();
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
+		float GetEnemyDeltaTime() { return player.TimeFrozen() ? 0 : GetRawDeltaTime(); }
 
 		Entity::Vector2Int GetPlayerPos() { return player.coords; }
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }
@@ -403,41 +419,28 @@ namespace PacMan_Board
 
 		struct PlayerSpawnData
 		{
-
 			Entity::Vector2Int spawnPos;
-
 			int spawnDir;
-
 		};
 
 		struct EnemySpawnData
 		{
-
 			int typeID;
-
 			Entity::Vector2Int spawnPos;
-
 			int spawnDir;
-
 		};
 
 		struct MazeSpawnData
 		{
-
 			std::vector<int> gridTiles;
-
 			PlayerSpawnData playerSpawn;
-
 			std::vector<EnemySpawnData> enemySpawns{ std::vector<EnemySpawnData>() };
-
 		};
 
 		std::vector<int> mazeIDs{ std::vector<int>() };
 
 		void RefillMazeQueue(bool _random = true);
-
 		MazeSpawnData ReturnMazeSpawnData(int _i);
-
 		void SpawnNextMaze();
 
 		void SpawnEnemy(EnemySpawnData _spawnData);
@@ -445,7 +448,7 @@ namespace PacMan_Board
 		int difficulty{ 0 };
 		int clearedRounds{ 0 };
 
-		float timeLeft{ 300 };
+		float timeLeft{ 180 };
 
 		int score{ 0 };
 		int speedScore{ 0 };
@@ -465,6 +468,9 @@ namespace PacMan_Board
 		States currentState{ Starting };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };
+
+		Texture2D itemIcons;
+		Texture2D roundCounter;
 
 		int shaderFlipValLocation{ -1 };
 

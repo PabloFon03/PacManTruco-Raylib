@@ -7,14 +7,17 @@ Board::Board(Resources* _res, int _difficulty)
 
 	resources = _res;
 
+	shaderFlipValLocation = GetShaderLocation(resources->GetShader(1), "flipVal");
+
+	itemIcons = GetTexture(0);
+	roundCounter = GetTexture(2);
+
 	difficulty = _difficulty;
 
 	player = Player{ this, &grid };
 
 	RefillMazeQueue(false);
-	SpawnNextMaze();
-
-	shaderFlipValLocation = GetShaderLocation(resources->GetShader(1), "flipVal");
+	SpawnNextMaze();	
 
 }
 
@@ -180,9 +183,29 @@ void Board::OnDraw()
 	// Bottom UI
 	DrawRectangle(0, 400, 304, 48, BLACK);
 
-	DrawTextureRec(GetTexture(2), Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
+	DrawTextureRec(roundCounter, Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
 	DrawText(("Dots: " + std::to_string(dotsCollected) + " / " + std::to_string(dotGoal)).c_str(), 192, 416, 16, WHITE);
 
+	Color itemTint = player.UsingItem() ? GRAY : WHITE;
+
+	for (int i = 0; i < 3; i++)
+	{
+
+		int currentItem = player.GetItemIndex(i);
+
+		DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, WHITE);
+
+		if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric())
+		{
+			std::string manaCost = TextFormat("%i", Items::GetItem(currentItem).GetManaCost());
+			DrawTextCharAtlas(manaCost, Vector2{ (float)(12 + 20 * i), 436 }, WHITE, 1);
+		}
+
+	}
+
+	DrawBox(8, Vector2{ 56, 12 }, Vector2{ 98, 424 }, YELLOW);
+	DrawRectangle(70, 418, round(56 * player.GetElectricCharge()), 12, WHITE);
+			
 }
 
 void Board::ClearTile(int _i) { grid.ClearTile(_i); }

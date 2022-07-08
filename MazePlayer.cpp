@@ -62,12 +62,12 @@ void Board::Player::Update()
 			if (IsKeyPressed(itemKeys[i]))
 			{
 
-				while (electricEnergy >= Items::GetItem((int)Trade).GetDischargeRate())
+				float dischargeRate = Items::GetItem((int)Trade).GetDischargeRate();
+
+				while (electricEnergy >= dischargeRate)
 				{
-
-					electricEnergy -= Items::GetItem((int)Trade).GetDischargeRate();
+					electricEnergy -= dischargeRate;
 					energy++;
-
 				}
 
 			}
