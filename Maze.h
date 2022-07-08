@@ -54,6 +54,78 @@ namespace PacMan_Board
 
 		};
 
+		inline PlayerItem GetItem(int _i)
+		{
+
+			PlayerItem Items[8]
+			{
+
+				// None
+				PlayerItem{ 0, 0 },
+
+				// Sword
+				PlayerItem{ 1, 2 },
+
+				// Jump
+				PlayerItem{ 3, 0 },
+
+				// Dash
+				PlayerItem{ 5, 0 },
+
+				// Magic
+				PlayerItem{ 8, 0 },
+
+				// Projectile
+				PlayerItem{ 10, 0 },
+
+				// Freeze
+				PlayerItem{ 12, 0.2f },
+
+				// Boost
+				PlayerItem{ 15, 0.5f }
+
+			};
+
+			return Items[_i];
+
+		}
+
+		inline int GetCharmPrice(int _i)
+		{
+
+			int CharmPrices[8]
+			{
+
+				// None
+				0,
+
+				// Score x2
+				3,
+
+				// Lifes x3
+				3,
+
+				// Crystals x3
+				5,
+
+				// Score x4
+				8,
+
+				// Lifes x5
+				10,
+
+				// Crystals x5
+				15,
+
+				// Locket
+				25
+
+			};
+
+			return CharmPrices[_i];
+
+		}
+
 	}
 
 	// Board Class
@@ -174,19 +246,14 @@ namespace PacMan_Board
 
 			Vector2 GetRawCoords() { return Vector2{ TrueMod(coords.x + dir(dirIndex).x * stepTimer, 19), TrueMod(coords.y + dir(dirIndex).y * stepTimer, 22) }; }
 
-			void DrawCurrentFrame(Texture2D& _animAtlas);
+			void DrawCurrentFrame(Texture2D& _animAtlas, int _frameIndex, Vector2 _tileSize, Vector2 _posOffset = Vector2{ 0, 0 });
 			virtual void OnDraw() = 0;
-
-			virtual Vector2Int TileSize() = 0;
 
 			int animIndex{ 0 };
 			float animDelay{ 0 };
 
 			float stepTimer{ 0 };
 			bool hitWall{ false };
-
-			float stateTimer;
-			int stateIndex;
 
 			virtual void ChangeDir();
 
@@ -210,22 +277,67 @@ namespace PacMan_Board
 				board = _board;
 				grid = _grid;
 
-				mainAnimAtlas = board->GetTexture(4);
+				mainAnimAtlas.atlas = board->GetTexture(4);
+				mainAnimAtlas.tileSize = Vector2{ 24, 24 };
+
+				swordAnimAtlas.atlas = board->GetTexture(5);
+				swordAnimAtlas.tileSize = Vector2{ 16, 16 };
+
+				dashAnimAtlas.atlas = board->GetTexture(6);
+				dashAnimAtlas.tileSize = Vector2{ 16, 16 };
+
+				magicAnimAtlas.atlas = board->GetTexture(7);
+				magicAnimAtlas.tileSize = Vector2{ 18, 52 };
 
 			}
 
 			void Update();
-			void OnDraw() { DrawCurrentFrame(mainAnimAtlas); }
+			void OnDraw();
 
-			int ReturnEnemyCollisionOutcome() { return 0; }
+			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic ? 1 : 0; }
 
 		private:
 
-			Texture2D mainAnimAtlas;
+			struct AnimAtlas
+			{
+				Texture2D atlas;
+				Vector2 tileSize;
+			};
+
+			AnimAtlas mainAnimAtlas;
+			AnimAtlas swordAnimAtlas;
+			AnimAtlas dashAnimAtlas;
+			AnimAtlas magicAnimAtlas;
+
+			AnimAtlas GetCurrentAnimAtlas()
+			{
+
+				switch (currentState)
+				{
+
+				case Dash:
+				case ElectricDash:
+					return dashAnimAtlas;
+
+				case Magic: return magicAnimAtlas;
+
+				default: return mainAnimAtlas;
+
+				}
+
+			}
 
 			void ChangeDir();
+			void BoostTileCheck();
 
-			Vector2Int TileSize() { return Vector2Int{ 24, 24 }; }
+			enum ItemStates { None, Sword, Dash, Magic, Projectile, Trade, Freeze, ElectricDash };
+			ItemStates currentState{ None };
+			float stateTimer;
+
+			ItemStates items[3]{ Sword, Dash, Magic };
+
+			int energy{ 0 };
+			float electricEnergy{ 0.0f };
 
 		};
 
@@ -250,7 +362,9 @@ namespace PacMan_Board
 			}
 
 			void Update();
-			void OnDraw() { DrawCurrentFrame(mainAnimAtlas); }
+			void OnDraw() { DrawCurrentFrame(mainAnimAtlas, animIndex, TileSize()); }
+
+			void OnStun() {}
 
 		private:
 
@@ -262,7 +376,7 @@ namespace PacMan_Board
 
 			void ChangeDir();
 
-			Vector2Int TileSize() { return Vector2Int{ 18, 52 }; }
+			Vector2 TileSize() { return Vector2{ 18, 52 }; }
 
 		};
 
@@ -274,7 +388,6 @@ namespace PacMan_Board
 		void ClearTile(int _i);
 		void AddScore(int _s);
 		void DotCollected();
-		void OnPowerCollected();
 		void OnPlayerHit();
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
@@ -282,6 +395,7 @@ namespace PacMan_Board
 		Entity::Vector2Int GetPlayerPos() { return player.coords; }
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }
 		int GetPlayerDirIndex() { return player.dirIndex; }
+		int GetPlayerHitOutcome() { return player.ReturnEnemyCollisionOutcome(); }
 
 		Texture2D GetTexture(int _i) { return (*resources).GetMazeTexture(_i); }
 
@@ -351,6 +465,8 @@ namespace PacMan_Board
 		States currentState{ Starting };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };
+
+		int shaderFlipValLocation{ -1 };
 
 	};
 

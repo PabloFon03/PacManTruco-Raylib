@@ -50,7 +50,23 @@ void Board::Enemy::Update()
 	if (rawDistanceTo(board->GetPlayerRawPos()) < 0.25f)
 	{
 
-		board->OnPlayerHit();
+		switch (board->GetPlayerHitOutcome())
+		{
+
+			// Player Hit
+		case 0:
+			board->OnPlayerHit();
+			break;
+
+			// Player Ignored
+		case 1:
+			break;
+
+			// Stunned
+		case 2:
+			break;
+
+		}
 
 	}
 

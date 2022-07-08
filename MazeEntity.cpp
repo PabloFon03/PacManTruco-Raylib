@@ -24,7 +24,7 @@ Board::Entity::Vector2Int Board::Entity::dir(int i)
 
 }
 
-void Board::Entity::DrawCurrentFrame(Texture2D& _animAtlas)
+void Board::Entity::DrawCurrentFrame(Texture2D& _animAtlas, int _frameIndex, Vector2 _tileSize, Vector2 _posOffset)
 {
 
 	for (int y = -1; y < 2; y++)
@@ -33,9 +33,9 @@ void Board::Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 		for (int x = -1; x < 2; x++)
 		{
 
-			Vector2 rawCoords = { GetRawCoords().x + x * 19, GetRawCoords().y + y * 22 };
+			Vector2 rawCoords = { GetRawCoords().x + x * 19 + _posOffset.x, GetRawCoords().y + y * 22 + _posOffset.y };
 
-			if (rawCoords.x > -1 && rawCoords.x < 20 && rawCoords.y > -1 && rawCoords.y < 23) { DrawTextureRec(_animAtlas, Rectangle{ (float)animIndex * TileSize().x, (float)dirIndex * TileSize().y, (float)TileSize().x, (float)TileSize().y }, Vector2{ rawCoords.x * 16 - (TileSize().x - 16) / 2.0f, rawCoords.y * 16 + 48 - (TileSize().y - 16) / 2.0f }, WHITE); }
+			if (rawCoords.x > -1 && rawCoords.x < 20 && rawCoords.y > -1 && rawCoords.y < 23) { DrawTextureRec(_animAtlas, Rectangle{ (float)_frameIndex * _tileSize.x, (float)dirIndex * _tileSize.y, (float)_tileSize.x, (float)_tileSize.y }, Vector2{ rawCoords.x * 16 - (_tileSize.x - 16) / 2.0f, rawCoords.y * 16 + 48 - (_tileSize.y - 16) / 2.0f }, WHITE); }
 
 		}
 
@@ -43,12 +43,7 @@ void Board::Entity::DrawCurrentFrame(Texture2D& _animAtlas)
 
 }
 
-void Board::Entity::ChangeDir()
-{
-
-	hitWall = !IsValidDir(coords, dirIndex);
-
-}
+void Board::Entity::ChangeDir() { hitWall = !IsValidDir(coords, dirIndex); }
 
 Board::Entity::Vector2Int Board::Entity::AddDir(Vector2Int _coords, int _dirIndex, bool _modWrap)
 {

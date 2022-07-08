@@ -14,6 +14,8 @@ Board::Board(Resources* _res, int _difficulty)
 	RefillMazeQueue(false);
 	SpawnNextMaze();
 
+	shaderFlipValLocation = GetShaderLocation(resources->GetShader(1), "flipVal");
+
 }
 
 void Board::Update()
@@ -65,7 +67,7 @@ void Board::Update()
 
 		}
 
-		else { SetShaderValue(resources->GetShader(0), 1, &stepTimer, SHADER_UNIFORM_FLOAT); }
+		else { SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &stepTimer, SHADER_UNIFORM_FLOAT); }
 
 		break;
 
@@ -76,6 +78,8 @@ void Board::Update()
 		if (stepTimer >= 1)
 		{
 
+			renderShader = 0;
+
 			stepTimer--;
 			currentState = Playing;
 
@@ -84,7 +88,7 @@ void Board::Update()
 		else
 		{
 			float val = 1 - stepTimer;
-			SetShaderValue(resources->GetShader(0), 1, &val, SHADER_UNIFORM_FLOAT);
+			SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &val, SHADER_UNIFORM_FLOAT);
 		}
 
 		break;
@@ -211,6 +215,8 @@ void Board::DotCollected()
 	if (dotsCollected == dotGoal)
 	{		
 
+		renderShader = 1;
+
 		stepTimer = 0;
 		currentState = FlipOut;
 
@@ -218,19 +224,12 @@ void Board::DotCollected()
 
 }
 
-void Board::OnPowerCollected()
-{
-}
-
 void Board::OnPlayerHit()
 {
 
-	// currentState = Defeat;
-	switch (player.ReturnEnemyCollisionOutcome())
-	{
-	default:
-		break;
-	}
+	currentState = Defeated;
+	stepCounter = 0;
+	stepTimer = 0;
 
 }
 
@@ -692,7 +691,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 3, 17 }, 2 };
+		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 3, 17 }, 0 };
 
 		break;
 
@@ -724,7 +723,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		};
 
-		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 6, 15 }, 2 };
+		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 6, 15 }, 0 };
 
 		break;
 
@@ -742,8 +741,8 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			0, 17, 17, 17, 17, 17, 17, 0, 0, 0, 0, 0, 17, 17, 17, 17, 17, 17, 0,
 			9, 17, 3, 11, 11, 9, 17, 4, 9, 0, 3, 10, 17, 3, 11, 11, 9, 17, 3,
 			0, 17, 17, 17, 17, 17, 17, 6, 17, 17, 17, 6, 17, 17, 17, 17, 17, 17, 0,
-			10, 17, 4, 12, 12, 10, 17, 6, 17, 2, 17, 6, 17, 4, 12, 12, 10, 17, 4,
-			13, 17, 7, 15, 15, 13, 17, 6, 17, 5, 17, 6, 17, 7, 15, 15, 13, 17, 7,
+			10, 17, 4, 11, 11, 10, 17, 6, 17, 2, 17, 6, 17, 4, 11, 11, 10, 17, 4,
+			13, 17, 7, 11, 11, 13, 17, 6, 17, 5, 17, 6, 17, 7, 11, 11, 13, 17, 7,
 			0, 17, 17, 17, 17, 17, 17, 6, 17, 17, 17, 6, 17, 17, 17, 17, 17, 17, 0,
 			9, 17, 3, 11, 11, 9, 17, 7, 9, 0, 3, 13, 17, 3, 11, 11, 9, 17, 3,
 			0, 17, 17, 17, 17, 17, 17, 0, 0, 0, 0, 0, 17, 17, 17, 17, 17, 17, 0,

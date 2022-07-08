@@ -21,6 +21,7 @@ public:
 		// Load Fragment Shader Files
 		LoadShaders(shaders, std::vector<std::string>
 		{
+			"base.fs",
 			"mazeFlip.fs",
 			"uvTest.fs",
 			"gray.fs"
@@ -60,6 +61,8 @@ public:
 			"RoundCounter.png",
 			"MazeTiles.png",
 			"Mouse.png",
+			"Sword.png",
+			"DashFlame.png",
 			"Alliga.png",
 			"Erika.png",
 			"Alice.png",
