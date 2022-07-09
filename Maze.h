@@ -277,16 +277,16 @@ namespace PacMan_Board
 				board = _board;
 				grid = _grid;
 
-				mainAnimAtlas.atlas = board->GetTexture(4);
+				mainAnimAtlas.atlas = board->GetTexture(5);
 				mainAnimAtlas.tileSize = Vector2{ 24, 24 };
 
-				swordAnimAtlas.atlas = board->GetTexture(5);
+				swordAnimAtlas.atlas = board->GetTexture(6);
 				swordAnimAtlas.tileSize = Vector2{ 16, 16 };
 
-				dashAnimAtlas.atlas = board->GetTexture(6);
+				dashAnimAtlas.atlas = board->GetTexture(7);
 				dashAnimAtlas.tileSize = Vector2{ 16, 16 };
 
-				magicAnimAtlas.atlas = board->GetTexture(7);
+				magicAnimAtlas.atlas = board->GetTexture(8);
 				magicAnimAtlas.tileSize = Vector2{ 18, 52 };
 
 			}
@@ -310,6 +310,7 @@ namespace PacMan_Board
 			bool UsingItem() { return currentState != None; }
 			bool TimeFrozen() { return currentState == Freeze; }
 
+			int GetEnergy() { return energy; }
 			float GetElectricCharge() { return electricEnergy; }
 
 		private:
@@ -470,9 +471,39 @@ namespace PacMan_Board
 		float stepTimer{ 0 };
 
 		Texture2D itemIcons;
+		Texture2D charmIcons;
+		Texture2D uiIcons;
 		Texture2D roundCounter;
 
 		int shaderFlipValLocation{ -1 };
+
+		std::string GetTimerDisplayValue()
+		{
+
+			int intTimerVal;
+
+			// X.XX
+			if (timeLeft < 10)
+			{
+				intTimerVal = (int)ceil(timeLeft * 100);
+				return TextFormat("%i.%i%i", (intTimerVal / 100) % 10, (intTimerVal / 10) % 10, intTimerVal % 10);
+			}			
+
+			// XX.X
+			else if (timeLeft < 60)
+			{
+				intTimerVal = (int)ceil(timeLeft * 10);
+				return TextFormat("%i%i.%i", (intTimerVal / 100) % 6, (intTimerVal / 10) % 10, intTimerVal % 10);
+			}
+
+			// X:XX
+			else
+			{
+				intTimerVal = (int)ceil(timeLeft);
+				return TextFormat("%i:%i%i", (intTimerVal / 60) % 10, (intTimerVal / 10) % 6, intTimerVal % 10);
+			}
+
+		}
 
 	};
 

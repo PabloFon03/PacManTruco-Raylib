@@ -252,6 +252,6 @@ void Board::Player::OnDraw()
 	AnimAtlas currentAtlas = GetCurrentAnimAtlas();
 	DrawCurrentFrame(currentAtlas.atlas, animIndex, currentAtlas.tileSize);
 
-	DrawText(TextFormat("%i\n%f\n%i\n%f", (int)currentState, stateTimer, energy, electricEnergy), 8, 64, 16, WHITE);
+	// DrawText(TextFormat("%i\n%f\n%i\n%f", (int)currentState, stateTimer, energy, electricEnergy), 8, 64, 16, WHITE);
 
 }

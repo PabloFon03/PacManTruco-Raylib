@@ -58,6 +58,7 @@ public:
 		{
 			"ItemIcons.png",
 			"CharmIcons.png",
+			"UIIcons.png",
 			"RoundCounter.png",
 			"MazeTiles.png",
 			"Mouse.png",

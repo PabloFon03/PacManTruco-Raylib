@@ -10,14 +10,16 @@ Board::Board(Resources* _res, int _difficulty)
 	shaderFlipValLocation = GetShaderLocation(resources->GetShader(1), "flipVal");
 
 	itemIcons = GetTexture(0);
-	roundCounter = GetTexture(2);
+	charmIcons = GetTexture(1);
+	uiIcons = GetTexture(2);
+	roundCounter = GetTexture(3);
 
 	difficulty = _difficulty;
 
 	player = Player{ this, &grid };
 
 	RefillMazeQueue(false);
-	SpawnNextMaze();	
+	SpawnNextMaze();
 
 }
 
@@ -48,6 +50,15 @@ void Board::Update()
 		break;
 
 	case Playing:
+
+		timeLeft -= GetRawDeltaTime();
+
+		if (timeLeft <= 0)
+		{
+
+			timeLeft = 0;
+
+		}
 
 		player.Update();
 
@@ -177,35 +188,69 @@ void Board::OnDraw()
 	// Top UI
 	DrawRectangle(0, 0, 304, 48, BLACK);
 
-	DrawText(("Score: " + std::to_string(score)).c_str(), 8, 8, 16, WHITE);
-	DrawText(("Speed: " + std::to_string(speedMod + 1)).c_str(), 128, 8, 16, WHITE);
+	// Draw Score
+	DrawBox(8, Vector2{ 80, 28 }, Vector2{ 62, 24 }, Color{ 102, 216, 255, 255 });
+	DrawTextCharAtlas("Score", Vector2{ 62, 14 }, Color{ 102, 216, 255, 255 }, 1);
+	DrawTextCharAtlas(std::to_string(score), Vector2{ 62, 26 }, Color{ 102, 216, 255, 255 }, 1);
+
+	// Draw Timer
+	DrawBox(8, Vector2{ 48, 28 }, Vector2{ 152, 24 }, Color{ 225, 225, 225, 255 });
+	DrawTextCharAtlas(GetTimerDisplayValue(), Vector2{ 152, 20 }, Color{ 225, 225, 225, 255 }, 1);
+
+	// Draw Speed
+	DrawBox(8, Vector2{ 80, 28 }, Vector2{ 242, 24 }, Color{ 255, 228, 102, 255 });
+	DrawTextCharAtlas("Speed", Vector2{ 242, 14 }, Color{ 255, 228, 102, 255 }, 1);
+	DrawTextCharAtlas(std::to_string(speedMod + 1), Vector2{ 242, 26 }, Color{ 255, 228, 102, 255 }, 1);
 
 	// Bottom UI
 	DrawRectangle(0, 400, 304, 48, BLACK);
 
-	DrawTextureRec(roundCounter, Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
-	DrawText(("Dots: " + std::to_string(dotsCollected) + " / " + std::to_string(dotGoal)).c_str(), 192, 416, 16, WHITE);
-
+	// Draw Item Icons
 	Color itemTint = player.UsingItem() ? GRAY : WHITE;
-
 	for (int i = 0; i < 3; i++)
 	{
 
 		int currentItem = player.GetItemIndex(i);
 
-		DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, WHITE);
+		DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, itemTint);
 
 		if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric())
 		{
 			std::string manaCost = TextFormat("%i", Items::GetItem(currentItem).GetManaCost());
-			DrawTextCharAtlas(manaCost, Vector2{ (float)(12 + 20 * i), 436 }, WHITE, 1);
+			DrawTextCharAtlas(manaCost, Vector2{ (float)(12 + 20 * i), 436 }, itemTint, 1);
 		}
 
 	}
 
-	DrawBox(8, Vector2{ 56, 12 }, Vector2{ 98, 424 }, YELLOW);
+	// Draw Electric Energy Bar
+	DrawBox(8, Vector2{ 56, 12 }, Vector2{ 98, 424 }, Color{ 255, 228, 102, 255 });
 	DrawRectangle(70, 418, round(56 * player.GetElectricCharge()), 12, WHITE);
-			
+
+	// Draw Round Counter
+	DrawTextureRec(roundCounter, Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
+
+	// Draw Vessels / Gems
+	DrawBox(8, Vector2{ 52, 28 }, Vector2{ 204, 424 }, Color{ 102, 255, 140, 255 });
+
+	// Blank Vessels Left
+	DrawTextureRec(uiIcons, Rectangle{ 0, 0, 8, 8 }, Vector2{ 182, 414 }, WHITE);
+	DrawTextCharAtlas(std::to_string(dotGoal - dotsCollected), Vector2{ 226, 414 }, WHITE, 2);
+
+	// Energy Left
+	DrawTextureRec(uiIcons, Rectangle{ 8, 0, 8, 8 }, Vector2{ 182, 426 }, WHITE);
+	DrawTextCharAtlas(std::to_string(player.GetEnergy()), Vector2{ 226, 426 }, WHITE, 2);
+
+	// Draw Lifes / Crystals
+	DrawBox(8, Vector2{ 52, 28 }, Vector2{ 272, 424 }, Color{ 207, 63, 255, 255 });
+
+	// Lifes Left
+	DrawTextureRec(uiIcons, Rectangle{ 0, 8, 8, 8 }, Vector2{ 250, 414 }, WHITE);
+	DrawTextCharAtlas(std::to_string(lifesLeft), Vector2{ 294, 414 }, WHITE, 2);
+
+	// Crystals Left
+	DrawTextureRec(uiIcons, Rectangle{ 8, 8, 8, 8 }, Vector2{ 250, 426 }, WHITE);
+	DrawTextCharAtlas(std::to_string(crystalsLeft), Vector2{ 294, 426 }, WHITE, 2);
+
 }
 
 void Board::ClearTile(int _i) { grid.ClearTile(_i); }
@@ -236,7 +281,7 @@ void Board::DotCollected()
 	dotsCollected++;
 
 	if (dotsCollected == dotGoal)
-	{		
+	{
 
 		renderShader = 1;
 
