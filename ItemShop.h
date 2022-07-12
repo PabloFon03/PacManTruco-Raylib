@@ -3,7 +3,8 @@
 #include "SubScreen.h"
 #include "Random.h"
 
-#include "MazeItems.h"
+#include "Maze.h"
+#include "PlayerData.h"
 
 namespace ItemShop_Screen
 {
@@ -13,7 +14,7 @@ namespace ItemShop_Screen
 
 	public:
 
-		ItemShop(Resources* _res, int _boardDifficulty, int _tokenAmount)
+		ItemShop(Resources* _res, int _boardDifficulty, PlayerData* _player)
 		{
 
 			resources = _res;
@@ -27,7 +28,8 @@ namespace ItemShop_Screen
 
 			difficulty = _boardDifficulty;
 
-			tokenAmount = _tokenAmount;
+			player = _player;
+			tokenAmount = player->GetTokens();
 
 		}
 
@@ -101,7 +103,12 @@ namespace ItemShop_Screen
 				// One-Time Purchase Check
 				for (int i = 0; isValidPurchase && i < 4; i++) { if (currentSection < 3 == i < 3) { isValidPurchase = itemIndexes[i] != itemIndex; } }
 
-				if (isValidPurchase || itemIndex == 0) { itemIndexes[currentSection] = itemIndex; }
+				// Store Item If Valid Purchase
+				if (isValidPurchase || itemIndex == 0)
+				{
+					itemIndexes[currentSection] = itemIndex;
+					player->SetPlayerItem(currentSection, itemIndex);
+				}
 
 			}
 
@@ -185,6 +192,7 @@ namespace ItemShop_Screen
 
 		}
 
+		PlayerData* player;
 		int tokenAmount{ 0 };
 
 		int itemIndexes[4]{ 0, 0, 0, 0 };

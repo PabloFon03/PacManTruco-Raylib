@@ -166,6 +166,69 @@ namespace PacMan_Board
 
 		};
 
+		// Player Projectile Attack Class
+		class Projectile
+		{
+
+		public:
+
+			Projectile(Board* _board, Vector2 _pos, Vector2 _dir, int _dirIndex)
+			{
+
+				board = _board;
+
+				pos = _pos;
+				dir = _dir;
+
+				animAtlas = board->GetTexture(9);
+				dirIndex = _dirIndex;
+
+			}
+
+			void Update()
+			{
+
+				// Update Position
+				float deltaTime = board->GetDeltaTime();
+				pos = Vector2{ pos.x + dir.x * deltaTime * v, pos.y + dir.y * deltaTime * v };
+
+				// Check If Out Of Bounds
+				if (pos.x < 0 || pos.x > 19 || pos.y < 0 || pos.y > 22) { outOfBounds = true; }
+
+				// Update Animation
+				animDelay += deltaTime;
+				if (animDelay >= 0.1f)
+				{
+
+					animIndex++;
+					animIndex %= 3;
+
+					animDelay -= 0.1f;
+
+				}
+
+			}
+
+			void OnDraw() { DrawTextureRec(animAtlas, Rectangle{ (float)(16 * animIndex), (float)(16 * dirIndex), 16, 16 }, Vector2{ 16 * pos.x, 16 * pos.y + 48 }, WHITE); }
+
+			bool IsOutOfBounds() { return outOfBounds; }
+
+		private:
+
+			Board* board;
+
+			float v{ 15 };
+			Vector2 pos;
+			Vector2 dir;
+			bool outOfBounds{ false };
+
+			Texture2D animAtlas;
+			int dirIndex;
+			int animIndex{ 0 };
+			float animDelay{ 0 };
+
+		};
+
 		// Abstract Class For Player And Enemy
 		class Entity
 		{
@@ -271,7 +334,7 @@ namespace PacMan_Board
 
 			Player() {}
 
-			Player(Board* _board, Grid* _grid)
+			Player(Board* _board, Grid* _grid, int _item1, int _item2, int _item3)
 			{
 
 				board = _board;
@@ -289,6 +352,10 @@ namespace PacMan_Board
 				magicAnimAtlas.atlas = board->GetTexture(8);
 				magicAnimAtlas.tileSize = Vector2{ 18, 52 };
 
+				items[0] = (ItemStates)_item1;
+				items[1] = (ItemStates)_item2;
+				items[2] = (ItemStates)_item3;
+
 			}
 
 			void Spawn()
@@ -303,6 +370,9 @@ namespace PacMan_Board
 
 			void Update();
 			void OnDraw();
+
+			void UpdateItems();
+			void UpdateMovement();
 
 			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic ? 1 : 0; }
 
@@ -351,7 +421,7 @@ namespace PacMan_Board
 			ItemStates currentState{ None };
 			float stateTimer{ 0 };
 
-			ItemStates items[3]{ Trade, Freeze, ElectricDash };
+			ItemStates items[3]{ None, None, None };
 
 			int energy{ 0 };
 			float electricEnergy{ 0 };
@@ -396,7 +466,7 @@ namespace PacMan_Board
 
 		};
 
-		Board(Resources* _res, int _difficulty);
+		Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm);
 
 		void Update();
 		void OnDraw();
@@ -404,6 +474,7 @@ namespace PacMan_Board
 		void ClearTile(int _i);
 		void AddScore(int _s);
 		void DotCollected();
+		void ShootProjectile(Vector2 _pos, Vector2 _dir, int _dirIndex);
 		void OnPlayerHit();
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
@@ -464,8 +535,9 @@ namespace PacMan_Board
 		Grid grid;
 		Player player;
 		std::vector<Enemy> enemies{ std::vector<Enemy>() };
+		std::vector<Projectile> playerProjectiles{ std::vector<Projectile>() };
 
-		enum States { Starting, Playing, Paused, FlipOut, FlipIn, Defeated, TimeUp, Results };
+		enum States { Starting, Playing, Paused, FlipOut, FlipIn, Defeated, GameOver, TimeUp, Results };
 		States currentState{ Starting };
 		int stepCounter{ 0 };
 		float stepTimer{ 0 };
@@ -487,7 +559,7 @@ namespace PacMan_Board
 			{
 				intTimerVal = (int)ceil(timeLeft * 100);
 				return TextFormat("%i.%i%i", (intTimerVal / 100) % 10, (intTimerVal / 10) % 10, intTimerVal % 10);
-			}			
+			}
 
 			// XX.X
 			else if (timeLeft < 60)

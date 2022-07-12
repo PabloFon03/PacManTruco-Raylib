@@ -2,7 +2,7 @@
 
 using namespace PacMan_Board;
 
-Board::Board(Resources* _res, int _difficulty)
+Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm)
 {
 
 	resources = _res;
@@ -16,7 +16,7 @@ Board::Board(Resources* _res, int _difficulty)
 
 	difficulty = _difficulty;
 
-	player = Player{ this, &grid };
+	player = Player{ this, &grid, _item1, _item2, _item3 };
 
 	RefillMazeQueue(false);
 	SpawnNextMaze();
@@ -34,15 +34,12 @@ void Board::Update()
 		stepTimer += GetDeltaTime();
 
 		float targetTimer;
-		targetTimer = stepCounter == 0 ? 3 : 1;
+		targetTimer = stepCounter == 0 ? 2 : 0.75f;
 
 		if (stepTimer >= targetTimer)
 		{
-
 			stepCounter++;
-
 			stepTimer -= targetTimer;
-
 		}
 
 		if (stepCounter == 6) { currentState = Playing; }
@@ -55,12 +52,16 @@ void Board::Update()
 
 		if (timeLeft <= 0)
 		{
-
 			timeLeft = 0;
 
+			currentState = TimeUp;
+			stepCounter = 0;
+			stepTimer = 0;
 		}
 
 		player.Update();
+
+		for (int i = playerProjectiles.size() - 1; i >= 0; i--) { if (playerProjectiles[i].IsOutOfBounds()) { playerProjectiles.erase(std::next(playerProjectiles.begin(), i)); } else { playerProjectiles[i].Update(); } }
 
 		for (int i = 0; i < enemies.size(); i++) { enemies[i].Update(); }
 
@@ -136,6 +137,9 @@ void Board::OnDraw()
 
 	// Draw Entities From Top To Bottom
 	for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
+
+	// Draw Player Projectiles
+	for (int i = 0; i < playerProjectiles.size(); i++) { playerProjectiles[i].OnDraw(); }
 
 	switch (currentState)
 	{
@@ -214,11 +218,7 @@ void Board::OnDraw()
 
 		DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, itemTint);
 
-		if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric())
-		{
-			std::string manaCost = TextFormat("%i", Items::GetItem(currentItem).GetManaCost());
-			DrawTextCharAtlas(manaCost, Vector2{ (float)(12 + 20 * i), 436 }, itemTint, 1);
-		}
+		if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric()) { DrawTextCharAtlas(TextFormat("%i", Items::GetItem(currentItem).GetManaCost()), Vector2{ (float)(12 + 20 * i), 436 }, itemTint, 1); }
 
 	}
 
@@ -291,6 +291,8 @@ void Board::DotCollected()
 	}
 
 }
+
+void Board::ShootProjectile(Vector2 _pos, Vector2 _dir, int _dirIndex) { playerProjectiles.push_back(Projectile{ this, _pos, _dir, _dirIndex }); }
 
 void Board::OnPlayerHit()
 {

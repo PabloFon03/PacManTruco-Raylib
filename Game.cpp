@@ -52,7 +52,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(6);
+	StartNewScreen(0);
 
 }
 
@@ -72,18 +72,19 @@ void Game::StartNewScreen(int _ID)
 		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
 		break;
 
-		// Maze
+		// Maze Items Shop
 	case 1:
 	case 2:
 	case 3:
-		content = new ItemShop_Screen::ItemShop(&resources, _ID - 1, player.GetTokens() + 25);
+		content = new ItemShop_Screen::ItemShop(&resources, _ID - 1, &player);
 		break;
 
 		// Maze
 	case 4:
 	case 5:
 	case 6:
-		content = new PacMan_Board::Board(&resources, _ID - 4);
+		content = new PacMan_Board::Board(&resources, _ID - 4, player.GetPlayerItem(0), player.GetPlayerItem(1), player.GetPlayerItem(2), player.GetPlayerItem(3));
+		player.ResetPlayerItems();
 		break;
 
 		// Baseball Minigame
@@ -197,7 +198,7 @@ void Game::EndDraw()
 		buffer2 = LoadRenderTexture(wScreen, hScreen);
 		SetTextureFilter(buffer2.texture, TEXTURE_FILTER_POINT);
 
-	}	
+	}
 
 	BeginTextureMode(buffer1);
 

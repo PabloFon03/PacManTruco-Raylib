@@ -5,15 +5,21 @@ using namespace PacMan_Board;
 void Board::Player::Update()
 {
 
+	UpdateItems();
+
+	UpdateMovement();
+
+}
+
+void Board::Player::UpdateItems()
+{
+
 	float deltaTime = board->GetDeltaTime();
 
 	if (currentState != None)
 	{
-
 		stateTimer -= deltaTime;
-
 		if (stateTimer <= 0) { currentState = None; }
-
 	}
 
 	int itemKeys[3]{ KEY_Z, KEY_X, KEY_C };
@@ -54,6 +60,15 @@ void Board::Player::Update()
 			break;
 
 		case Projectile:
+
+			if (IsKeyPressed(itemKeys[i]))
+			{
+				Vector2Int dirVec = dir(dirIndex);
+				board->ShootProjectile(GetRawCoords(), Vector2{ (float)dirVec.x, (float)dirVec.y }, dirIndex);
+
+				currentState = Projectile;
+				stateTimer = 0.5f;
+			}
 
 			break;
 
@@ -103,6 +118,13 @@ void Board::Player::Update()
 		}
 
 	}
+
+}
+
+void Board::Player::UpdateMovement()
+{
+
+	float deltaTime = board->GetDeltaTime();
 
 	stepTimer += (currentState == Dash || currentState == ElectricDash ? 12 : 5) * deltaTime;
 
@@ -159,31 +181,31 @@ void Board::Player::Update()
 	if (hitWall)
 	{
 
-		stepTimer = 0;
-
-		ChangeDir();
-
 		if (currentState == Dash && !IsValidDir(coords, dirIndex))
 		{
 			currentState = None;
 			stateTimer = 0;
 		}
 
+		stepTimer = 0;
+		ChangeDir();
+
+		if (!hitWall) { BoostTileCheck(); }
+
 	}
 
 	else
 	{
+
 		// Drift
 		int dirKeys[4]{ KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT };
 		for (int i = 0; i < 2; i++)
 		{
-
 			if (IsKeyDown(dirKeys[2 * i + (dirIndex % 2 == 0 ? 1 : 0)]))
 			{
 				electricEnergy += 0.25f * deltaTime;
 				if (electricEnergy > 1) { electricEnergy = 1; }
 			}
-
 		}
 
 		// Update Animation

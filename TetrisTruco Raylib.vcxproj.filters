@@ -107,7 +107,7 @@
     <ClInclude Include="ItemShop.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="MazeItems.h">
+    <ClInclude Include="PlayerData.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

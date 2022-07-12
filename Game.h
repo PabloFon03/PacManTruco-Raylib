@@ -4,37 +4,14 @@
 #include<vector>
 #include<raylib.h>
 
+#include "PlayerData.h"
 #include "SubScreen.h"
 
 // Game Class
-class Game {
+class Game
+{
 
-public:
-
-	// Player Save Data Class
-	class PlayerData
-	{
-
-	public:
-
-		PlayerData() { tokens = 0; }
-
-		int GetTokens() { return tokens; }
-
-		void AddTokens(int _amount)
-		{
-
-			tokens += _amount;
-
-			if (tokens < 0) { tokens = 0; }
-
-		}
-
-	private:
-
-		int tokens{ 0 };
-
-	};
+public:	
 
 	// Constrcutor
 	Game(int w, int h, int fps, std::string t);
@@ -77,6 +54,5 @@ private:
 
 	SubScreen* content;
 	void StartNewScreen(int _ID);
-
 
 };

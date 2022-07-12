@@ -65,6 +65,7 @@ public:
 			"Sword.png",
 			"DashFlame.png",
 			"Alliga.png",
+			"PlayerProjectile.png",
 			"Erika.png",
 			"Alice.png",
 			"Carla.png"
