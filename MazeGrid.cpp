@@ -6,12 +6,8 @@ Board::Grid::Grid() { }
 
 Board::Grid::Grid(Board* _board, std::vector<int> rawTiles)
 {
-
-	board = _board;
-	tilesAtlas = board->GetTexture(4);
-
+	tilesAtlas = _board->GetTexture(4);
 	tiles = rawTiles;
-
 }
 
 Board::Grid::~Grid() { }
@@ -47,7 +43,3 @@ int Board::Grid::GetDotCount()
 
 	return n;
 }
-
-void Board::Grid::ClearTile(int _i) { tiles[_i] = 0; }
-
-int Board::Grid::GetTileID(int i) { return tiles[i]; }

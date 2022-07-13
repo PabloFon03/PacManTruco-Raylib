@@ -63,7 +63,7 @@ void Board::Player::UpdateItems()
 
 			if (IsKeyPressed(itemKeys[i]))
 			{
-				Vector2Int dirVec = dir(dirIndex);
+				Vector2Int dirVec = DirVec(dirIndex);
 				board->ShootProjectile(GetRawCoords(), Vector2{ (float)dirVec.x, (float)dirVec.y }, dirIndex);
 
 				currentState = Projectile;
@@ -268,7 +268,7 @@ void Board::Player::OnDraw()
 {
 
 	// Draw Sword
-	if (currentState == Sword) { DrawCurrentFrame(swordAnimAtlas.atlas, (int)floorf((0.2f - stateTimer) / 0.05f), swordAnimAtlas.tileSize, Vector2{ dir(dirIndex).x * 0.75f, dir(dirIndex).y * 0.75f }); }
+	if (currentState == Sword) { DrawCurrentFrame(swordAnimAtlas.atlas, (int)floorf((0.2f - stateTimer) / 0.05f), swordAnimAtlas.tileSize, Vector2{ DirVec(dirIndex).x * 0.75f, DirVec(dirIndex).y * 0.75f }); }
 
 	// Draw Player
 	AnimAtlas currentAtlas = GetCurrentAnimAtlas();

@@ -66,6 +66,9 @@ public:
 			"DashFlame.png",
 			"Alliga.png",
 			"PlayerProjectile.png",
+			"LurkerWake.png",
+			"LurkerFollow.png",
+			"LurkerSleep.png",
 			"Erika.png",
 			"Alice.png",
 			"Carla.png"

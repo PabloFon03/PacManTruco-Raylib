@@ -23,6 +23,13 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 }
 
+Board::~Board()
+{
+
+	for (int i = enemies.size() - 1; i >= 0; i--) { delete enemies[i]; }
+
+}
+
 void Board::Update()
 {
 
@@ -48,8 +55,8 @@ void Board::Update()
 
 	case Playing:
 
+		// Update Timer
 		timeLeft -= GetRawDeltaTime();
-
 		if (timeLeft <= 0)
 		{
 			timeLeft = 0;
@@ -59,11 +66,14 @@ void Board::Update()
 			stepTimer = 0;
 		}
 
+		// Update Player
 		player.Update();
 
+		// Update Player Projectiles
 		for (int i = playerProjectiles.size() - 1; i >= 0; i--) { if (playerProjectiles[i].IsOutOfBounds()) { playerProjectiles.erase(std::next(playerProjectiles.begin(), i)); } else { playerProjectiles[i].Update(); } }
 
-		for (int i = 0; i < enemies.size(); i++) { enemies[i].Update(); }
+		// Update Enemies
+		for (int i = enemies.size() - 1; i >= 0; i--) { if ((*enemies[i]).GetRemoveFlag()) { delete enemies[i]; } else { (*enemies[i]).Update(); } }
 
 		break;
 
@@ -73,13 +83,11 @@ void Board::Update()
 
 		if (stepTimer >= 1)
 		{
-
 			clearedRounds++;
 			SpawnNextMaze();
 
 			stepTimer--;
 			currentState = FlipIn;
-
 		}
 
 		else { SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &stepTimer, SHADER_UNIFORM_FLOAT); }
@@ -92,18 +100,29 @@ void Board::Update()
 
 		if (stepTimer >= 1)
 		{
-
 			renderShader = 0;
 
 			stepTimer--;
 			currentState = Playing;
-
 		}
 
 		else
 		{
 			float val = 1 - stepTimer;
 			SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &val, SHADER_UNIFORM_FLOAT);
+		}
+
+		break;
+
+	case TimeUp:
+	case GameOver:
+
+		stepTimer += GetRawDeltaTime();
+
+		if (stepTimer >= 5)
+		{
+			stepTimer -= 5;
+			currentState = Results;
 		}
 
 		break;
@@ -121,7 +140,7 @@ void Board::OnDraw()
 	// List All Entities
 	std::vector<Entity*> entities = std::vector<Entity*>();
 	entities.push_back(&player);
-	for (int i = 0; i < enemies.size(); i++) { entities.push_back(&enemies[i]); }
+	for (int i = 0; i < enemies.size(); i++) { entities.push_back(enemies[i]); }
 
 	// Selection Sort
 	for (int i = 0; i < entities.size() - 1; i++)
@@ -296,6 +315,8 @@ void Board::ShootProjectile(Vector2 _pos, Vector2 _dir, int _dirIndex) { playerP
 
 void Board::OnPlayerHit()
 {
+
+	lifesLeft--;
 
 	currentState = Defeated;
 	stepCounter = 0;
@@ -859,6 +880,12 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 13 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 7 }, 0 },
+		};
+
 		break;
 
 	case 16:
@@ -1338,15 +1365,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 16 }, 3 };
-		/*
-		returnData.enemySpawns = std::vector<EnemySpawnData>
-		{
-			EnemySpawnData{ 0, Entity::Vector2Int{ 9, 8 }, 3 },
-			EnemySpawnData{ 1, Entity::Vector2Int{ 8, 10 }, 0 },
-			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 10 }, 0 },
-			EnemySpawnData{ 3, Entity::Vector2Int{ 10, 10 }, 0 }
-		};
-		*/
+
 		break;
 
 	}
@@ -1358,9 +1377,12 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 void Board::SpawnEnemy(EnemySpawnData _spawnData)
 {
 
-	enemies.push_back(Enemy{ this, &grid, _spawnData.typeID });
+	switch (_spawnData.typeID)
+	{
+	default: enemies.push_back(new Lurker{ this, &grid }); break;
+	}
 
-	enemies[enemies.size() - 1].SetSpawn(_spawnData.spawnPos, _spawnData.spawnDir);
+	(*enemies[enemies.size() - 1]).SetSpawn(_spawnData.spawnPos, _spawnData.spawnDir);
 
 }
 

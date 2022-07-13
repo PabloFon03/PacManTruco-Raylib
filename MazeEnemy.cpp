@@ -2,50 +2,90 @@
 
 using namespace PacMan_Board;
 
-void Board::Enemy::Update()
+Board::Entity::Vector2Int Board::Enemy::GetTarget(int _i)
 {
 
-	float deltaTime = board->GetDeltaTime();
+	Vector2Int playerCoords = board->GetPlayerPos();
 
-	stepTimer += 4 * deltaTime;
+	switch (_i)
+	{
+	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex(), false), board->GetPlayerDirIndex(), false);
+	default: return playerCoords;
+	}
 
+}
+
+void Board::Enemy::UpdateMovement()
+{
+
+	float deltaTime = GetDeltaTime();
+
+	stepTimer += 5 * deltaTime;
 	if (stepTimer >= 1)
 	{
 
+		// Move To Next Tile
 		coords = AddDir(coords, dirIndex);
 
+		// Try Turning
 		ChangeDir();
 
+		// Reset Step Timer
 		stepTimer--;
 
 	}
 
 	if (hitWall)
 	{
-
-		ChangeDir();
-
 		stepTimer = 0;
-
+		ChangeDir();
 	}
 
+	// Update Animation
 	else
 	{
-
 		animDelay += deltaTime;
-
 		if (animDelay >= 0.1f)
 		{
-
 			animIndex++;
-
 			animIndex %= 2;
 
 			animDelay -= 0.1f;
-
 		}
-
 	}
+
+}
+
+std::vector<Board::Enemy::PossibleDirection> Board::Enemy::GetPossibleDirections(Vector2Int _targetPos, bool _UTurnsAllowed)
+{
+
+	// Store All Possible Directions (No U-Turns Allowed)
+	std::vector<PossibleDirection> returnVec = std::vector<PossibleDirection>();
+	for (int i = -1; i < (_UTurnsAllowed ? 3 : 2); i++)
+	{
+		int dir = TrueMod(dirIndex + i, 4);
+		if (IsValidDir(coords, dir)) { returnVec.push_back(PossibleDirection{ dir, AddDir(coords, dir).distanceTo(_targetPos) }); }
+	}
+
+	if (returnVec.size() == 0) { returnVec.push_back(PossibleDirection{ 0, 0 }); }
+
+	// Selection Sort (Sort By Lowest Distance)
+	else
+	{
+		for (int i = 0; i < returnVec.size() - 1; i++)
+		{
+			int lowestDistIndex = i;
+			for (int j = i + 1; j < returnVec.size(); j++) { if (returnVec[j].targetDistance < returnVec[lowestDistIndex].targetDistance) { lowestDistIndex = j; } }
+			std::swap(returnVec[i], returnVec[lowestDistIndex]);
+		}
+	}
+
+	return returnVec;
+
+}
+
+void Board::Enemy::PlayerCollisionCheck()
+{
 
 	if (rawDistanceTo(board->GetPlayerRawPos()) < 0.25f)
 	{
@@ -53,17 +93,16 @@ void Board::Enemy::Update()
 		switch (board->GetPlayerHitOutcome())
 		{
 
-			// Player Hit
+			// 0 - Player Hit
 		case 0:
 			board->OnPlayerHit();
 			break;
 
-			// Player Ignored
-		case 1:
-			break;
+			// 1 - Collision Ignored
 
-			// Stunned
+			// 2 - Stun
 		case 2:
+			OnStun();
 			break;
 
 		}
@@ -72,56 +111,8 @@ void Board::Enemy::Update()
 
 }
 
-Board::Entity::Vector2Int Board::Enemy::GetTarget()
+void Board::Enemy::ProjectileCollisionCheck()
 {
-
-	Vector2Int playerCoords = board->GetPlayerPos();
-
-	switch (ID)
-	{
-
-	case 0: return playerCoords;
-
-	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex(), false), board->GetPlayerDirIndex(), false);
-
-	case 3: return coords.distanceTo(playerCoords) > 5 ? playerCoords : Vector2Int{ 0, 0 };
-
-	}
-
-	return Vector2Int{ 0, 0 };
-
-}
-
-void Board::Enemy::ChangeDir()
-{
-
-	Vector2Int targetPos = GetTarget();
-
-	std::vector<float> dirDist(4);
-
-	for (int i = -1; i < 2; i++)
-	{
-
-		if (IsValidDir(coords, TrueMod(dirIndex + i, 4))) { dirDist[i + 1] = AddDir(coords, TrueMod(dirIndex + i, 4)).distanceTo(targetPos); }
-
-		else { dirDist[i + 1] = -1; }
-
-	}
-
-	// Allow U-Turns
-	if (true) { dirDist[3] = -1; }
-
-	int lowestDistIndex = 0;
-
-	// Look For First Possible Direction
-	while (lowestDistIndex < 4 && dirDist[lowestDistIndex] < 0) { lowestDistIndex++; }
-
-	// Look For Direction With Lowest Distance
-	for (int i = lowestDistIndex + 1; i < 4; i++) { if (dirDist[i] > -1 && dirDist[i] < dirDist[lowestDistIndex]) { lowestDistIndex = i; } }
-
-	// Apply Lowest Distance Direction Offset (U-Turn If None)
-	dirIndex = TrueMod(dirIndex + lowestDistIndex - 1, 4);
-
-	Entity::ChangeDir();
-
+	std::vector<Vector2> shotProjectiles = board->GetPlayerProjectiles();
+	for (int i = 0; i < shotProjectiles.size(); i++) { if (rawDistanceTo(board->GetPlayerRawPos()) < 0.75f) { OnStun(); break; } }
 }

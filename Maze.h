@@ -150,19 +150,17 @@ namespace PacMan_Board
 
 			void OnDraw(int _ColorID);
 
-			void ClearTile(int _i);
-			int GetTileID(int _i);
+			void ClearTile(int _i) { tiles[_i] = 0; }
+			int GetTileID(int _i) { return tiles[_i]; }
 
 			int GetDotCount();
 
 		private:
 
-			Board* board;
-
-			std::vector<int> tiles;
+			std::vector<int> tiles{ std::vector<int>() };
 			Texture2D tilesAtlas;
 
-			int ColorID{ 1 };
+			int ColorID{ 0 };
 
 		};
 
@@ -213,6 +211,8 @@ namespace PacMan_Board
 
 			bool IsOutOfBounds() { return outOfBounds; }
 
+			Vector2 GetPos() { return pos; }
+
 		private:
 
 			Board* board;
@@ -257,18 +257,11 @@ namespace PacMan_Board
 
 			float TrueMod(float _i, float _n)
 			{
-
 				if (_n < 0) { _n *= -1; }
-
 				while (_i < 0) { _i += _n; }
-
 				while (_i >= _n) { _i -= _n; }
-
 				return _i;
 			}
-
-			Entity();
-			virtual ~Entity();
 
 			Board* board;
 			Grid* grid;
@@ -277,37 +270,29 @@ namespace PacMan_Board
 			int spawnDirIndex;
 			void SetSpawn(Vector2Int _coords, int _dirIndex)
 			{
-
 				spawnCoords = _coords;
 				spawnDirIndex = _dirIndex;
-
 				Spawn();
-
 			}
 			void Spawn()
 			{
-
 				stepTimer = 0;
-
 				coords = spawnCoords;
 				dirIndex = spawnDirIndex;
-
 			}
 
 			Vector2Int coords;
 			int dirIndex;
-			Vector2Int dir(int _i);
+			Vector2Int DirVec(int _i);
 
 			float rawDistanceTo(Vector2 _target)
 			{
-
 				Vector2 rawCoords = GetRawCoords();
 				Vector2 diff = Vector2{ _target.x - rawCoords.x, _target.y - rawCoords.y };
 				return sqrt(powf(diff.x, 2) + powf(diff.y, 2));
-
 			}
 
-			Vector2 GetRawCoords() { return Vector2{ TrueMod(coords.x + dir(dirIndex).x * stepTimer, 19), TrueMod(coords.y + dir(dirIndex).y * stepTimer, 22) }; }
+			Vector2 GetRawCoords() { return Vector2{ TrueMod(coords.x + DirVec(dirIndex).x * stepTimer, 19), TrueMod(coords.y + DirVec(dirIndex).y * stepTimer, 22) }; }
 
 			void DrawCurrentFrame(Texture2D& _animAtlas, int _frameIndex, Vector2 _tileSize, Vector2 _posOffset = Vector2{ 0, 0 });
 			virtual void OnDraw() = 0;
@@ -428,45 +413,146 @@ namespace PacMan_Board
 
 		};
 
-		// Enemy Class
+		// Abstract Class For Enemies
 		class Enemy : public Entity
 		{
 
 		public:
 
-			Enemy() {}
-			Enemy(Board* _board, Grid* _grid, int _ID)
+			virtual void Update() = 0;
+			virtual void OnDraw() = 0;
+
+			virtual void ChangeDir() = 0;
+			virtual void OnStepFinished() = 0;
+
+			virtual void OnStun() {}
+
+			bool GetRemoveFlag() { return removeFlag; }
+
+			bool removeFlag{ false };
+			void SetRemoveFlag() { removeFlag = true; }
+
+			float GetDeltaTime() { return board->GetEnemyDeltaTime(); }
+
+			struct PossibleDirection
+			{
+				int dirIndex;
+				float targetDistance;
+			};
+			Vector2Int GetTarget(int _i);
+			std::vector<PossibleDirection> GetPossibleDirections(Vector2Int _targetPos, bool _UTurnsAllowed = false);
+
+			void UpdateMovement();
+
+			void PlayerCollisionCheck();
+			void ProjectileCollisionCheck();
+
+		};
+
+		// Lurker Enemy Class
+		class Lurker : public Enemy
+		{
+
+		public:
+
+			Lurker(Board* _board, Grid* _grid)
 			{
 
 				board = _board;
 				grid = _grid;
 
-				ID = _ID;
-
-				mainAnimAtlas = board->GetTexture(ID + 3);
+				wakeAnimAtlas = board->GetTexture(10);
+				followAnimAtlas = board->GetTexture(11);
+				sleepAnimAtlas = board->GetTexture(12);
 
 			}
 
-			void Update();
-			void OnDraw() { DrawCurrentFrame(mainAnimAtlas, animIndex, TileSize()); }
+			void Update()
+			{
 
-			void OnStun() {}
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Asleep:
+
+					if (rawDistanceTo(board->GetPlayerRawPos()) < 1.25f) { currentState = WakingUp; }
+
+					break;
+
+				case WakingUp:
+				case FallingAsleep:
+
+					stepTimer += deltaTime;
+
+					float delay;
+					delay = stepTimer == 4 && currentState == WakingUp ? 1.5f : 0.05f;
+
+					if (stepTimer >= delay)
+					{
+
+						stepCounter++;
+						if (stepCounter == 5) { if (currentState == WakingUp) { ChangeDir(); currentState = Lurking; } else { SetRemoveFlag(); } }
+
+						stepTimer -= delay;
+
+					}
+
+					break;
+
+				case Lurking:
+
+					UpdateMovement();
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw()
+			{
+				switch (currentState)
+				{
+				case Asleep: DrawCurrentFrame(wakeAnimAtlas, 0, TileSize()); break;
+				case WakingUp: DrawCurrentFrame(wakeAnimAtlas, stepCounter, TileSize()); break;
+				case Lurking: DrawCurrentFrame(followAnimAtlas, 0, TileSize()); break;
+				case FallingAsleep: DrawCurrentFrame(sleepAnimAtlas, stepCounter, TileSize()); break;
+				}
+			}
+
+			void OnStun()
+			{
+				currentState = FallingAsleep;
+				stepTimer = 0;
+				stepCounter = 0;
+			}
 
 		private:
 
-			Texture2D mainAnimAtlas;
+			void ChangeDir()
+			{
+				dirIndex = GetPossibleDirections(GetTarget(0), currentState == WakingUp)[0].dirIndex;
+				Entity::ChangeDir();
+			}
 
-			int ID{ -1 };
+			void OnStepFinished() {}
 
-			Vector2Int GetTarget();
+			enum States { Asleep, WakingUp, Lurking, FallingAsleep };
+			States currentState{ Asleep };
+			int stepCounter{ 0 };
 
-			void ChangeDir();
+			Texture2D wakeAnimAtlas;
+			Texture2D followAnimAtlas;
+			Texture2D sleepAnimAtlas;
 
-			Vector2 TileSize() { return Vector2{ 18, 52 }; }
+			Vector2 TileSize() { return Vector2{ 14, 10 }; }
 
 		};
 
 		Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm);
+		~Board();
 
 		void Update();
 		void OnDraw();
@@ -484,6 +570,12 @@ namespace PacMan_Board
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }
 		int GetPlayerDirIndex() { return player.dirIndex; }
 		int GetPlayerHitOutcome() { return player.ReturnEnemyCollisionOutcome(); }
+		std::vector<Vector2> GetPlayerProjectiles()
+		{
+			std::vector<Vector2> returnVec = std::vector<Vector2>();
+			for (int i = 0; i < playerProjectiles.size(); i++) { returnVec.push_back(playerProjectiles[i].GetPos()); }
+			return returnVec;
+		}
 
 		Texture2D GetTexture(int _i) { return (*resources).GetMazeTexture(_i); }
 
@@ -534,7 +626,7 @@ namespace PacMan_Board
 
 		Grid grid;
 		Player player;
-		std::vector<Enemy> enemies{ std::vector<Enemy>() };
+		std::vector<Enemy*> enemies{ std::vector<Enemy*>() };
 		std::vector<Projectile> playerProjectiles{ std::vector<Projectile>() };
 
 		enum States { Starting, Playing, Paused, FlipOut, FlipIn, Defeated, GameOver, TimeUp, Results };
