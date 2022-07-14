@@ -16,7 +16,7 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 	difficulty = _difficulty;
 
-	player = Player{ this, &grid, _item1, _item2, _item3 };
+	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 6, _item3 * 0 + 7 };
 
 	RefillMazeQueue(false);
 	SpawnNextMaze();
@@ -70,46 +70,78 @@ void Board::Update()
 		player.Update();
 
 		// Update Player Projectiles
-		for (int i = playerProjectiles.size() - 1; i >= 0; i--) { if (playerProjectiles[i].IsOutOfBounds()) { playerProjectiles.erase(std::next(playerProjectiles.begin(), i)); } else { playerProjectiles[i].Update(); } }
+		for (int i = playerProjectiles.size() - 1; i >= 0; i--)
+		{
+			playerProjectiles[i].Update();
+			if (playerProjectiles[i].IsOutOfBounds()) { playerProjectiles.erase(std::next(playerProjectiles.begin(), i)); }
+		}
 
 		// Update Enemies
-		for (int i = enemies.size() - 1; i >= 0; i--) { if ((*enemies[i]).GetRemoveFlag()) { delete enemies[i]; } else { (*enemies[i]).Update(); } }
+		for (int i = enemies.size() - 1; i >= 0; i--)
+		{
+			(*enemies[i]).Update();
+			if ((*enemies[i]).GetRemoveFlag()) { RemoveEnemy(i); }
+		}
 
 		break;
 
 	case FlipOut:
-
-		stepTimer += 4 * GetRawDeltaTime();
-
-		if (stepTimer >= 1)
-		{
-			clearedRounds++;
-			SpawnNextMaze();
-
-			stepTimer--;
-			currentState = FlipIn;
-		}
-
-		else { SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &stepTimer, SHADER_UNIFORM_FLOAT); }
-
-		break;
-
 	case FlipIn:
 
 		stepTimer += 4 * GetRawDeltaTime();
 
 		if (stepTimer >= 1)
 		{
-			renderShader = 0;
 
 			stepTimer--;
-			currentState = Playing;
+
+			if (currentState == FlipIn)
+			{
+				renderShader = 0;
+				currentState = Playing;
+			}
+
+			else
+			{
+				SpawnNextMaze();
+				currentState = FlipIn;
+			}
+
 		}
 
 		else
 		{
-			float val = 1 - stepTimer;
+			float val = currentState == FlipIn ? 1 - stepTimer : stepTimer;
 			SetShaderValue(resources->GetShader(1), shaderFlipValLocation, &val, SHADER_UNIFORM_FLOAT);
+		}
+
+		break;
+
+	case Defeated:
+
+		stepTimer += GetRawDeltaTime();
+
+		float delay;
+		delay = stepCounter == 0 ? 2 : 1;
+		if (stepTimer >= delay)
+		{
+
+			// Update Counter
+			stepCounter++;
+
+			// Resume Play
+			if (stepCounter == 2) { currentState = Playing; }
+
+			// Reset Player And Enemies To Spawn
+			else
+			{
+				player.Spawn();
+				for (int i = 0; i < enemies.size(); i++) { (*enemies[i]).Respawn(); }
+			}
+
+			// Reset Timer
+			stepTimer -= delay;
+
 		}
 
 		break;
@@ -164,10 +196,6 @@ void Board::OnDraw()
 	{
 
 	case Starting:
-
-		grid.OnDraw(clearedRounds % 6);
-
-		player.OnDraw();
 
 		switch (stepCounter)
 		{
@@ -318,7 +346,7 @@ void Board::OnPlayerHit()
 
 	lifesLeft--;
 
-	currentState = Defeated;
+	currentState = lifesLeft == 0 ? GameOver : Defeated;
 	stepCounter = 0;
 	stepTimer = 0;
 
@@ -1367,6 +1395,12 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 13 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 1 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 4 }, 3 },
+		};
+
 		break;
 
 	case 26:
@@ -1540,6 +1574,7 @@ void Board::SpawnEnemy(EnemySpawnData _spawnData)
 
 	switch (_spawnData.typeID)
 	{
+	case 1: enemies.push_back(new Clock{ this, &grid }); break;
 	default: enemies.push_back(new Lurker{ this, &grid }); break;
 	}
 
@@ -1560,9 +1595,12 @@ void Board::SpawnNextMaze()
 
 	player.SetSpawn(nextMaze.playerSpawn.spawnPos, nextMaze.playerSpawn.spawnDir);
 
-	enemies.clear();
+	RemoveAllEnemies();
 	for (int i = 0; i < nextMaze.enemySpawns.size(); i++) { SpawnEnemy(nextMaze.enemySpawns[i]); }
 
 	mazeIDs.erase(mazeIDs.begin());
+
+	clearedRounds++;
+	clearedRounds %= 6;
 
 }

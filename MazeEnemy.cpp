@@ -35,6 +35,12 @@ void Board::Enemy::UpdateMovement()
 
 	}
 
+	// Check For Stunning Projectile
+	ProjectileCollisionCheck();
+
+	// Check For Player Collision
+	PlayerCollisionCheck();
+
 	if (hitWall)
 	{
 		stepTimer = 0;
@@ -53,6 +59,7 @@ void Board::Enemy::UpdateMovement()
 			animDelay -= 0.1f;
 		}
 	}
+
 
 }
 

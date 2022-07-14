@@ -69,6 +69,10 @@ public:
 			"LurkerWake.png",
 			"LurkerFollow.png",
 			"LurkerSleep.png",
+			"MirandaOrange.png",
+			"MirandaOrangeStun.png",
+			"MirandaBlue.png",
+			"MirandaBlueStun.png",
 			"Erika.png",
 			"Alice.png",
 			"Carla.png"

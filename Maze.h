@@ -280,6 +280,12 @@ namespace PacMan_Board
 				coords = spawnCoords;
 				dirIndex = spawnDirIndex;
 			}
+			virtual void OnRespawn() = 0;
+			void Respawn()
+			{
+				Spawn();
+				OnRespawn();
+			}
 
 			Vector2Int coords;
 			int dirIndex;
@@ -345,13 +351,13 @@ namespace PacMan_Board
 
 			void Spawn()
 			{
-
 				Entity::Spawn();
 
 				currentState = None;
 				stateTimer = 0;
-
 			}
+
+			void OnRespawn() {}
 
 			void Update();
 			void OnDraw();
@@ -363,7 +369,10 @@ namespace PacMan_Board
 
 			int GetItemIndex(int _i) { return (int)items[_i]; }
 			bool UsingItem() { return currentState != None; }
+			bool SwingingSword() { return currentState == Sword; }
 			bool TimeFrozen() { return currentState == Freeze; }
+
+			Vector2 GetSwordCoords() { return Vector2{ GetRawCoords().x + DirVec(dirIndex).x, GetRawCoords().y + DirVec(dirIndex).y }; }
 
 			int GetEnergy() { return energy; }
 			float GetElectricCharge() { return electricEnergy; }
@@ -539,6 +548,8 @@ namespace PacMan_Board
 
 			void OnStepFinished() {}
 
+			void OnRespawn() { OnStun(); }
+
 			enum States { Asleep, WakingUp, Lurking, FallingAsleep };
 			States currentState{ Asleep };
 			float stateTimer{ 0 };
@@ -549,6 +560,96 @@ namespace PacMan_Board
 			Texture2D sleepAnimAtlas;
 
 			Vector2 TileSize() { return Vector2{ 14, 10 }; }
+
+		};
+
+		// Clockwise Miranda Enemy Class
+		class Clock : public Enemy
+		{
+
+		public:
+
+			Clock(Board* _board, Grid* _grid)
+			{
+
+				board = _board;
+				grid = _grid;
+
+				mainAnimAtlas = board->GetTexture(13);
+				stunAnimAtlas = board->GetTexture(14);
+
+			}
+
+			void Update()
+			{
+
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Walking:
+
+					UpdateMovement();
+
+					break;
+
+				case Stunned:
+
+					// Update Animation
+					animDelay += deltaTime;
+					if (animDelay >= 0.075f)
+					{
+						animIndex++;
+						animIndex %= 4;
+						animDelay -= 0.075f;
+					}
+
+					// Update State Timer
+					stateTimer += deltaTime;
+					if (stateTimer > 0.75f)
+					{
+						currentState = Walking;
+						animIndex = 0;
+						stateTimer -= 0.75f;
+					}
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw() { DrawCurrentFrame(currentState == Stunned ? stunAnimAtlas : mainAnimAtlas, animIndex, TileSize()); }
+
+			void OnStun()
+			{
+				currentState = Stunned;
+				animIndex = 0;
+				stateTimer = 0;
+			}
+
+		private:
+
+			// Rotate Clockwise
+			void ChangeDir()
+			{
+				if (IsValidDir(coords, (dirIndex + 1) % 4)) { dirIndex++; dirIndex %= 4; }
+				Entity::ChangeDir();
+			}
+
+			void OnStepFinished() {}
+
+			void OnRespawn() {}
+
+			enum States { Walking, Stunned };
+			States currentState{ Walking };
+			float stateTimer{ 0 };
+
+			Texture2D mainAnimAtlas;
+			Texture2D stunAnimAtlas;
+
+			Vector2 TileSize() { return Vector2{ 20, 52 }; }
 
 		};
 
@@ -575,6 +676,7 @@ namespace PacMan_Board
 		{
 			std::vector<Vector2> returnVec = std::vector<Vector2>();
 			for (int i = 0; i < playerProjectiles.size(); i++) { returnVec.push_back(playerProjectiles[i].GetPos()); }
+			if (player.SwingingSword()) { returnVec.push_back(player.GetSwordCoords()); }
 			return returnVec;
 		}
 
@@ -609,9 +711,15 @@ namespace PacMan_Board
 		void SpawnNextMaze();
 
 		void SpawnEnemy(EnemySpawnData _spawnData);
+		void RemoveEnemy(int _i)
+		{
+			delete enemies[_i];
+			enemies.erase(std::next(enemies.begin(), _i));
+		}
+		void RemoveAllEnemies() { for (int i = enemies.size() - 1; i >= 0; i--) { RemoveEnemy(i); } }
 
 		int difficulty{ 0 };
-		int clearedRounds{ 0 };
+		int clearedRounds{ -1 };
 
 		float timeLeft{ 180 };
 
