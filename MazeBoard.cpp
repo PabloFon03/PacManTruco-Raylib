@@ -884,6 +884,12 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		{
 			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 7 }, 0 },
 			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 14 }, 0 }
 		};
 
 		break;
@@ -918,6 +924,18 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 15 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 14 }, 0 }
+		};
+
 		break;
 
 	case 17:
@@ -949,6 +967,16 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 12 }, 3 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 11 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 11 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 14 }, 0 }
+		};
 
 		break;
 
@@ -982,6 +1010,18 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 13 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 16 }, 0 }
+		};
+
 		break;
 
 	case 19:
@@ -1013,6 +1053,18 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 13 }, 3 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 16 }, 0 }
+		};
 
 		break;
 
@@ -1046,6 +1098,17 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 8 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 9, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 19 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 19 }, 0 },
+		};
+
 		break;
 
 	case 21:
@@ -1062,8 +1125,8 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			0, 6, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 6, 0,
 			0, 6, 0, 3, 11, 11, 9, 0, 2, 0, 2, 0, 3, 11, 11, 9, 0, 6, 0,
 			0, 6, 17, 17, 17, 17, 17, 17, 6, 0, 6, 17, 17, 17, 17, 17, 17, 6, 0,
-			0, 6, 0, 2, 17, 4, 10, 17, 6, 0, 6, 17, 4, 10, 17, 2, 17, 6, 0,
-			0, 6, 0, 5, 17, 7, 13, 17, 6, 0, 6, 17, 7, 13, 17, 5, 17, 6, 0,
+			0, 6, 17, 2, 17, 4, 10, 17, 6, 0, 6, 17, 4, 10, 17, 2, 17, 6, 0,
+			0, 6, 17, 5, 17, 7, 13, 17, 6, 0, 6, 17, 7, 13, 17, 5, 17, 6, 0,
 			0, 6, 17, 17, 17, 17, 17, 17, 6, 0, 6, 17, 17, 17, 17, 17, 17, 6, 0,
 			0, 6, 0, 3, 11, 11, 9, 0, 5, 0, 5, 0, 3, 11, 11, 9, 0, 6, 0,
 			0, 6, 17, 17, 17, 17, 17, 0, 0, 0, 0, 0, 17, 17, 17, 17, 17, 6, 0,
@@ -1077,6 +1140,23 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 16 }, 2 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 9, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 6, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 16 }, 0 }
+		};
 
 		break;
 
@@ -1110,6 +1190,30 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 2, 14 }, 0 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 2 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 10, 2 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 8, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 10, 6 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 6 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 10, 15 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 14, 15 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 8, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 12, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 4, 19 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 10, 19 }, 0 }
+		};
+
 		break;
 
 	case 23:
@@ -1142,6 +1246,35 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 17 }, 3 };
 
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 6 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 6 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 7 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 9, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 8 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 9 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 12 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 9, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 13 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 14 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 15 }, 0 }
+		};
+
 		break;
 
 	case 24:
@@ -1173,6 +1306,34 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 14 }, 3 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 3 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 3 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 1, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 17, 4 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 5 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 16 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 1, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 3, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 5, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 7, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 11, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 13, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 15, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 17, 17 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 2, 18 }, 0 },
+			EnemySpawnData{ 0, Entity::Vector2Int{ 16, 18 }, 0 }
+		};
 
 		break;
 

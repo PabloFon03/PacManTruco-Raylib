@@ -484,18 +484,18 @@ namespace PacMan_Board
 				case WakingUp:
 				case FallingAsleep:
 
-					stepTimer += deltaTime;
+					stateTimer += deltaTime;
 
 					float delay;
-					delay = stepTimer == 4 && currentState == WakingUp ? 1.5f : 0.05f;
+					delay = stateCounter == 4 && currentState == WakingUp ? 0.4f : 0.05f;
 
-					if (stepTimer >= delay)
+					if (stateTimer >= delay)
 					{
 
-						stepCounter++;
-						if (stepCounter == 5) { if (currentState == WakingUp) { ChangeDir(); currentState = Lurking; } else { SetRemoveFlag(); } }
+						stateCounter++;
+						if (stateCounter == 5) { if (currentState == WakingUp) { ChangeDir(); currentState = Lurking; } else { SetRemoveFlag(); } }
 
-						stepTimer -= delay;
+						stateTimer -= delay;
 
 					}
 
@@ -516,17 +516,17 @@ namespace PacMan_Board
 				switch (currentState)
 				{
 				case Asleep: DrawCurrentFrame(wakeAnimAtlas, 0, TileSize()); break;
-				case WakingUp: DrawCurrentFrame(wakeAnimAtlas, stepCounter, TileSize()); break;
+				case WakingUp: DrawCurrentFrame(wakeAnimAtlas, stateCounter, TileSize()); break;
 				case Lurking: DrawCurrentFrame(followAnimAtlas, 0, TileSize()); break;
-				case FallingAsleep: DrawCurrentFrame(sleepAnimAtlas, stepCounter, TileSize()); break;
+				case FallingAsleep: DrawCurrentFrame(sleepAnimAtlas, stateCounter, TileSize()); break;
 				}
 			}
 
 			void OnStun()
 			{
 				currentState = FallingAsleep;
-				stepTimer = 0;
-				stepCounter = 0;
+				stateCounter = 0;
+				stateTimer = 0;
 			}
 
 		private:
@@ -541,7 +541,8 @@ namespace PacMan_Board
 
 			enum States { Asleep, WakingUp, Lurking, FallingAsleep };
 			States currentState{ Asleep };
-			int stepCounter{ 0 };
+			float stateTimer{ 0 };
+			int stateCounter{ 0 };
 
 			Texture2D wakeAnimAtlas;
 			Texture2D followAnimAtlas;
@@ -564,7 +565,7 @@ namespace PacMan_Board
 		void OnPlayerHit();
 
 		float GetDeltaTime() { return GetRawDeltaTime() * (1 + 0.1f * speedMod); }
-		float GetEnemyDeltaTime() { return player.TimeFrozen() ? 0 : GetRawDeltaTime(); }
+		float GetEnemyDeltaTime() { return player.TimeFrozen() ? 0 : GetDeltaTime(); }
 
 		Entity::Vector2Int GetPlayerPos() { return player.coords; }
 		Vector2 GetPlayerRawPos() { return player.GetRawCoords(); }
