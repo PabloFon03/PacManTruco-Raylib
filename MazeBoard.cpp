@@ -1365,7 +1365,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		break;
 
-	case 25:
+	case -25:
 
 		returnData.gridTiles = std::vector<int>
 		{
@@ -1416,6 +1416,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		break;
 
 	case 26:
+	case 25:
 
 		returnData.gridTiles = std::vector<int>
 		{
@@ -1444,6 +1445,26 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 13 }, 3 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 1, Entity::Vector2Int{ 3, 1 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 1 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 15, 1 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 3, 4 }, 3 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 4 }, 3 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 15, 4 }, 3 },
+
+			EnemySpawnData{ 3, Entity::Vector2Int{ 9, 6 }, 3 },
+			EnemySpawnData{ 4, Entity::Vector2Int{ 9, 8 }, 1 },
+
+			EnemySpawnData{ 2, Entity::Vector2Int{ 3, 17 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 17 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 15, 17 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 3, 20 }, 1 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 20 }, 1 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 15, 20 }, 1 }
+		};
 
 		break;
 
@@ -1593,6 +1614,9 @@ void Board::SpawnEnemy(EnemySpawnData _spawnData)
 
 		// Miranda
 	case 3: enemies.push_back(new Miranda{ this, &grid }); break;
+
+		// Alice
+	case 4: enemies.push_back(new Alice{ this, &grid }); break;
 
 		// Lurker
 	default: enemies.push_back(new Lurker{ this, &grid }); break;

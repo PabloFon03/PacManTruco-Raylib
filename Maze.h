@@ -749,6 +749,101 @@ namespace PacMan_Board
 
 		};
 
+		// Alice Enemy Class
+		class Alice : public Enemy
+		{
+
+		public:
+
+			Alice(Board* _board, Grid* _grid)
+			{
+
+				board = _board;
+				grid = _grid;
+
+				mainAnimAtlas = board->GetTexture(19);
+				stunAnimAtlas = board->GetTexture(20);
+
+			}
+
+			void Update()
+			{
+
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Chilling:
+				case Chasing:
+
+					UpdateMovement();
+
+					if (currentState == Chilling && rawDistanceTo(board->GetPlayerRawPos()) < 5) { currentState = Chasing; }
+
+					break;
+
+				case Stunned:
+
+					// Update Animation
+					animDelay += deltaTime;
+					if (animDelay >= 0.075f)
+					{
+						animIndex++;
+						animIndex %= 4;
+						animDelay -= 0.075f;
+					}
+
+					// Update State Timer
+					stateTimer += deltaTime;
+					if (stateTimer > 0.75f)
+					{
+						currentState = Chasing;
+						animIndex = 0;
+						stateTimer -= 0.75f;
+					}
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw() { DrawCurrentFrame(currentState == Stunned ? stunAnimAtlas : mainAnimAtlas, animIndex, TileSize()); }
+
+			void OnStun()
+			{
+				currentState = Stunned;
+				animIndex = 0;
+				stateTimer = 0;
+			}
+
+		private:
+
+			void ChangeDir()
+			{
+				std::vector<PossibleDirection> possibleDirections = GetPossibleDirections(GetTarget(0));
+				dirIndex = possibleDirections[currentState == Chilling ? possibleDirections.size() - 1 : 0].dirIndex;
+				Entity::ChangeDir();
+			}
+
+			void OnStepFinished() {}
+
+			void OnRespawn() {}
+
+			bool counterClock{ false };
+
+			enum States { Chilling, Chasing, Stunned };
+			States currentState{ Chilling };
+			float stateTimer{ 0 };
+
+			Texture2D mainAnimAtlas;
+			Texture2D stunAnimAtlas;
+
+			Vector2 TileSize() { return Vector2{ 20, 52 }; }
+
+		};
+
 		Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm);
 		~Board();
 
