@@ -191,7 +191,7 @@ namespace PacMan_Board
 				pos = Vector2{ pos.x + dir.x * deltaTime * v, pos.y + dir.y * deltaTime * v };
 
 				// Check If Out Of Bounds
-				if (pos.x < 0 || pos.x > 19 || pos.y < 0 || pos.y > 22) { outOfBounds = true; }
+				if (pos.x < -1 || pos.x > 19 || pos.y < -1 || pos.y > 22) { outOfBounds = true; }
 
 				// Update Animation
 				animDelay += deltaTime;
@@ -365,14 +365,15 @@ namespace PacMan_Board
 			void UpdateItems();
 			void UpdateMovement();
 
-			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic || currentState == Freeze ? 1 : 0; }
+			int ReturnEnemyCollisionOutcome() { return Dashing() ? 2 : currentState == Magic || TimeFrozen() ? 1 : 0; }
 
 			int GetItemIndex(int _i) { return (int)items[_i]; }
 			bool UsingItem() { return currentState != None; }
 			bool SwingingSword() { return currentState == Sword; }
+			bool Dashing() { return currentState == Dash || currentState == ElectricDash; }
 			bool TimeFrozen() { return currentState == Freeze; }
 
-			Vector2 GetSwordCoords() { return Vector2{ GetRawCoords().x + DirVec(dirIndex).x, GetRawCoords().y + DirVec(dirIndex).y }; }
+			Vector2 GetSwordCoords() { return Vector2{ GetRawCoords().x + DirVec(dirIndex).x * 0.75f, GetRawCoords().y + DirVec(dirIndex).y * 0.75f }; }
 
 			int GetEnergy() { return energy; }
 			float GetElectricCharge() { return electricEnergy; }
@@ -681,6 +682,7 @@ namespace PacMan_Board
 			std::vector<Vector2> returnVec = std::vector<Vector2>();
 			for (int i = 0; i < playerProjectiles.size(); i++) { returnVec.push_back(playerProjectiles[i].GetPos()); }
 			if (player.SwingingSword()) { returnVec.push_back(player.GetSwordCoords()); }
+			if (player.Dashing()) { returnVec.push_back(player.GetRawCoords()); }
 			return returnVec;
 		}
 

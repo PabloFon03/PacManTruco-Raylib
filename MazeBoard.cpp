@@ -16,7 +16,7 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 	difficulty = _difficulty;
 
-	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 6, _item3 * 0 + 7 };
+	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 4, _item3 * 0 + 7 };
 
 	RefillMazeQueue(false);
 	SpawnNextMaze();

@@ -121,5 +121,5 @@ void Board::Enemy::PlayerCollisionCheck()
 void Board::Enemy::ProjectileCollisionCheck()
 {
 	std::vector<Vector2> shotProjectiles = board->GetPlayerProjectiles();
-	for (int i = 0; i < shotProjectiles.size(); i++) { if (rawDistanceTo(board->GetPlayerRawPos()) < 0.75f) { OnStun(); break; } }
+	for (int i = 0; i < shotProjectiles.size(); i++) { if (rawDistanceTo(shotProjectiles[i]) < 0.75f) { OnStun(); break; } }
 }
