@@ -77,9 +77,10 @@ public:
 			"MirandaStun.png",
 			"Alice.png",
 			"AliceStun.png",
+			"Carla.png",
+			"CarlaStun.png",
 			"Erika.png",
-			"Alice.png",
-			"Carla.png"
+			"ErikaStun.png",
 		}, "maze/");
 
 		// Load Baseball Texture Files

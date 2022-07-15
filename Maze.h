@@ -844,6 +844,108 @@ namespace PacMan_Board
 
 		};
 
+		// Carla Enemy Class
+		class Carla : public Enemy
+		{
+
+		public:
+
+			Carla(Board* _board, Grid* _grid)
+			{
+
+				board = _board;
+				grid = _grid;
+
+				mainAnimAtlas = board->GetTexture(21);
+				stunAnimAtlas = board->GetTexture(22);
+
+			}
+
+			void Update()
+			{
+
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Pretending:
+
+					UpdateMovement();
+
+					if (rawDistanceTo(board->GetPlayerRawPos()) < 5) { currentState = Hiding; }
+
+					break;
+
+				case Hiding:
+
+					UpdateMovement();
+
+					if (rawDistanceTo(board->GetPlayerRawPos()) > 12) { currentState = Pretending; }
+
+					break;
+
+				case Stunned:
+
+					// Update Animation
+					animDelay += deltaTime;
+					if (animDelay >= 0.075f)
+					{
+						animIndex++;
+						animIndex %= 4;
+						animDelay -= 0.075f;
+					}
+
+					// Update State Timer
+					stateTimer += deltaTime;
+					if (stateTimer > 0.75f)
+					{
+						currentState = Hiding;
+						animIndex = 0;
+						stateTimer -= 0.75f;
+					}
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw() { DrawCurrentFrame(currentState == Stunned ? stunAnimAtlas : mainAnimAtlas, animIndex, TileSize()); }
+
+			void OnStun()
+			{
+				currentState = Stunned;
+				animIndex = 0;
+				stateTimer = 0;
+			}
+
+		private:
+
+			void ChangeDir()
+			{
+				std::vector<PossibleDirection> possibleDirections = GetPossibleDirections(GetTarget(0));
+				dirIndex = possibleDirections[currentState == Hiding ? possibleDirections.size() - 1 : 0].dirIndex;
+				Entity::ChangeDir();
+			}
+
+			void OnStepFinished() {}
+
+			void OnRespawn() { currentState = Pretending; }
+
+			bool counterClock{ false };
+
+			enum States { Pretending, Hiding, Stunned };
+			States currentState{ Pretending };
+			float stateTimer{ 0 };
+
+			Texture2D mainAnimAtlas;
+			Texture2D stunAnimAtlas;
+
+			Vector2 TileSize() { return Vector2{ 20, 52 }; }
+
+		};
+
 		Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm);
 		~Board();
 
