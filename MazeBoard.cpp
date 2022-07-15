@@ -1399,6 +1399,10 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		{
 			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 1 }, 1 },
 			EnemySpawnData{ 1, Entity::Vector2Int{ 9, 4 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 1, 6 }, 2 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 4, 6 }, 0 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 14, 6 }, 2 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 17, 6 }, 0 },
 		};
 
 		break;
@@ -1574,8 +1578,14 @@ void Board::SpawnEnemy(EnemySpawnData _spawnData)
 
 	switch (_spawnData.typeID)
 	{
-	case 1: enemies.push_back(new Clock{ this, &grid }); break;
+
+	// Clockwise Miranda
+	case 1:
+	case 2: enemies.push_back(new Clock{ this, &grid, _spawnData.typeID == 2 }); break;
+
+	// Lurker
 	default: enemies.push_back(new Lurker{ this, &grid }); break;
+
 	}
 
 	(*enemies[enemies.size() - 1]).SetSpawn(_spawnData.spawnPos, _spawnData.spawnDir);

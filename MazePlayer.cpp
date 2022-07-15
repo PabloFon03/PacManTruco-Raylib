@@ -30,67 +30,80 @@ void Board::Player::UpdateItems()
 		{
 
 		case Sword:
+		{
+			int energyCost;
+			energyCost = Items::GetItem((int)Magic).GetManaCost();
 
-			if (IsKeyPressed(itemKeys[i]))
+			if (IsKeyPressed(itemKeys[i]) && energy >= energyCost)
 			{
+				energy -= energyCost;
 				currentState = Sword;
 				stateTimer = 0.2f;
 			}
 
 			break;
-
+		}
 		case Dash:
+		{
+			int energyCost;
+			energyCost = Items::GetItem((int)Magic).GetManaCost();
 
-			if (IsKeyPressed(itemKeys[i]))
+			if (IsKeyPressed(itemKeys[i]) && energy >= energyCost)
 			{
+				energy -= energyCost;
 				currentState = Dash;
 				stateTimer = 0.5f;
 			}
 
 			break;
-
+		}
 		case Magic:
+		{
+			int energyCost;
+			energyCost = Items::GetItem((int)Magic).GetManaCost();
 
-			if (IsKeyPressed(itemKeys[i]))
+			if (IsKeyPressed(itemKeys[i]) && energy >= energyCost)
 			{
+				energy -= energyCost;
 				currentState = Magic;
 				stateTimer = 10;
 			}
 
 			break;
-
+		}
 		case Projectile:
+		{
+			int energyCost;
+			energyCost = Items::GetItem((int)Projectile).GetManaCost();
 
-			if (IsKeyPressed(itemKeys[i]))
+			if (IsKeyPressed(itemKeys[i]) && energy >= energyCost)
 			{
 				Vector2Int dirVec = DirVec(dirIndex);
 				board->ShootProjectile(GetRawCoords(), Vector2{ (float)dirVec.x, (float)dirVec.y }, dirIndex);
 
+				energy -= energyCost;
 				currentState = Projectile;
 				stateTimer = 0.5f;
 			}
 
 			break;
-
+		}
 		case Trade:
-
+		{
 			if (IsKeyPressed(itemKeys[i]))
 			{
-
 				float dischargeRate = Items::GetItem((int)Trade).GetDischargeRate();
-
 				while (electricEnergy >= dischargeRate)
 				{
 					electricEnergy -= dischargeRate;
 					energy++;
 				}
-
 			}
 
 			break;
-
+		}
 		case Freeze:
-
+		{
 			if (IsKeyDown(itemKeys[i]) && electricEnergy > 0)
 			{
 				currentState = Freeze;
@@ -101,9 +114,9 @@ void Board::Player::UpdateItems()
 			}
 
 			break;
-
+		}
 		case ElectricDash:
-
+		{
 			if (IsKeyDown(itemKeys[i]) && electricEnergy > 0)
 			{
 				currentState = ElectricDash;
@@ -114,7 +127,7 @@ void Board::Player::UpdateItems()
 			}
 
 			break;
-
+		}
 		}
 
 	}
@@ -203,7 +216,7 @@ void Board::Player::UpdateMovement()
 		{
 			if (IsKeyDown(dirKeys[2 * i + (dirIndex % 2 == 0 ? 1 : 0)]))
 			{
-				electricEnergy += 0.25f * deltaTime;
+				electricEnergy += 0.2f * deltaTime;
 				if (electricEnergy > 1) { electricEnergy = 1; }
 			}
 		}

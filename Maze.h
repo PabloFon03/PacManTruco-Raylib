@@ -79,10 +79,10 @@ namespace PacMan_Board
 				PlayerItem{ 10, 0.125f },
 
 				// Freeze
-				PlayerItem{ 12, 0.2f },
+				PlayerItem{ 12, 0.4f },
 
 				// Boost
-				PlayerItem{ 15, 0.5f }
+				PlayerItem{ 15, 0.25f }
 
 			};
 
@@ -365,7 +365,7 @@ namespace PacMan_Board
 			void UpdateItems();
 			void UpdateMovement();
 
-			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic ? 1 : 0; }
+			int ReturnEnemyCollisionOutcome() { return currentState == Dash || currentState == ElectricDash ? 2 : currentState == Magic || currentState == Freeze ? 1 : 0; }
 
 			int GetItemIndex(int _i) { return (int)items[_i]; }
 			bool UsingItem() { return currentState != None; }
@@ -397,10 +397,9 @@ namespace PacMan_Board
 				{
 
 				case Dash:
-				case ElectricDash:
-					return dashAnimAtlas;
+				case ElectricDash: return dashAnimAtlas;
 
-				case Magic: return magicAnimAtlas;
+				case Magic: return stateTimer > 1 || (int)ceilf(stateTimer * 8) % 2 == 0 ? magicAnimAtlas : mainAnimAtlas;
 
 				default: return mainAnimAtlas;
 
@@ -569,14 +568,16 @@ namespace PacMan_Board
 
 		public:
 
-			Clock(Board* _board, Grid* _grid)
+			Clock(Board* _board, Grid* _grid, bool _counterClock)
 			{
 
 				board = _board;
 				grid = _grid;
 
-				mainAnimAtlas = board->GetTexture(13);
-				stunAnimAtlas = board->GetTexture(14);
+				counterClock = _counterClock;
+
+				mainAnimAtlas = board->GetTexture(counterClock ? 15 : 13);
+				stunAnimAtlas = board->GetTexture(counterClock ? 16 : 14);
 
 			}
 
@@ -634,13 +635,16 @@ namespace PacMan_Board
 			// Rotate Clockwise
 			void ChangeDir()
 			{
-				if (IsValidDir(coords, (dirIndex + 1) % 4)) { dirIndex++; dirIndex %= 4; }
+				int targetDir = (int)TrueMod(dirIndex + (counterClock ? -1 : 1), 4);
+				if (IsValidDir(coords, targetDir)) { dirIndex = targetDir; }
 				Entity::ChangeDir();
 			}
 
 			void OnStepFinished() {}
 
 			void OnRespawn() {}
+
+			bool counterClock{ false };
 
 			enum States { Walking, Stunned };
 			States currentState{ Walking };
