@@ -10,6 +10,7 @@ Board::Entity::Vector2Int Board::Enemy::GetTarget(int _i)
 	switch (_i)
 	{
 	case 1: return AddDir(AddDir(playerCoords, board->GetPlayerDirIndex(), false), board->GetPlayerDirIndex(), false);
+	case 2: return AddDir(AddDir(playerCoords, (board->GetPlayerDirIndex() + 2) % 4, false), (board->GetPlayerDirIndex() + 2) % 4, false);
 	default: return playerCoords;
 	}
 
@@ -29,6 +30,9 @@ void Board::Enemy::UpdateMovement()
 
 		// Try Turning
 		ChangeDir();
+
+		// Call Step Finished Flag
+		OnStepFinished();
 
 		// Reset Step Timer
 		stepTimer--;

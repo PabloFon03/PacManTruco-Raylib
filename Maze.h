@@ -946,6 +946,128 @@ namespace PacMan_Board
 
 		};
 
+		// Carla Enemy Class
+		class Marina : public Enemy
+		{
+
+		public:
+
+			Marina(Board* _board, Grid* _grid)
+			{
+
+				board = _board;
+				grid = _grid;
+
+				mainAnimAtlas = board->GetTexture(25);
+				stunAnimAtlas = board->GetTexture(26);
+				teleportAnimAtlas = board->GetTexture(27);
+
+			}
+
+			void Update()
+			{
+
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Walking:
+
+					UpdateMovement();
+
+					break;
+
+				case Teleporting:
+
+					stateTimer += deltaTime;
+					if (stateTimer >= 1)
+					{
+						coords = targetPos;
+						currentState = Walking;
+						ChangeDir();
+						stateTimer--;
+					}
+
+					break;
+
+				case Stunned:
+
+					// Update Animation
+					animDelay += deltaTime;
+					if (animDelay >= 0.075f)
+					{
+						animIndex++;
+						animIndex %= 4;
+						animDelay -= 0.075f;
+					}
+
+					// Update State Timer
+					stateTimer += deltaTime;
+					if (stateTimer > 0.75f)
+					{
+						currentState = Walking;
+						animIndex = 0;
+						stateTimer -= 0.75f;
+					}
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw()
+			{
+				if (currentState == Teleporting) { for (int i = 0; i < 2; i++) { DrawCurrentFrame(teleportAnimAtlas, ((int)ceilf(stateTimer * 8) % 2) == (i % 2) ? 1 - i : i, TileSize(), Vector2{ (float)(targetPos.x - coords.x) * i, (float)(targetPos.y - coords.y) * i }); } }
+				else { DrawCurrentFrame(currentState == Stunned ? stunAnimAtlas : mainAnimAtlas, animIndex, TileSize()); }
+			}
+
+			void OnStun()
+			{
+				currentState = Stunned;
+				animIndex = 0;
+				stateTimer = 0;
+			}
+
+		private:
+
+			void ChangeDir()
+			{
+				dirIndex = GetPossibleDirections(GetTarget(2))[0].dirIndex;
+				Entity::ChangeDir();
+			}
+
+			int teleportCooldown{ 0 };
+			Vector2Int targetPos;
+
+			void OnStepFinished()
+			{
+				teleportCooldown++;
+				if (teleportCooldown >= 10 && rawDistanceTo(board->GetPlayerRawPos()) > 8)
+				{
+					teleportCooldown = 0;
+					targetPos = GetTarget(0);
+					currentState = Teleporting;
+					stateTimer = 0;
+				}
+			}
+
+			void OnRespawn() { currentState = Walking; }
+
+			enum States { Walking, Teleporting, Stunned };
+			States currentState{ Walking };
+			float stateTimer{ 0 };
+
+
+			Texture2D mainAnimAtlas;
+			Texture2D stunAnimAtlas;
+			Texture2D teleportAnimAtlas;
+
+			Vector2 TileSize() { return Vector2{ 20, 52 }; }
+
+		};
+
 		Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item3, int _charm);
 		~Board();
 
