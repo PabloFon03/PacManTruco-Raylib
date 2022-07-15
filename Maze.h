@@ -400,7 +400,7 @@ namespace PacMan_Board
 				case Dash:
 				case ElectricDash: return dashAnimAtlas;
 
-				case Magic: return stateTimer > 1 || (int)ceilf(stateTimer * 8) % 2 == 0 ? magicAnimAtlas : mainAnimAtlas;
+				case Magic: return stateTimer > 1 || (int)ceilf(stateTimer * 16) % 2 == 0 ? magicAnimAtlas : mainAnimAtlas;
 
 				default: return mainAnimAtlas;
 
