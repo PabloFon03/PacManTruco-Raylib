@@ -168,7 +168,6 @@
     <ClInclude Include="SubScreen.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\arcade.fs" />
     <None Include="shaders\base.fs" />
     <None Include="shaders\bloom.fs" />
     <None Include="shaders\gray.fs" />

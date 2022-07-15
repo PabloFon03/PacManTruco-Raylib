@@ -67,16 +67,16 @@ namespace PacMan_Board
 				PlayerItem{ 1, 2 },
 
 				// Dash
-				PlayerItem{ 3, 0 },
+				PlayerItem{ 3, 3 },
 
 				// Magic
-				PlayerItem{ 5, 0 },
+				PlayerItem{ 5, 5 },
 
 				// Projectile
-				PlayerItem{ 8, 0 },
+				PlayerItem{ 8, 2 },
 
 				// Trade
-				PlayerItem{ 10, 0.125f },
+				PlayerItem{ 10, 0.2f },
 
 				// Freeze
 				PlayerItem{ 12, 0.4f },
@@ -102,7 +102,7 @@ namespace PacMan_Board
 				// Score x2
 				3,
 
-				// Lifes x3
+				// Lifes x5
 				3,
 
 				// Crystals x3
@@ -111,7 +111,7 @@ namespace PacMan_Board
 				// Score x4
 				8,
 
-				// Lifes x5
+				// Lifes x7
 				10,
 
 				// Crystals x5
@@ -1276,6 +1276,15 @@ namespace PacMan_Board
 		Texture2D charmIcons;
 		Texture2D uiIcons;
 		Texture2D roundCounter;
+		Texture2D rewindIcon;
+
+		struct
+		{
+			Texture2D animAtlas;
+			int frameIndex{ 0 };
+			float frameDelay{ 0 };
+			bool isPlaying{ false };
+		}CrystalAnimation;
 
 		int shaderFlipValLocation{ -1 };
 

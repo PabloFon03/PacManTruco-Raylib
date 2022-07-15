@@ -13,6 +13,8 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 	charmIcons = GetTexture(1);
 	uiIcons = GetTexture(2);
 	roundCounter = GetTexture(3);
+	rewindIcon = GetTexture(28);
+	CrystalAnimation.animAtlas = GetTexture(29);
 
 	difficulty = _difficulty;
 
@@ -76,11 +78,43 @@ void Board::Update()
 			if (playerProjectiles[i].IsOutOfBounds()) { playerProjectiles.erase(std::next(playerProjectiles.begin(), i)); }
 		}
 
-		// Update Enemies
-		for (int i = enemies.size() - 1; i >= 0; i--)
+		if (IsKeyPressed(KEY_LEFT_CONTROL) && crystalsLeft > 0)
 		{
-			(*enemies[i]).Update();
-			if ((*enemies[i]).GetRemoveFlag()) { RemoveEnemy(i); }
+			CrystalAnimation.isPlaying = true;
+			CrystalAnimation.frameIndex = 0;
+			CrystalAnimation.frameDelay = 0;
+			crystalsLeft--;
+		}
+
+		// Update Dispawn Animation
+		if (CrystalAnimation.isPlaying)
+		{
+
+			CrystalAnimation.frameDelay += GetDeltaTime();
+
+			if (CrystalAnimation.frameDelay >= 0.1f)
+			{
+				CrystalAnimation.frameIndex++;
+				if (CrystalAnimation.frameIndex == 6)
+				{
+					CrystalAnimation.isPlaying = false;
+					RemoveAllEnemies();
+				}
+				CrystalAnimation.frameDelay -= 0.1f;
+			}
+
+		}
+
+		else
+		{
+
+			// Update Enemies
+			for (int i = enemies.size() - 1; i >= 0; i--)
+			{
+				(*enemies[i]).Update();
+				if ((*enemies[i]).GetRemoveFlag()) { RemoveEnemy(i); }
+			}
+
 		}
 
 		break;
@@ -137,6 +171,7 @@ void Board::Update()
 			{
 				player.Respawn();
 				for (int i = 0; i < enemies.size(); i++) { (*enemies[i]).Respawn(); }
+				renderShader = 0;
 			}
 
 			// Reset Timer
@@ -150,10 +185,9 @@ void Board::Update()
 	case GameOver:
 
 		stepTimer += GetRawDeltaTime();
-
-		if (stepTimer >= 5)
+		if (stepTimer >= 3)
 		{
-			stepTimer -= 5;
+			stepTimer -= 3;
 			currentState = Results;
 		}
 
@@ -166,137 +200,163 @@ void Board::Update()
 void Board::OnDraw()
 {
 
-	// Draw Maze Grid
-	grid.OnDraw(clearedRounds % 6);
-
-	// List All Entities
-	std::vector<Entity*> entities = std::vector<Entity*>();
-	entities.push_back(&player);
-	for (int i = 0; i < enemies.size(); i++) { entities.push_back(enemies[i]); }
-
-	// Selection Sort
-	for (int i = 0; i < entities.size() - 1; i++)
+	if (currentState == Results)
 	{
 
-		int targetIndex = i;
 
-		for (int i = targetIndex + 1; i < entities.size(); i++) { if ((*entities[i]).GetRawCoords().y < (*entities[targetIndex]).GetRawCoords().y) { targetIndex = i; } }
-
-		if (targetIndex != i) { std::swap(entities[i], entities[targetIndex]); }
 
 	}
 
-	// Draw Entities From Top To Bottom
-	for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
-
-	// Draw Player Projectiles
-	for (int i = 0; i < playerProjectiles.size(); i++) { playerProjectiles[i].OnDraw(); }
-
-	switch (currentState)
+	else
 	{
 
-	case Starting:
+		// Draw Maze Grid
+		grid.OnDraw(clearedRounds % 6);
 
-		switch (stepCounter)
+		if (CrystalAnimation.isPlaying)
 		{
 
-		case 0:
+			// Draw Player
+			player.OnDraw();
 
-			DrawBox(8, Vector2{ 96, 32 }, Vector2{ 152, 224 }, SKYBLUE);
-			DrawTextCharAtlas("READY", Vector2{ 152, 220 }, SKYBLUE, 1);
+			// Draw Enemy Dispawn Animation
+			for (int i = 0; i < enemies.size(); i++) { DrawTextureRec(CrystalAnimation.animAtlas, Rectangle{ (float)(16 * CrystalAnimation.frameIndex), 0, 16, 16 }, Vector2{ enemies[i]->GetRawCoords().x * 16, enemies[i]->GetRawCoords().y * 16 + 48 }, WHITE); }
+
+		}
+
+		else
+		{
+
+			// List All Entities
+			std::vector<Entity*> entities = std::vector<Entity*>();
+			entities.push_back(&player);
+			for (int i = 0; i < enemies.size(); i++) { entities.push_back(enemies[i]); }
+
+			// Selection Sort
+			for (int i = 0; i < entities.size() - 1; i++)
+			{
+				int targetIndex = i;
+				for (int i = targetIndex + 1; i < entities.size(); i++) { if ((*entities[i]).GetRawCoords().y < (*entities[targetIndex]).GetRawCoords().y) { targetIndex = i; } }
+				if (targetIndex != i) { std::swap(entities[i], entities[targetIndex]); }
+			}
+
+			// Draw Entities From Top To Bottom
+			for (int i = 0; i < entities.size(); i++) { (*entities[i]).OnDraw(); }
+
+		}
+
+		// Draw Player Projectiles
+		for (int i = 0; i < playerProjectiles.size(); i++) { playerProjectiles[i].OnDraw(); }
+
+		switch (currentState)
+		{
+
+		case Starting:
+
+			switch (stepCounter)
+			{
+
+			case 0:
+
+				DrawBox(8, Vector2{ 96, 32 }, Vector2{ 152, 224 }, SKYBLUE);
+				DrawTextCharAtlas("READY", Vector2{ 152, 220 }, SKYBLUE, 1);
+				break;
+
+			case 2:
+
+				DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, RED);
+				DrawTextCharAtlas("3", Vector2{ 152, 220 }, RED, 1);
+				break;
+
+			case 3:
+
+				DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, YELLOW);
+				DrawTextCharAtlas("2", Vector2{ 152, 220 }, YELLOW, 1);
+				break;
+
+			case 4:
+
+				DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, GREEN);
+				DrawTextCharAtlas("1", Vector2{ 152, 220 }, GREEN, 1);
+				break;
+
+			case 5:
+
+				DrawBox(8, Vector2{ 64, 32 }, Vector2{ 152, 224 }, SKYBLUE);
+				DrawTextCharAtlas("GO", Vector2{ 152, 220 }, SKYBLUE, 1);
+				break;
+
+			}
+
 			break;
 
-		case 2:
+		case Defeated:
 
-			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, RED);
-			DrawTextCharAtlas("3", Vector2{ 152, 220 }, RED, 1);
-			break;
+			if (stepTimer < 3) { DrawTexture(rewindIcon, 16, 64, WHITE); }
 
-		case 3:
-
-			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, YELLOW);
-			DrawTextCharAtlas("2", Vector2{ 152, 220 }, YELLOW, 1);
-			break;
-
-		case 4:
-
-			DrawBox(8, Vector2{ 32, 32 }, Vector2{ 152, 224 }, GREEN);
-			DrawTextCharAtlas("1", Vector2{ 152, 220 }, GREEN, 1);
-			break;
-
-		case 5:
-
-			DrawBox(8, Vector2{ 64, 32 }, Vector2{ 152, 224 }, SKYBLUE);
-			DrawTextCharAtlas("GO", Vector2{ 152, 220 }, SKYBLUE, 1);
 			break;
 
 		}
 
-		break;
+		// Top UI
+		DrawRectangle(0, 0, 304, 48, BLACK);
+
+		// Draw Score
+		DrawBox(8, Vector2{ 80, 28 }, Vector2{ 62, 24 }, Color{ 102, 216, 255, 255 });
+		DrawTextCharAtlas("Score", Vector2{ 62, 14 }, Color{ 102, 216, 255, 255 }, 1);
+		DrawTextCharAtlas(std::to_string(score), Vector2{ 62, 26 }, Color{ 102, 216, 255, 255 }, 1);
+
+		// Draw Timer
+		DrawBox(8, Vector2{ 48, 28 }, Vector2{ 152, 24 }, Color{ 225, 225, 225, 255 });
+		DrawTextCharAtlas(GetTimerDisplayValue(), Vector2{ 152, 20 }, Color{ 225, 225, 225, 255 }, 1);
+
+		// Draw Speed
+		DrawBox(8, Vector2{ 80, 28 }, Vector2{ 242, 24 }, Color{ 255, 228, 102, 255 });
+		DrawTextCharAtlas("Speed", Vector2{ 242, 14 }, Color{ 255, 228, 102, 255 }, 1);
+		DrawTextCharAtlas(std::to_string(speedMod + 1), Vector2{ 242, 26 }, Color{ 255, 228, 102, 255 }, 1);
+
+		// Bottom UI
+		DrawRectangle(0, 400, 304, 48, BLACK);
+
+		// Draw Item Icons
+		Color itemTint = player.UsingItem() ? GRAY : WHITE;
+		for (int i = 0; i < 3; i++)
+		{
+			int currentItem = player.GetItemIndex(i);
+			DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, itemTint);
+			if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric()) { DrawTextCharAtlas(TextFormat("%i", Items::GetItem(currentItem).GetManaCost()), Vector2{ (float)(12 + 20 * i), 436 }, itemTint, 1); }
+		}
+
+		// Draw Electric Energy Bar
+		DrawBox(8, Vector2{ 56, 12 }, Vector2{ 98, 424 }, Color{ 255, 228, 102, 255 });
+		DrawRectangle(70, 418, round(56 * player.GetElectricCharge()), 12, WHITE);
+
+		// Draw Round Counter
+		DrawTextureRec(roundCounter, Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
+
+		// Draw Vessels / Gems
+		DrawBox(8, Vector2{ 52, 28 }, Vector2{ 204, 424 }, Color{ 102, 255, 140, 255 });
+
+		// Blank Vessels Left
+		DrawTextureRec(uiIcons, Rectangle{ 0, 0, 8, 8 }, Vector2{ 182, 414 }, WHITE);
+		DrawTextCharAtlas(std::to_string(dotGoal - dotsCollected), Vector2{ 226, 414 }, WHITE, 2);
+
+		// Energy Left
+		DrawTextureRec(uiIcons, Rectangle{ 8, 0, 8, 8 }, Vector2{ 182, 426 }, WHITE);
+		DrawTextCharAtlas(std::to_string(player.GetEnergy()), Vector2{ 226, 426 }, WHITE, 2);
+
+		// Draw Lifes / Crystals
+		DrawBox(8, Vector2{ 52, 28 }, Vector2{ 272, 424 }, Color{ 207, 63, 255, 255 });
+
+		// Lifes Left
+		DrawTextureRec(uiIcons, Rectangle{ 0, 8, 8, 8 }, Vector2{ 250, 414 }, WHITE);
+		DrawTextCharAtlas(std::to_string(lifesLeft), Vector2{ 294, 414 }, WHITE, 2);
+
+		// Crystals Left
+		DrawTextureRec(uiIcons, Rectangle{ 8, 8, 8, 8 }, Vector2{ 250, 426 }, WHITE);
+		DrawTextCharAtlas(std::to_string(crystalsLeft), Vector2{ 294, 426 }, WHITE, 2);
 
 	}
-
-	// Top UI
-	DrawRectangle(0, 0, 304, 48, BLACK);
-
-	// Draw Score
-	DrawBox(8, Vector2{ 80, 28 }, Vector2{ 62, 24 }, Color{ 102, 216, 255, 255 });
-	DrawTextCharAtlas("Score", Vector2{ 62, 14 }, Color{ 102, 216, 255, 255 }, 1);
-	DrawTextCharAtlas(std::to_string(score), Vector2{ 62, 26 }, Color{ 102, 216, 255, 255 }, 1);
-
-	// Draw Timer
-	DrawBox(8, Vector2{ 48, 28 }, Vector2{ 152, 24 }, Color{ 225, 225, 225, 255 });
-	DrawTextCharAtlas(GetTimerDisplayValue(), Vector2{ 152, 20 }, Color{ 225, 225, 225, 255 }, 1);
-
-	// Draw Speed
-	DrawBox(8, Vector2{ 80, 28 }, Vector2{ 242, 24 }, Color{ 255, 228, 102, 255 });
-	DrawTextCharAtlas("Speed", Vector2{ 242, 14 }, Color{ 255, 228, 102, 255 }, 1);
-	DrawTextCharAtlas(std::to_string(speedMod + 1), Vector2{ 242, 26 }, Color{ 255, 228, 102, 255 }, 1);
-
-	// Bottom UI
-	DrawRectangle(0, 400, 304, 48, BLACK);
-
-	// Draw Item Icons
-	Color itemTint = player.UsingItem() ? GRAY : WHITE;
-	for (int i = 0; i < 3; i++)
-	{
-
-		int currentItem = player.GetItemIndex(i);
-
-		DrawTextureRec(itemIcons, Rectangle{ (float)(16 * currentItem), (float)(16 * i), 16, 16 }, Vector2{ (float)(4 + 20 * i), 416 }, itemTint);
-
-		if (currentItem > 0 && !Items::GetItem(currentItem).IsElectric()) { DrawTextCharAtlas(TextFormat("%i", Items::GetItem(currentItem).GetManaCost()), Vector2{ (float)(12 + 20 * i), 436 }, itemTint, 1); }
-
-	}
-
-	// Draw Electric Energy Bar
-	DrawBox(8, Vector2{ 56, 12 }, Vector2{ 98, 424 }, Color{ 255, 228, 102, 255 });
-	DrawRectangle(70, 418, round(56 * player.GetElectricCharge()), 12, WHITE);
-
-	// Draw Round Counter
-	DrawTextureRec(roundCounter, Rectangle{ (float)(clearedRounds % 6) * 32, 0, 32, 32 }, Vector2{ 136, 408 }, WHITE);
-
-	// Draw Vessels / Gems
-	DrawBox(8, Vector2{ 52, 28 }, Vector2{ 204, 424 }, Color{ 102, 255, 140, 255 });
-
-	// Blank Vessels Left
-	DrawTextureRec(uiIcons, Rectangle{ 0, 0, 8, 8 }, Vector2{ 182, 414 }, WHITE);
-	DrawTextCharAtlas(std::to_string(dotGoal - dotsCollected), Vector2{ 226, 414 }, WHITE, 2);
-
-	// Energy Left
-	DrawTextureRec(uiIcons, Rectangle{ 8, 0, 8, 8 }, Vector2{ 182, 426 }, WHITE);
-	DrawTextCharAtlas(std::to_string(player.GetEnergy()), Vector2{ 226, 426 }, WHITE, 2);
-
-	// Draw Lifes / Crystals
-	DrawBox(8, Vector2{ 52, 28 }, Vector2{ 272, 424 }, Color{ 207, 63, 255, 255 });
-
-	// Lifes Left
-	DrawTextureRec(uiIcons, Rectangle{ 0, 8, 8, 8 }, Vector2{ 250, 414 }, WHITE);
-	DrawTextCharAtlas(std::to_string(lifesLeft), Vector2{ 294, 414 }, WHITE, 2);
-
-	// Crystals Left
-	DrawTextureRec(uiIcons, Rectangle{ 8, 8, 8, 8 }, Vector2{ 250, 426 }, WHITE);
-	DrawTextCharAtlas(std::to_string(crystalsLeft), Vector2{ 294, 426 }, WHITE, 2);
 
 }
 
@@ -349,6 +409,8 @@ void Board::OnPlayerHit()
 	currentState = lifesLeft == 0 ? GameOver : Defeated;
 	stepCounter = 0;
 	stepTimer = 0;
+
+	if (currentState == Defeated) { renderShader = 2; }
 
 }
 

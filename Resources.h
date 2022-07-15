@@ -23,8 +23,8 @@ public:
 		{
 			"base.fs",
 			"mazeFlip.fs",
-			"uvTest.fs",
-			"gray.fs"
+			"gray.fs",
+			"uvTest.fs"
 		});
 
 		// Load Common Texture Files
@@ -83,7 +83,9 @@ public:
 			"ErikaStun.png",
 			"Marina.png",
 			"MarinaStun.png",
-			"MarinaTimeFreezeMove.png"
+			"MarinaTimeFreezeMove.png",
+			"RewindLabel.png",
+			"EnemyDispawn.png"
 		}, "maze/");
 
 		// Load Baseball Texture Files

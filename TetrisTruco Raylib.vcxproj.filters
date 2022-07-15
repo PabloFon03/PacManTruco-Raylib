@@ -112,9 +112,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\arcade.fs">
-      <Filter>Archivos de recursos\shaders</Filter>
-    </None>
     <None Include="shaders\base.fs">
       <Filter>Archivos de recursos\shaders</Filter>
     </None>
