@@ -16,7 +16,7 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 	difficulty = _difficulty;
 
-	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 4, _item3 * 0 + 7 };
+	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 4, _item3 * 0 + 3 };
 
 	RefillMazeQueue(false);
 	SpawnNextMaze();
@@ -26,7 +26,7 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 Board::~Board()
 {
 
-	for (int i = enemies.size() - 1; i >= 0; i--) { delete enemies[i]; }
+	RemoveAllEnemies();
 
 }
 
@@ -135,7 +135,7 @@ void Board::Update()
 			// Reset Player And Enemies To Spawn
 			else
 			{
-				player.Spawn();
+				player.Respawn();
 				for (int i = 0; i < enemies.size(); i++) { (*enemies[i]).Respawn(); }
 			}
 
@@ -1403,6 +1403,14 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			EnemySpawnData{ 2, Entity::Vector2Int{ 4, 6 }, 0 },
 			EnemySpawnData{ 2, Entity::Vector2Int{ 14, 6 }, 2 },
 			EnemySpawnData{ 2, Entity::Vector2Int{ 17, 6 }, 0 },
+			EnemySpawnData{ 3, Entity::Vector2Int{ 9, 8 }, 3 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 7, 15 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 11, 15 }, 1 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 7, 17 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 17 }, 3 },
+			EnemySpawnData{ 1, Entity::Vector2Int{ 11, 17 }, 3 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 20 }, 1 },
+			EnemySpawnData{ 2, Entity::Vector2Int{ 9, 20 }, 1 }
 		};
 
 		break;
@@ -1579,11 +1587,14 @@ void Board::SpawnEnemy(EnemySpawnData _spawnData)
 	switch (_spawnData.typeID)
 	{
 
-	// Clockwise Miranda
+		// Clockwise Miranda
 	case 1:
 	case 2: enemies.push_back(new Clock{ this, &grid, _spawnData.typeID == 2 }); break;
 
-	// Lurker
+		// Miranda
+	case 3: enemies.push_back(new Miranda{ this, &grid }); break;
+
+		// Lurker
 	default: enemies.push_back(new Lurker{ this, &grid }); break;
 
 	}

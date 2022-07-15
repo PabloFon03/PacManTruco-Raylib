@@ -73,6 +73,8 @@ public:
 			"MirandaOrangeStun.png",
 			"MirandaBlue.png",
 			"MirandaBlueStun.png",
+			"Miranda.png",
+			"MirandaStun.png",
 			"Erika.png",
 			"Alice.png",
 			"Carla.png"
