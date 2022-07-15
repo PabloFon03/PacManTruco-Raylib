@@ -369,6 +369,23 @@ void Board::OnDraw()
 
 			break;
 
+		case GameOver:
+
+			if (stepTimer > 1)
+			{
+				DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
+				DrawTextCharAtlas("Game Over", Vector2{ 152, 220 }, WHITE, 1);
+			}
+
+			break;
+
+		case TimeUp:
+
+			DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
+			DrawTextCharAtlas("Time Up!", Vector2{ 152, 220 }, WHITE, 1);
+
+			break;
+
 		}
 
 		// Top UI
