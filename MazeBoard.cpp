@@ -39,7 +39,7 @@ void Board::Update()
 	{
 
 	case Starting:
-
+	{
 		stepTimer += GetDeltaTime();
 
 		float targetTimer;
@@ -54,9 +54,9 @@ void Board::Update()
 		if (stepCounter == 6) { currentState = Playing; }
 
 		break;
-
+	}
 	case Playing:
-
+	{
 		// Update Timer
 		timeLeft -= GetRawDeltaTime();
 		if (timeLeft <= 0)
@@ -118,10 +118,10 @@ void Board::Update()
 		}
 
 		break;
-
+	}
 	case FlipOut:
 	case FlipIn:
-
+	{
 		stepTimer += 4 * GetRawDeltaTime();
 
 		if (stepTimer >= 1)
@@ -150,9 +150,9 @@ void Board::Update()
 		}
 
 		break;
-
+	}
 	case Defeated:
-
+	{
 		stepTimer += GetRawDeltaTime();
 
 		float delay;
@@ -180,10 +180,10 @@ void Board::Update()
 		}
 
 		break;
-
+	}
 	case TimeUp:
 	case GameOver:
-
+	{
 		stepTimer += GetRawDeltaTime();
 		if (stepTimer >= 3)
 		{
@@ -192,7 +192,20 @@ void Board::Update()
 		}
 
 		break;
+	}
+	case Results:
+	{
+		stepTimer += GetRawDeltaTime();
+		float delay = stepCounter == 17 ? 5 : stepCounter == 11 ? 3 : stepCounter == 0 || stepCounter == 12 ? 1.5f : 0.75f;
+		if (stepTimer >= delay)
+		{
+			stepCounter++;
+			if (stepCounter == 18) { exitFlag = 40; }
+			stepTimer -= delay;
+		}
 
+		break;
+	}
 	}
 
 }
@@ -203,7 +216,63 @@ void Board::OnDraw()
 	if (currentState == Results)
 	{
 
+		if (stepCounter > 11)
+		{
 
+			for (int i = 13; i < stepCounter; i++)
+			{
+
+				switch (i - 13)
+				{
+
+					// Final Score
+				case 0: DrawTextCharAtlas("Final Score", Vector2{ 152, 156 }, WHITE, 1); break;
+				case 1: DrawTextCharAtlas(std::to_string(GetFinalScore()), Vector2{ 152, 168 }, WHITE, 1); break;
+
+					// Tokens
+				case 2: break;
+				case 3: DrawTextCharAtlas(std::to_string(GetTokens()), Vector2{ 152, 284 }, WHITE, 1); break;
+
+				}
+
+			}
+
+		}
+
+		else
+		{
+
+			for (int i = 1; i < stepCounter; i++)
+			{
+
+				switch (i - 1)
+				{
+
+					// Score
+				case 0: DrawTextCharAtlas("Score", Vector2{ 152, 126 }, WHITE, 1); break;
+				case 1: DrawTextCharAtlas(std::to_string(GetScore()), Vector2{ 152, 138 }, WHITE, 1); break;
+
+					// Speed
+				case 2: DrawTextCharAtlas(TextFormat("[%i] Speed Bonus [%i]", speedMod + 1, speedMod + 1), Vector2{ 152, 170 }, WHITE, 1); break;
+				case 3: DrawTextCharAtlas(std::to_string(GetSpeedBonusScore()), Vector2{ 152, 182 }, WHITE, 1); break;
+
+					// Extra Energy
+				case 4: DrawTextCharAtlas(TextFormat("<%i> Energy Crystals Bonus <%i>", player.GetEnergy(), player.GetEnergy()), Vector2{ 152, 214 }, WHITE, 1); break;
+				case 5: DrawTextCharAtlas(std::to_string(GetEnergyBonusScore()), Vector2{ 152, 226 }, WHITE, 1); break;
+
+					// Extra Lifes
+				case 6: DrawTextCharAtlas(TextFormat("(%i) Extra Lifes Bonus (%i)", lifesLeft, lifesLeft), Vector2{ 152, 258 }, WHITE, 1); break;
+				case 7: DrawTextCharAtlas(std::to_string(GetExtraLifeBonusScore()), Vector2{ 152, 270 }, WHITE, 1); break;
+
+					// Extra Crystals
+				case 8: DrawTextCharAtlas(TextFormat("<%i> Crystals Bonus <%i>", crystalsLeft, crystalsLeft), Vector2{ 152, 302 }, WHITE, 1); break;
+				case 9: DrawTextCharAtlas(std::to_string(GetCrystalBonusScore()), Vector2{ 152, 314 }, WHITE, 1); break;
+
+				}
+
+			}
+
+		}
 
 	}
 

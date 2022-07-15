@@ -1211,6 +1211,8 @@ namespace PacMan_Board
 
 		Texture2D GetTexture(int _i) { return (*resources).GetMazeTexture(_i); }
 
+		int GetTokens() { return (int)ceilf(GetFinalScore() / 500.0f); }
+
 	private:
 
 		struct PlayerSpawnData
@@ -1250,17 +1252,18 @@ namespace PacMan_Board
 		int difficulty{ 0 };
 		int clearedRounds{ -1 };
 
-		float timeLeft{ 180 };
+		float timeLeft{ 10 };
 
 		int score{ 0 };
+		int scoreMod{ 1 };
 		int speedScore{ 0 };
 		int speedMod{ 0 };
 
 		int dotsCollected{ 0 };
 		int dotGoal{ 0 };
 
-		int lifesLeft{ 99 };
-		int crystalsLeft{ 99 };
+		int lifesLeft{ 3 };
+		int crystalsLeft{ 0 };
 
 		Grid grid;
 		Player player;
@@ -1315,6 +1318,13 @@ namespace PacMan_Board
 			}
 
 		}
+
+		int GetScore() { return score * scoreMod; }
+		int GetSpeedBonusScore() { return speedMod < 24 ? 100 * speedMod : 5000; }
+		int GetEnergyBonusScore() { int n = 0; for (int i = 0; i < player.GetEnergy(); i++) { n += 100 * i; } return n; }
+		int GetExtraLifeBonusScore() { int n = 0; for (int i = 0; i < lifesLeft; i++) { n += 250 * i; } return n; }
+		int GetCrystalBonusScore() { int n = 0; for (int i = 0; i < crystalsLeft; i++) { n += 500 * i; } return n; }
+		int GetFinalScore() { return GetScore() + GetSpeedBonusScore() + GetEnergyBonusScore() + GetExtraLifeBonusScore() + GetCrystalBonusScore(); }
 
 	};
 

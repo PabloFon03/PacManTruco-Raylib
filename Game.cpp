@@ -52,7 +52,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(6);
+	StartNewScreen(4);
 
 }
 
