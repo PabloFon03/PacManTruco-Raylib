@@ -1636,6 +1636,9 @@ void Board::SpawnEnemy(EnemySpawnData _spawnData)
 		// Carla
 	case 5: enemies.push_back(new Carla{ this, &grid }); break;
 
+		// Erika
+	case 6: enemies.push_back(new Erika{ this, &grid }); break;
+
 		// Marina
 	case 7: enemies.push_back(new Marina{ this, &grid }); break;
 

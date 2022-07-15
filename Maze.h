@@ -946,7 +946,116 @@ namespace PacMan_Board
 
 		};
 
-		// Carla Enemy Class
+		// Erika Enemy Class
+		class Erika : public Enemy
+		{
+
+		public:
+
+			Erika(Board* _board, Grid* _grid)
+			{
+
+				board = _board;
+				grid = _grid;
+
+				mainAnimAtlas = board->GetTexture(23);
+				stunAnimAtlas = board->GetTexture(24);
+
+			}
+
+			void Update()
+			{
+
+				float deltaTime = GetDeltaTime();
+
+				switch (currentState)
+				{
+
+				case Walking:
+
+					UpdateMovement();
+
+					break;
+
+				case Stunned:
+
+					// Update Animation
+					animDelay += deltaTime;
+					if (animDelay >= 0.075f)
+					{
+						animIndex++;
+						animIndex %= 4;
+						animDelay -= 0.075f;
+					}
+
+					// Update State Timer
+					stateTimer += deltaTime;
+					if (stateTimer > 0.75f)
+					{
+						currentState = Walking;
+						animIndex = 0;
+						stateTimer -= 0.75f;
+					}
+
+					break;
+
+				}
+
+			}
+
+			void OnDraw() { DrawCurrentFrame(currentState == Stunned ? stunAnimAtlas : mainAnimAtlas, animIndex, TileSize()); }
+
+			void OnStun()
+			{
+				currentState = Stunned;
+				animIndex = 0;
+				stateTimer = 0;
+			}
+
+		private:
+
+			void ChangeDir()
+			{
+				dirIndex = GetPossibleDirections(GetTarget(1))[0].dirIndex;
+				Entity::ChangeDir();
+			}
+
+			int turnCooldown{ 0 };
+
+			void OnStepFinished()
+			{
+				turnCooldown++;
+				if (turnCooldown >= 7)
+				{
+					int newDirIndex = GetPossibleDirections(GetTarget(1), true)[0].dirIndex;
+					if (dirIndex != newDirIndex)
+					{
+						dirIndex = newDirIndex;
+						Entity::ChangeDir();
+						turnCooldown = 0;
+					}
+				}
+			}
+
+			void OnRespawn()
+			{
+				currentState = Walking;
+				if (turnCooldown > 3) { turnCooldown = 3; }
+			}
+
+			enum States { Walking, Stunned };
+			States currentState{ Walking };
+			float stateTimer{ 0 };
+
+
+			Texture2D mainAnimAtlas;
+			Texture2D stunAnimAtlas;
+
+			Vector2 TileSize() { return Vector2{ 20, 52 }; }
+
+		};
+
+		// Marina Enemy Class
 		class Marina : public Enemy
 		{
 
@@ -1053,7 +1162,11 @@ namespace PacMan_Board
 				}
 			}
 
-			void OnRespawn() { currentState = Walking; }
+			void OnRespawn()
+			{
+				currentState = Walking;
+				if (teleportCooldown > 5) { teleportCooldown = 5; }
+			}
 
 			enum States { Walking, Teleporting, Stunned };
 			States currentState{ Walking };
