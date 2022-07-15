@@ -643,7 +643,7 @@ namespace PacMan_Board
 
 			void OnStepFinished() {}
 
-			void OnRespawn() {}
+			void OnRespawn() { currentState = Walking; }
 
 			bool counterClock{ false };
 
@@ -734,7 +734,7 @@ namespace PacMan_Board
 
 			void OnStepFinished() {}
 
-			void OnRespawn() {}
+			void OnRespawn() { currentState = Walking; }
 
 			bool counterClock{ false };
 
@@ -829,7 +829,7 @@ namespace PacMan_Board
 
 			void OnStepFinished() {}
 
-			void OnRespawn() {}
+			void OnRespawn() { currentState = Chilling; }
 
 			bool counterClock{ false };
 
