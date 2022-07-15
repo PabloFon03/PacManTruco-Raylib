@@ -5,7 +5,6 @@
 #include<raylib.h>
 
 #include "SubScreen.h"
-#include "Random.h"
 
 namespace PacMan_Board
 {
@@ -1280,6 +1279,8 @@ namespace PacMan_Board
 		Texture2D uiIcons;
 		Texture2D roundCounter;
 		Texture2D rewindIcon;
+		Texture2D tokenIcon;
+		int tokenID{ 0 };
 
 		struct
 		{

@@ -1,4 +1,5 @@
 #include "Maze.h"
+#include "Random.h"
 
 using namespace PacMan_Board;
 
@@ -15,6 +16,9 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 	roundCounter = GetTexture(3);
 	rewindIcon = GetTexture(28);
 	CrystalAnimation.animAtlas = GetTexture(29);
+
+	tokenIcon = GetCommonTexture(1);
+	tokenID = Random().RandomInt(5);
 
 	difficulty = _difficulty;
 
@@ -230,7 +234,7 @@ void Board::OnDraw()
 				case 1: DrawTextCharAtlas(std::to_string(GetFinalScore()), Vector2{ 152, 168 }, WHITE, 1); break;
 
 					// Tokens
-				case 2: break;
+				case 2: DrawTextureRec(tokenIcon, Rectangle{ 0, (float)(16 * tokenID), 16, 16 }, Vector2{ 144, 264 }, WHITE); break;
 				case 3: DrawTextCharAtlas(std::to_string(GetTokens()), Vector2{ 152, 284 }, WHITE, 1); break;
 
 				}
@@ -249,24 +253,24 @@ void Board::OnDraw()
 				{
 
 					// Score
-				case 0: DrawTextCharAtlas("Score", Vector2{ 152, 126 }, WHITE, 1); break;
-				case 1: DrawTextCharAtlas(std::to_string(GetScore()), Vector2{ 152, 138 }, WHITE, 1); break;
+				case 0: DrawTextCharAtlas("Score", Vector2{ 152, 126 }, Color{ 102, 216, 255, 255 }, 1); break;
+				case 1: DrawTextCharAtlas(std::to_string(GetScore()), Vector2{ 152, 138 }, Color{ 102, 216, 255, 255 }, 1); break;
 
 					// Speed
-				case 2: DrawTextCharAtlas(TextFormat("[%i] Speed Bonus [%i]", speedMod + 1, speedMod + 1), Vector2{ 152, 170 }, WHITE, 1); break;
-				case 3: DrawTextCharAtlas(std::to_string(GetSpeedBonusScore()), Vector2{ 152, 182 }, WHITE, 1); break;
+				case 2: DrawTextCharAtlas(TextFormat("[%i] Speed Bonus [%i]", speedMod + 1, speedMod + 1), Vector2{ 152, 170 }, Color{ 255, 228, 102, 255 }, 1); break;
+				case 3: DrawTextCharAtlas(std::to_string(GetSpeedBonusScore()), Vector2{ 152, 182 }, Color{ 255, 228, 102, 255 }, 1); break;
 
 					// Extra Energy
-				case 4: DrawTextCharAtlas(TextFormat("<%i> Energy Crystals Bonus <%i>", player.GetEnergy(), player.GetEnergy()), Vector2{ 152, 214 }, WHITE, 1); break;
-				case 5: DrawTextCharAtlas(std::to_string(GetEnergyBonusScore()), Vector2{ 152, 226 }, WHITE, 1); break;
+				case 4: DrawTextCharAtlas(TextFormat("<%i> Energy Crystals Bonus <%i>", player.GetEnergy(), player.GetEnergy()), Vector2{ 152, 214 }, Color{ 102, 255, 140, 255 }, 1); break;
+				case 5: DrawTextCharAtlas(std::to_string(GetEnergyBonusScore()), Vector2{ 152, 226 }, Color{ 102, 255, 140, 255 }, 1); break;
 
 					// Extra Lifes
-				case 6: DrawTextCharAtlas(TextFormat("(%i) Extra Lifes Bonus (%i)", lifesLeft, lifesLeft), Vector2{ 152, 258 }, WHITE, 1); break;
-				case 7: DrawTextCharAtlas(std::to_string(GetExtraLifeBonusScore()), Vector2{ 152, 270 }, WHITE, 1); break;
+				case 6: DrawTextCharAtlas(TextFormat("(%i) Extra Lifes Bonus (%i)", lifesLeft, lifesLeft), Vector2{ 152, 258 }, Color{ 255, 102, 216, 255 }, 1); break;
+				case 7: DrawTextCharAtlas(std::to_string(GetExtraLifeBonusScore()), Vector2{ 152, 270 }, Color{ 255, 102, 216, 255 }, 1); break;
 
 					// Extra Crystals
-				case 8: DrawTextCharAtlas(TextFormat("<%i> Crystals Bonus <%i>", crystalsLeft, crystalsLeft), Vector2{ 152, 302 }, WHITE, 1); break;
-				case 9: DrawTextCharAtlas(std::to_string(GetCrystalBonusScore()), Vector2{ 152, 314 }, WHITE, 1); break;
+				case 8: DrawTextCharAtlas(TextFormat("<%i> Crystals Bonus <%i>", crystalsLeft, crystalsLeft), Vector2{ 152, 302 }, Color{ 191, 102, 255, 255 }, 1); break;
+				case 9: DrawTextCharAtlas(std::to_string(GetCrystalBonusScore()), Vector2{ 152, 314 }, Color{ 191, 102, 255, 255 }, 1); break;
 
 				}
 
@@ -433,39 +437,25 @@ void Board::ClearTile(int _i) { grid.ClearTile(_i); }
 
 void Board::AddScore(int _s)
 {
-
 	score += _s;
-
 	speedScore += _s;
-
 	while (speedScore >= 500)
 	{
-
 		speedScore -= 500;
-
 		if (speedMod < 24) { speedMod++; }
-
 		else { score += 2500; }
-
 	}
-
 }
 
 void Board::DotCollected()
 {
-
 	dotsCollected++;
-
 	if (dotsCollected == dotGoal)
 	{
-
 		renderShader = 1;
-
 		stepTimer = 0;
 		currentState = FlipOut;
-
 	}
-
 }
 
 void Board::ShootProjectile(Vector2 _pos, Vector2 _dir, int _dirIndex) { playerProjectiles.push_back(Projectile{ this, _pos, _dir, _dirIndex }); }
