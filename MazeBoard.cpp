@@ -22,7 +22,35 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 	difficulty = _difficulty;
 
-	player = Player{ this, &grid, _item1 * 0 + 5, _item2 * 0 + 4, _item3 * 0 + 3 };
+	player = Player{ this, &grid, _item1, _item2, _item3 };
+
+	_charm = 7;
+
+	switch (_charm)
+	{
+
+		// Score x2
+	case 1: scoreMod = 2; break;
+
+		// 5 Extra Lifes
+	case 2: lifesLeft = 5; break;
+
+		// 1 Crystal
+	case 3: crystalsLeft = 1; break;
+
+		// Score x4
+	case 4: scoreMod = 4; break;
+
+		// 7 Extra Lifes
+	case 5: lifesLeft = 7; break;
+
+		// 3 Crystals
+	case 6: crystalsLeft = 3; break;
+
+		// Locket
+	case 7: lifesLeft = 9; crystalsLeft = 7; break;
+
+	}
 
 	RefillMazeQueue(false);
 	SpawnNextMaze();
@@ -254,7 +282,7 @@ void Board::OnDraw()
 
 					// Score
 				case 0: DrawTextCharAtlas("Score", Vector2{ 152, 126 }, Color{ 102, 216, 255, 255 }, 1); break;
-				case 1: DrawTextCharAtlas(std::to_string(GetScore()), Vector2{ 152, 138 }, Color{ 102, 216, 255, 255 }, 1); break;
+				case 1: DrawTextCharAtlas(std::to_string(GetScore()), Vector2{ 152, 138 }, Color{ 102, 216, 255, 255 }, 1); if (scoreMod > 1) { for (int i = 0; i < 2; i++) { DrawTextureRec(charmIcons, Rectangle{ 16 * (float)(scoreMod == 4 ? 4 : 1), 0, 16, 16 }, Vector2{ (float)(104 + 80 * i), 122 }, WHITE); } } break;
 
 					// Speed
 				case 2: DrawTextCharAtlas(TextFormat("[%i] Speed Bonus [%i]", speedMod + 1, speedMod + 1), Vector2{ 152, 170 }, Color{ 255, 228, 102, 255 }, 1); break;
@@ -373,16 +401,16 @@ void Board::OnDraw()
 
 			if (stepTimer > 1)
 			{
-				DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
-				DrawTextCharAtlas("Game Over", Vector2{ 152, 220 }, WHITE, 1);
+				DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 225, 225, 225, 255 });
+				DrawTextCharAtlas("Game Over", Vector2{ 152, 220 }, Color{ 225, 225, 225, 255 }, 1);
 			}
 
 			break;
 
 		case TimeUp:
 
-			DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 200, 200, 200, 255 });
-			DrawTextCharAtlas("Time Up!", Vector2{ 152, 220 }, WHITE, 1);
+			DrawBox(8, Vector2{ 96, 24 }, Vector2{ 152, 224 }, Color{ 225, 225, 225, 255 });
+			DrawTextCharAtlas("Time Up!", Vector2{ 152, 220 }, Color{ 225, 225, 225, 255 }, 1);
 
 			break;
 
