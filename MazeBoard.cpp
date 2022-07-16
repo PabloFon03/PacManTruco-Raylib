@@ -1670,7 +1670,6 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		break;
 
 	case 28:
-	case 25:
 
 		returnData.gridTiles = std::vector<int>
 		{
@@ -1714,10 +1713,11 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		break;
 
 	case 29:
+	case 25:
 
 		returnData.gridTiles = std::vector<int>
 		{
-			4, 11, 9, 0, 3, 9, 0, 3, 9, 0, 3, 9, 0, 3, 9, 0, 3, 11, 10,
+			4, 11, 11, 11, 11, 9, 0, 3, 9, 0, 3, 9, 0, 3, 11, 11, 11, 11, 10,
 			6, 18, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 6,
 			6, 17, 3, 11, 11, 9, 21, 3, 11, 11, 11, 9, 21, 3, 11, 11, 9, 17, 6,
 			6, 17, 20, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 22, 17, 6,
@@ -1738,10 +1738,19 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 			6, 17, 20, 17, 17, 17, 17, 0, 0, 0, 0, 0, 17, 17, 17, 17, 22, 17, 6,
 			6, 17, 3, 11, 11, 9, 19, 3, 11, 11, 11, 9, 19, 3, 11, 11, 9, 17, 6,
 			6, 18, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 6,
-			7, 11, 9, 0, 3, 9, 0, 3, 9, 0, 3, 9, 0, 3, 9, 0, 3, 11, 13
+			7, 11, 11, 11, 11, 9, 0, 3, 9, 0, 3, 9, 0, 3, 11, 11, 11, 11, 13
 		};
 
 		returnData.playerSpawn = PlayerSpawnData{ Entity::Vector2Int{ 9, 18 }, 3 };
+
+		returnData.enemySpawns = std::vector<EnemySpawnData>
+		{
+			EnemySpawnData{ 5, Entity::Vector2Int{ 9, 1 }, 1 },
+			EnemySpawnData{ 3, Entity::Vector2Int{ 9, 3 }, 3 },
+			EnemySpawnData{ 7, Entity::Vector2Int{ 7, 5 }, 3 },
+			EnemySpawnData{ 6, Entity::Vector2Int{ 11, 5 }, 1 },
+			EnemySpawnData{ 4, Entity::Vector2Int{ 9, 9 }, 1 }
+		};
 
 		break;
 
