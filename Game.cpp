@@ -2,6 +2,7 @@
 
 #include "Game.h";
 #include "ErrorScreen.h";
+#include "IntroScreen.h";
 #include "MainMenu.h";
 #include "LoadingTrain.h";
 #include "ItemShop.h";
@@ -53,7 +54,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(-2);
+	StartNewScreen(-1);
 
 }
 
@@ -67,8 +68,12 @@ void Game::StartNewScreen(int _ID)
 	switch (_ID)
 	{
 
-		// Main Menu
+	// Intro Screen
 	case -1:
+		content = new Intro_Screen::IntroScreen(&resources);
+		break;
+
+		// Main Menu
 	case 0:
 		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
 		break;
