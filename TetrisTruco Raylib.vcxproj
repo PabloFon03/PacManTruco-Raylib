@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Baseball.h" />
     <ClInclude Include="Claw.h" />
+    <ClInclude Include="ErrorScreen.h" />
     <ClInclude Include="ItemShop.h" />
     <ClInclude Include="LoadingTrain.h" />
     <ClInclude Include="MainMenu.h" />

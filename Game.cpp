@@ -1,6 +1,7 @@
 #include <assert.h>
 
 #include "Game.h";
+#include "ErrorScreen.h";
 #include "MainMenu.h";
 #include "LoadingTrain.h";
 #include "ItemShop.h";
@@ -52,7 +53,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(-1);
+	StartNewScreen(-2);
 
 }
 
@@ -105,6 +106,9 @@ void Game::StartNewScreen(int _ID)
 
 		// Loading Screens
 		if (_ID >= 40 && _ID <= 52) { content = new Loading_Screen::LoadScreen(&resources, _ID - 40); }
+
+		// Undefined Exit Flag
+		else { content = new Error_Screen::ErrorScreen(&resources, _ID); }
 
 		break;
 

@@ -188,6 +188,11 @@ namespace Loading_Screen
 			case 3:
 				return "Item Shop";
 
+			case 4:
+			case 5:
+			case 6:
+				return "Maze";
+
 			case 7:
 			case 8:
 			case 9:
