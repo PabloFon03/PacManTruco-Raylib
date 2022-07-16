@@ -24,8 +24,6 @@ Board::Board(Resources* _res, int _difficulty, int _item1, int _item2, int _item
 
 	player = Player{ this, &grid, _item1, _item2, _item3 };
 
-	_charm = 7;
-
 	switch (_charm)
 	{
 
