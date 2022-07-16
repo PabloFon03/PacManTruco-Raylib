@@ -32,10 +32,10 @@ Game::Game(int w, int h, int fps, std::string t)
 Game::~Game() noexcept
 {
 
-	assert(GetWindowHandle());
-
 	// Free Window Content
 	delete content;
+
+	assert(GetWindowHandle());
 
 	CloseWindow();
 
@@ -52,7 +52,7 @@ void Game::Start()
 	resources.Load();
 
 	// Start Intro Screen
-	StartNewScreen(6);
+	StartNewScreen(-1);
 
 }
 

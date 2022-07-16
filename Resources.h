@@ -156,16 +156,11 @@ private:
 
 	void LoadTextures(std::vector<Texture2D>& _refVec, std::vector<std::string> _fileNames, std::string _aboveFolder = "")
 	{
-
 		for (int i = 0; i < _fileNames.size(); i++)
 		{
-
 			_refVec.push_back(LoadTexture(("img/" + _aboveFolder + _fileNames[i]).c_str()));
-
 			SetTextureFilter(_refVec[i], TEXTURE_FILTER_POINT);
-
 		}
-
 	}
 
 };

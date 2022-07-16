@@ -1531,7 +1531,7 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 
 		break;
 
-	case -25:
+	case 25:
 
 		returnData.gridTiles = std::vector<int>
 		{
@@ -1713,7 +1713,6 @@ Board::MazeSpawnData Board::ReturnMazeSpawnData(int _i)
 		break;
 
 	case 29:
-	case 25:
 
 		returnData.gridTiles = std::vector<int>
 		{

@@ -1251,7 +1251,7 @@ namespace PacMan_Board
 		int difficulty{ 0 };
 		int clearedRounds{ -1 };
 
-		float timeLeft{ 10 };
+		float timeLeft{ 180 };
 
 		int score{ 0 };
 		int scoreMod{ 1 };
