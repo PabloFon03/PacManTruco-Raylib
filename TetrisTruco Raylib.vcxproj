@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{3cfbd64e-c388-413a-a063-ccedb9c81246}</ProjectGuid>
-    <RootNamespace>TetrisTrucoRaylib</RootNamespace>
+    <RootNamespace>PacManTruco-Raylib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>PacManTruco-Raylib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,6 +89,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,10 +106,11 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Native</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EntryPointSymbol>mainCRTStartUp</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,6 +119,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,27 +136,58 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Native</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EntryPointSymbol>mainCRTStartUp</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="BaseballArena.cpp" />
+    <ClCompile Include="BaseballBall.cpp" />
+    <ClCompile Include="BaseballPlayer.cpp" />
+    <ClCompile Include="ClawBoard.cpp" />
+    <ClCompile Include="ClawPlayer.cpp" />
+    <ClCompile Include="ClawTarget.cpp" />
+    <ClCompile Include="MazeBoard.cpp" />
+    <ClCompile Include="MazeEnemy.cpp" />
+    <ClCompile Include="MazeEntity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MazeGrid.cpp" />
+    <ClCompile Include="MazePlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Baseball.h" />
+    <ClInclude Include="Claw.h" />
+    <ClInclude Include="ErrorScreen.h" />
+    <ClInclude Include="IntroScreen.h" />
+    <ClInclude Include="ItemShop.h" />
+    <ClInclude Include="LoadingTrain.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="PlayerData.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Resources.h" />
+    <ClInclude Include="SubScreen.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\pacmiku.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
+    <None Include="shaders\base.fs" />
+    <None Include="shaders\bloom.fs" />
+    <None Include="shaders\gray.fs" />
+    <None Include="shaders\mazeFlip.fs" />
+    <None Include="shaders\uvTest.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\baseball\AshleyPlatform.png" />
+    <Image Include="img\baseball\Baseballs.png" />
+    <Image Include="img\baseball\Carla.png" />
+    <Image Include="img\baseball\CarlaPlatform.png" />
+    <Image Include="img\baseball\ElectricBall.png" />
+    <Image Include="img\baseball\ElectricBase.png" />
+    <Image Include="img\baseball\ElectricPlatform.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

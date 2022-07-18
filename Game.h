@@ -1,11 +1,17 @@
 #pragma once
-#include <string>
-#include <raylib.h>
-#include "Maze.h";
 
-class Game {
+#include<string>
+#include<vector>
+#include<raylib.h>
 
-public:
+#include "PlayerData.h"
+#include "SubScreen.h"
+
+// Game Class
+class Game
+{
+
+public:	
 
 	// Constrcutor
 	Game(int w, int h, int fps, std::string t);
@@ -21,21 +27,32 @@ public:
 
 	bool GameShouldClose() const;
 
+	void Start();
 	void Tick();
 
 private:
 
-	const int wMin = 304;
-	const int hMin = 352;
+	bool isClosed{ false };
 
-	int frameCounter;
+	const int wMin = 304;
+	const int hMin = 448;
 
 	RenderTexture2D target;
 
-	Maze currentMaze;	
+	RenderTexture2D buffer1;
+	RenderTexture2D buffer2;
 
 	void Update();
 	void Draw();
-	void OnDraw();
+
+	void StartDraw();
+	void EndDraw();
+
+	Resources resources;
+
+	PlayerData player;
+
+	SubScreen* content;
+	void StartNewScreen(int _ID);
 
 };

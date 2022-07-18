@@ -1,83 +1,225 @@
-#include "Game.h";
 #include <assert.h>
+
+#include "Game.h";
+#include "ErrorScreen.h";
+#include "IntroScreen.h";
+#include "MainMenu.h";
+#include "LoadingTrain.h";
+#include "ItemShop.h";
+#include "Maze.h";
+#include "Baseball.h";
+#include "Claw.h";
 
 Game::Game(int w, int h, int fps, std::string t)
 {
+
 	assert(!IsWindowReady());
+
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 	InitWindow(w, h, t.c_str());
 	SetWindowMinSize(wMin, hMin);
 	SetTargetFPS(fps);
+
 	target = LoadRenderTexture(wMin, hMin);
 	SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
-	// 19x22
-	std::vector<int> mazeTiles
-	{
-		7, 11, 11, 11, 11, 11, 11, 11, 11, 15, 11, 11, 11, 11, 11, 11, 11, 11, 13,
-		6, 18, 18, 18, 18, 18, 18, 18, 18, 6, 18, 18, 18, 18, 18, 18, 18, 18, 6,
-		6, 19, 7, 13, 18, 7, 11, 13, 18, 6, 18, 7, 11, 13, 18, 7, 13, 19, 6,
-		6, 18, 4, 10, 18, 4, 11, 10, 18, 5, 18, 4, 11, 10, 18, 4, 10, 18, 6,
-		6, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 6,
-		6, 18, 9, 3, 18, 2, 18, 9, 11, 15, 11, 3, 18, 2, 18, 9, 3, 18, 6,
-		6, 18, 18, 18, 18, 6, 18, 18, 18, 6, 18, 18, 18, 6, 18, 18, 18, 18, 6,
-		4, 11, 11, 13, 18, 8, 11, 3, 0, 5, 0, 9, 11, 14, 18, 7, 11, 11, 10,
-		0, 0, 0, 6, 18, 6, 0, 0, 0, 0, 0, 0, 0, 6, 18, 6, 0, 0, 0,
-		11, 11, 11, 10, 18, 5, 0, 7, 3, 17, 9, 13, 0, 5, 18, 4, 11, 11, 11,
-		0, 0, 0, 0, 18, 0, 0, 6, 0, 0, 0, 6, 0, 0, 18, 0, 0, 0, 0,
-		11, 11, 11, 13, 18, 2, 0, 4, 11, 11, 11, 10, 0, 2, 18, 7, 11, 11, 11,
-		0, 0, 0, 6, 18, 6, 0, 0, 0, 0, 0, 0, 0, 6, 18, 6, 0, 0, 0,
-		7, 11, 11, 10, 18, 5, 0, 9, 11, 15, 11, 3, 0, 5, 18, 4, 11, 11, 13,
-		6, 18, 18, 18, 18, 18, 18, 18, 18, 6, 18, 18, 18, 18, 18, 18, 18, 18, 6,
-		6, 18, 9, 13, 18, 9, 11, 3, 18, 5, 18, 9, 11, 3, 18, 7, 3, 18, 6,
-		6, 19, 18, 6, 18, 18, 18, 18, 18, 0, 18, 18, 18, 18, 18, 6, 18, 19, 6,
-		8, 3, 18, 5, 18, 2, 18, 9, 11, 15, 11, 3, 18, 2, 18, 5, 18, 9, 14,
-		6, 18, 18, 18, 18, 6, 18, 18, 18, 6, 18, 18, 18, 6, 18, 18, 18, 18, 6,
-		6, 18, 9, 11, 11, 12, 11, 3, 18, 5, 18, 9, 11, 12, 11, 11, 3, 18, 6,
-		6, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 6,
-		4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 10
-	};
-	currentMaze = Maze(mazeTiles);
+
+	buffer1 = LoadRenderTexture(wMin, hMin);
+	SetTextureFilter(buffer1.texture, TEXTURE_FILTER_POINT);
+
+	buffer2 = LoadRenderTexture(wMin, hMin);
+	SetTextureFilter(buffer2.texture, TEXTURE_FILTER_POINT);
+
 }
 
 Game::~Game() noexcept
 {
+
+	// Free Window Content
+	delete content;
+
 	assert(GetWindowHandle());
+
 	CloseWindow();
+
 }
 
-bool Game::GameShouldClose() const { return WindowShouldClose(); }
+bool Game::GameShouldClose() const { return WindowShouldClose() || isClosed; }
+
+void Game::Start()
+{
+
+	resources = Resources();
+
+	// Load Resources
+	resources.Load();
+
+	// Start Intro Screen
+	StartNewScreen(-1);
+
+}
+
+void Game::StartNewScreen(int _ID)
+{
+
+	// Free Old Content Memory
+	delete content;
+
+	// Create New Content
+	switch (_ID)
+	{
+
+	// Intro Screen
+	case -1:
+		content = new Intro_Screen::IntroScreen(&resources);
+		break;
+
+		// Main Menu
+	case 0:
+		content = new MainMenu_Screen::MainMenu(&resources, player.GetTokens());
+		break;
+
+		// Maze Items Shop
+	case 1:
+	case 2:
+	case 3:
+		content = new ItemShop_Screen::ItemShop(&resources, _ID - 1, &player);
+		break;
+
+		// Maze
+	case 4:
+	case 5:
+	case 6:
+		content = new PacMan_Board::Board(&resources, _ID - 4, player.GetPlayerItem(0), player.GetPlayerItem(1), player.GetPlayerItem(2), player.GetPlayerItem(3));
+		player.ResetPlayerItems();
+		break;
+
+		// Baseball Minigame
+	case 7:
+	case 8:
+	case 9:
+		content = new Baseball_Arena::Arena(&resources, _ID - 7);
+		break;
+
+		// Claw Minigame
+	case 10:
+	case 11:
+	case 12:
+		content = new Claw_Board::Board(&resources, _ID - 10);
+		break;
+
+	default:
+
+		// Loading Screens
+		if (_ID >= 40 && _ID <= 52) { content = new Loading_Screen::LoadScreen(&resources, _ID - 40); }
+
+		// Undefined Exit Flag
+		else { content = new Error_Screen::ErrorScreen(&resources, _ID); }
+
+		break;
+
+	}
+
+}
 
 void Game::Tick()
 {
-	frameCounter++;
+
+	// Update Logic
 	Update();
+
+	// Draw On Screen
 	Draw();
+
 }
 
 void Game::Update()
 {
+
+	int exitFlag = (*content).exitFlag;
+
+	switch (exitFlag)
+	{
+
+		// Keep Going
+	case -1:
+
+		(*content).Update();
+
+		break;
+
+		// Close App
+	case -2:
+
+		isClosed = true;
+
+		break;
+
+		// Load New Screen
+	default:
+
+		player.AddTokens((*content).GetTokens());
+
+		StartNewScreen(exitFlag);
+
+		break;
+
+	}
+
 }
 
 void Game::Draw()
 {
 
+	StartDraw();
+
+	(*content).OnDraw();
+
+	EndDraw();
+
+}
+
+void Game::StartDraw()
+{
+
 	BeginTextureMode(target);
 
-	ClearBackground(Color{ 5, 5, 5, 255 });
+	ClearBackground(BLACK);
 
-	OnDraw();
+}
+
+void Game::EndDraw()
+{
 
 	EndTextureMode();
 
-	BeginDrawing();
+	int wScreen = GetScreenWidth();
+	int hScreen = GetScreenHeight();
 
-	float wScale = (float)GetScreenWidth() / wMin;
-	float hScale = (float)GetScreenHeight() / hMin;
+	if (buffer1.texture.width != wScreen || buffer1.texture.height != hScreen)
+	{
+
+		UnloadRenderTexture(buffer1);
+		UnloadRenderTexture(buffer2);
+
+		buffer1 = LoadRenderTexture(wScreen, hScreen);
+		SetTextureFilter(buffer1.texture, TEXTURE_FILTER_POINT);
+
+		buffer2 = LoadRenderTexture(wScreen, hScreen);
+		SetTextureFilter(buffer2.texture, TEXTURE_FILTER_POINT);
+
+	}
+
+	BeginTextureMode(buffer1);
+
+	ClearBackground(BLACK);
+
+	float wScale = (float)wScreen / wMin;
+	float hScale = (float)hScreen / hMin;
 
 	float scale = wScale < hScale ? wScale : hScale;
 
 	DrawTexturePro(target.texture,
-		Rectangle{ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height },
+		Rectangle{ 0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height },
 		Rectangle{
 		(GetScreenWidth() - ((float)wMin * scale)) * 0.5f,
 		(GetScreenHeight() - ((float)hMin * scale)) * 0.5f,
@@ -85,13 +227,35 @@ void Game::Draw()
 		(float)hMin * scale },
 		Vector2{ 0, 0 }, 0.0f, WHITE);
 
+	EndTextureMode();
+
+	std::vector<int> shaderStack = std::vector<int>();
+
+	shaderStack.push_back((*content).renderShader);
+
+	for (int i = 1; i <= shaderStack.size(); i++)
+	{
+
+		BeginTextureMode(i % 2 == 0 ? buffer1 : buffer2);
+
+		ClearBackground(BLACK);
+
+		BeginShaderMode(resources.GetShader(shaderStack[i - 1]));
+
+		Texture* currentBuffer = &(i == 0 ? target : i % 2 == 0 ? buffer2 : buffer1).texture;
+		DrawTexturePro((*currentBuffer), Rectangle{ 0, 0, (float)(*currentBuffer).width, -(float)(*currentBuffer).height }, Rectangle{ 0, 0, (float)(*currentBuffer).width, (float)(*currentBuffer).height }, Vector2{ 0, 0 }, 0.0f, WHITE);
+
+		EndShaderMode();
+
+		EndTextureMode();
+
+	}
+
+	BeginDrawing();
+
+	Texture* finalBuffer = &(shaderStack.size() % 2 == 0 ? buffer1 : buffer2).texture;
+	DrawTexturePro((*finalBuffer), Rectangle{ 0, 0, (float)(*finalBuffer).width, -(float)(*finalBuffer).height }, Rectangle{ 0, 0, (float)(*finalBuffer).width, (float)(*finalBuffer).height }, Vector2{ 0, 0 }, 0.0f, WHITE);
+
 	EndDrawing();
-
-}
-
-void Game::OnDraw()
-{
-
-	currentMaze.OnDraw();
 
 }

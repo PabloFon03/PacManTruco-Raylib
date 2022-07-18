@@ -16,35 +16,145 @@
     <Filter Include="Archivos de recursos\img">
       <UniqueIdentifier>{3ff09671-a57a-4375-9fd1-9f02aa1fef41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Baseball">
+      <UniqueIdentifier>{c917ff51-ef01-4bbd-9210-b5450df25f40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Maze">
+      <UniqueIdentifier>{064c7001-e8b6-411e-80b0-f4b0190bc5a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\img\Baseball">
+      <UniqueIdentifier>{390aca63-d76d-49ce-bb19-61b1c2e481ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\img\Maze">
+      <UniqueIdentifier>{7d8008c4-e8bd-4214-933b-1e3a9f3ffc3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\shaders">
+      <UniqueIdentifier>{02b8751d-e53f-4848-80ed-270f3c45b7d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Claw">
+      <UniqueIdentifier>{edf2b5a8-2fe6-4880-a15b-de84e62603a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Archivos de recursos</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Archivos de recursos</Filter>
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Maze.cpp">
-      <Filter>Archivos de recursos</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Archivos de recursos</Filter>
+    <ClCompile Include="BaseballArena.cpp">
+      <Filter>Archivos de origen\Baseball</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseballPlayer.cpp">
+      <Filter>Archivos de origen\Baseball</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeBoard.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeEnemy.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeEntity.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="MazePlayer.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseballBall.cpp">
+      <Filter>Archivos de origen\Baseball</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeGrid.cpp">
+      <Filter>Archivos de origen\Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="ClawPlayer.cpp">
+      <Filter>Archivos de origen\Claw</Filter>
+    </ClCompile>
+    <ClCompile Include="ClawTarget.cpp">
+      <Filter>Archivos de origen\Claw</Filter>
+    </ClCompile>
+    <ClCompile Include="ClawBoard.cpp">
+      <Filter>Archivos de origen\Claw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="SubScreen.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Baseball.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Maze.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="Game.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Claw.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingTrain.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemShop.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorScreen.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScreen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="img\pacmiku.png">
-      <Filter>Archivos de recursos\img</Filter>
+    <None Include="shaders\base.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
+    <None Include="shaders\bloom.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
+    <None Include="shaders\gray.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
+    <None Include="shaders\mazeFlip.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
+    <None Include="shaders\uvTest.fs">
+      <Filter>Archivos de recursos\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\baseball\AshleyPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\Baseballs.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\Carla.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\CarlaPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricBall.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricBase.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
+    </Image>
+    <Image Include="img\baseball\ElectricPlatform.png">
+      <Filter>Archivos de recursos\img\Baseball</Filter>
     </Image>
   </ItemGroup>
 </Project>

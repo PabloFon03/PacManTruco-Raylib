@@ -1,19 +1,16 @@
 #include<raylib.h>
+
 #include "Game.h"
 
 int main(void)
 {
-	const int screenWidth = 304;
-	const int screenHeight = 352;
 
-	Game game{ screenWidth, screenHeight, 60, "test" };
+	Game game{ 304, 448, 60, "Cat n' Mouse" };
 
-	SetTargetFPS(60);
+	game.Start();
 
-	while (!game.GameShouldClose())
-	{
-		game.Tick();
-	}
+	while (!game.GameShouldClose()) { game.Tick(); }
 
 	return 0;
+
 }
